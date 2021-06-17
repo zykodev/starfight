@@ -12,6 +12,7 @@ import io.netty.channel.SimpleChannelInboundHandler;
 public class ClientNetworkHandler extends SimpleChannelInboundHandler<Packet> {
 
     private Channel channel;
+    private long latency;
 
     public ClientNetworkHandler(Channel channel) {
         this.channel = channel;
@@ -24,10 +25,12 @@ public class ClientNetworkHandler extends SimpleChannelInboundHandler<Packet> {
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, Packet msg) throws Exception {
         if(msg instanceof S01PacketKeepAlive) {
-            long timeDiff =  System.currentTimeMillis() - ((S01PacketKeepAlive) msg).getSystemTime();
-            StarfightClient.getInstance().setPingTime(timeDiff);
-            System.out.println("Ping: " + timeDiff);
+            this.latency = System.currentTimeMillis() - ((S01PacketKeepAlive) msg).getSystemTime();
         }
+    }
+
+    public long getLatency() {
+        return latency;
     }
 
 }

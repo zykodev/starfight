@@ -1,6 +1,8 @@
 package dev.zyko.starfight.client;
 
+import dev.zyko.starfight.client.display.DisplayManager;
 import dev.zyko.starfight.client.netcode.ClientNetworkHandler;
+import dev.zyko.starfight.client.netcode.NetworkManager;
 import dev.zyko.starfight.client.netcode.encoding.ClientPacketDecoder;
 import dev.zyko.starfight.client.netcode.encoding.ClientPacketEncoder;
 import dev.zyko.starfight.protocol.impl.C01PacketKeepAlive;
@@ -12,39 +14,13 @@ import io.netty.channel.epoll.EpollEventLoopGroup;
 import io.netty.channel.epoll.EpollSocketChannel;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import org.lwjgl.glfw.GLFW;
 
 public class StarfightClient {
 
-    public static final boolean EPOLL = Epoll.isAvailable();
-
     private static StarfightClient instance;
-    private long pingTime;
-
-    public StarfightClient() throws Exception {
-        instance = this;
-        EventLoopGroup eventLoopGroup = EPOLL ? new EpollEventLoopGroup() : new NioEventLoopGroup();
-        try {
-            Channel ch = new Bootstrap()
-                    .group(eventLoopGroup)
-                    .channel(EPOLL ? EpollSocketChannel.class : NioSocketChannel.class)
-                    .handler(new ChannelInitializer<Channel>() {
-                        @Override
-                        protected void initChannel(Channel ch) throws Exception {
-                            ch.pipeline().addLast("encoder", new ClientPacketEncoder()).addLast("decoder", new ClientPacketDecoder()).addLast("nethandler", new ClientNetworkHandler(ch));
-                        }
-                    }).connect("127.0.0.1", 8000).sync().channel();
-            int i = 0;
-            while(true) {
-                if(i == 5) break;
-                Thread.sleep(200);
-                ch.writeAndFlush(new C01PacketKeepAlive(System.currentTimeMillis()), ch.voidPromise());
-                i++;
-            }
-            ch.close().syncUninterruptibly();
-        } finally {
-            eventLoopGroup.shutdownGracefully();
-        }
-    }
+    private NetworkManager networkManager;
+    private DisplayManager displayManager;
 
     public static void main(String[] args) {
         try {
@@ -54,16 +30,34 @@ public class StarfightClient {
         }
     }
 
+    public StarfightClient() throws Exception {
+        instance = this;
+        this.networkManager = new NetworkManager();
+        this.displayManager = new DisplayManager();
+        this.displayManager.createDisplay(1280, 720, "Starfight (alpha-indev)");
+        this.run();
+    }
+
+    private void run() {
+        while(this.displayManager.shouldWindowClose()) {
+            this.displayManager.updateDisplay();
+        }
+        this.displayManager.destroyDisplay();
+    }
+
+    private void createDisplay() throws Exception {
+        if(!GLFW.glfwInit()) {
+            throw new IllegalStateException("GLFW failed to initialize, application stuck in illegal state.");
+        }
+
+    }
+
     public static StarfightClient getInstance() {
         return instance;
     }
 
-    public long getPingTime() {
-        return pingTime;
-    }
-
-    public void setPingTime(long pingTime) {
-        this.pingTime = pingTime;
+    public NetworkManager getNetworkManager() {
+        return networkManager;
     }
 
 }
