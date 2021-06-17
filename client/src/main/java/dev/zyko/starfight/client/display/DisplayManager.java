@@ -2,6 +2,7 @@ package dev.zyko.starfight.client.display;
 
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWVidMode;
+import org.lwjgl.opengl.GL;
 
 public class DisplayManager {
 
@@ -17,12 +18,19 @@ public class DisplayManager {
             throw new IllegalStateException("GLFW failed to create a window to render to, application stuck in illegal state.");
         }
         GLFWVidMode videoMode = GLFW.glfwGetVideoMode(GLFW.glfwGetPrimaryMonitor());
-        GLFW.glfwSetWindowPos(this.windowId, (videoMode.width() + width) / 2, (videoMode.height() + height) / 2);
+        GLFW.glfwSetWindowPos(this.windowId, (videoMode.width() - width) / 2, (videoMode.height() - height) / 2);
         GLFW.glfwShowWindow(this.windowId);
+        GLFW.glfwMakeContextCurrent(this.windowId);
+        GL.createCapabilities();
+        GLFW.glfwSwapInterval(0);
     }
 
     public void updateDisplay() {
         GLFW.glfwPollEvents();
+    }
+
+    public void finishUpdate() {
+        GLFW.glfwSwapBuffers(this.windowId);
     }
 
     public void destroyDisplay() {
@@ -33,4 +41,7 @@ public class DisplayManager {
         return GLFW.glfwWindowShouldClose(this.windowId);
     }
 
+    public long getWindowId() {
+        return windowId;
+    }
 }
