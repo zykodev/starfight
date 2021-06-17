@@ -1,2 +1,5 @@
 /.idea/
 starfight.iml
+/common/target/
+/client/target/
+/server/target/
