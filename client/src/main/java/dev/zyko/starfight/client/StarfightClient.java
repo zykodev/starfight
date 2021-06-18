@@ -3,29 +3,20 @@ package dev.zyko.starfight.client;
 import dev.zyko.starfight.client.display.DisplayManager;
 import dev.zyko.starfight.client.gui.impl.GuiScreenMainMenu;
 import dev.zyko.starfight.client.input.InputManager;
-import dev.zyko.starfight.client.netcode.ClientNetworkHandler;
 import dev.zyko.starfight.client.netcode.NetworkManager;
-import dev.zyko.starfight.client.netcode.encoding.ClientPacketDecoder;
-import dev.zyko.starfight.client.netcode.encoding.ClientPacketEncoder;
 import dev.zyko.starfight.client.renderer.GameRenderer;
-import dev.zyko.starfight.protocol.impl.C01PacketKeepAlive;
-import io.netty.bootstrap.Bootstrap;
-import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.*;
-import io.netty.channel.epoll.Epoll;
-import io.netty.channel.epoll.EpollEventLoopGroup;
-import io.netty.channel.epoll.EpollSocketChannel;
-import io.netty.channel.nio.NioEventLoopGroup;
-import io.netty.channel.socket.nio.NioSocketChannel;
-import org.lwjgl.glfw.GLFW;
+import dev.zyko.starfight.entity.EntityPlayerSpaceship;
 
 public class StarfightClient {
+
+    public static final String VERSION = "alpha-indev";
 
     private static StarfightClient instance;
     private NetworkManager networkManager;
     private DisplayManager displayManager;
     private GameRenderer gameRenderer;
     private InputManager inputManager;
+    private EntityPlayerSpaceship playerSpaceship;
 
     public static void main(String[] args) {
         try {
@@ -39,7 +30,7 @@ public class StarfightClient {
         instance = this;
         this.networkManager = new NetworkManager();
         this.displayManager = new DisplayManager();
-        this.displayManager.createDisplay(1280, 720, "Starfight (alpha-indev)");
+        this.displayManager.createDisplay(1280, 720, "Starfight (" + StarfightClient.VERSION + ")");
         this.gameRenderer = new GameRenderer();
         this.inputManager = new InputManager();
         this.gameRenderer.displayGuiScreen(new GuiScreenMainMenu());
@@ -73,6 +64,10 @@ public class StarfightClient {
 
     public GameRenderer getGameRenderer() {
         return gameRenderer;
+    }
+
+    public EntityPlayerSpaceship getPlayerSpaceship() {
+        return playerSpaceship;
     }
 
 }

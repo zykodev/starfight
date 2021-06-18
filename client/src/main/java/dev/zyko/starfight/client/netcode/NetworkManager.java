@@ -1,10 +1,12 @@
 package dev.zyko.starfight.client.netcode;
 
+import dev.zyko.starfight.client.StarfightClient;
 import dev.zyko.starfight.client.netcode.encoding.ClientPacketDecoder;
 import dev.zyko.starfight.client.netcode.encoding.ClientPacketEncoder;
 import dev.zyko.starfight.protocol.Packet;
 import dev.zyko.starfight.protocol.impl.C01PacketKeepAlive;
 import dev.zyko.starfight.protocol.impl.C02PacketDisconnect;
+import dev.zyko.starfight.protocol.impl.C03PacketConnect;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
@@ -20,7 +22,7 @@ public class NetworkManager {
     public static final boolean EPOLL = Epoll.isAvailable();
     private Channel channel;
 
-    public void connect(String remoteAddress) throws Exception {
+    public void connect(String remoteAddress, String nickname) throws Exception {
         int port = 26800;
         String hostname = "";
         if(remoteAddress.contains(":")) {
@@ -41,6 +43,7 @@ public class NetworkManager {
                             ch.pipeline().addLast("encoder", new ClientPacketEncoder()).addLast("decoder", new ClientPacketDecoder()).addLast("nethandler", new ClientNetworkHandler(ch));
                         }
                     }).connect("127.0.0.1", 8000).sync().channel();
+            this.channel.writeAndFlush(new C03PacketConnect(StarfightClient.VERSION, nickname));
         } finally {
             eventLoopGroup.shutdownGracefully();
         }
