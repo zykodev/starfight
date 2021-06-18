@@ -6,7 +6,7 @@ import io.netty.buffer.ByteBuf;
 
 import java.io.IOException;
 
-public class C03PacketConnect implements Packet {
+public class C03PacketConnect extends Packet {
 
     private String nickname;
     private String version;

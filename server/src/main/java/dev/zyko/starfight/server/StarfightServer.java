@@ -11,9 +11,12 @@ import io.netty.channel.epoll.EpollServerSocketChannel;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 
+import java.util.UUID;
+
 public class StarfightServer {
 
     public static final boolean EPOLL = Epoll.isAvailable();
+    public static final String SIGNATURE = UUID.randomUUID().toString().replace("-", "");
 
     public StarfightServer() throws Exception {
         EventLoopGroup eventLoopGroup = EPOLL ? new EpollEventLoopGroup() : new NioEventLoopGroup();

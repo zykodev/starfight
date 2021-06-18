@@ -2,6 +2,7 @@ package dev.zyko.starfight.server.netcode.encoding;
 
 import dev.zyko.starfight.protocol.Packet;
 import dev.zyko.starfight.protocol.PacketRegistry;
+import dev.zyko.starfight.server.StarfightServer;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
@@ -17,6 +18,7 @@ public class ServerPacketEncoder extends MessageToByteEncoder<Packet> {
             throw new IOException("Tried to encode a packet with an unknown id.");
         }
         out.writeInt(packetId);
+        msg.sign(out, StarfightServer.SIGNATURE);
         msg.write(out);
     }
 

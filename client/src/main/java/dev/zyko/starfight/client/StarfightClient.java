@@ -5,6 +5,7 @@ import dev.zyko.starfight.client.gui.impl.GuiScreenMainMenu;
 import dev.zyko.starfight.client.input.InputManager;
 import dev.zyko.starfight.client.netcode.NetworkManager;
 import dev.zyko.starfight.client.renderer.GameRenderer;
+import dev.zyko.starfight.client.renderer.texture.TextureManager;
 import dev.zyko.starfight.entity.EntityPlayerSpaceship;
 
 import java.util.UUID;
@@ -20,6 +21,7 @@ public class StarfightClient {
     private GameRenderer gameRenderer;
     private InputManager inputManager;
     private EntityPlayerSpaceship playerSpaceship;
+    private TextureManager textureManager;
 
     public static void main(String[] args) {
         try {
@@ -33,7 +35,9 @@ public class StarfightClient {
         instance = this;
         this.networkManager = new NetworkManager();
         this.displayManager = new DisplayManager();
+        this.textureManager = new TextureManager();
         this.displayManager.createDisplay(1280, 720, "Starfight (" + StarfightClient.VERSION + ")");
+        this.textureManager.loadTextures();
         this.gameRenderer = new GameRenderer();
         this.inputManager = new InputManager();
         this.gameRenderer.displayGuiScreen(new GuiScreenMainMenu());
@@ -73,4 +77,11 @@ public class StarfightClient {
         return playerSpaceship;
     }
 
+    public void setPlayerSpaceship(EntityPlayerSpaceship playerSpaceship) {
+        this.playerSpaceship = playerSpaceship;
+    }
+
+    public TextureManager getTextureManager() {
+        return textureManager;
+    }
 }

@@ -6,7 +6,7 @@ import io.netty.buffer.ByteBuf;
 
 import java.io.IOException;
 
-public class S02PacketDisconnect implements Packet {
+public class S02PacketDisconnect extends Packet {
 
     private String message;
 

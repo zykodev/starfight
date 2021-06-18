@@ -6,7 +6,7 @@ import io.netty.buffer.ByteBuf;
 
 import java.io.IOException;
 
-public class S03PacketAcceptConnection implements Packet {
+public class S03PacketAcceptConnection extends Packet {
 
     private int entityId;
     private String nickname;

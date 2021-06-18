@@ -18,6 +18,7 @@ public class ServerPacketDecoder extends ByteToMessageDecoder {
             throw new IOException("Received an invalid packet from client.");
         }
         Packet packet = packetClass.newInstance();
+        packet.readSignature(in);
         packet.read(in);
         out.add(packet);
     }

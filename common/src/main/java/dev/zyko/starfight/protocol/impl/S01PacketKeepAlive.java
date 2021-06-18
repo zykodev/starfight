@@ -5,7 +5,7 @@ import io.netty.buffer.ByteBuf;
 
 import java.io.IOException;
 
-public class S01PacketKeepAlive implements Packet {
+public class S01PacketKeepAlive extends Packet {
 
     private long systemTime;
 
