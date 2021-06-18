@@ -3,3 +3,6 @@ starfight.iml
 /common/target/
 /client/target/
 /server/target/
+/common/common.iml
+/client/client.iml
+/server/server.iml

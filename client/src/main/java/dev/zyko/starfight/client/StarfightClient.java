@@ -7,9 +7,12 @@ import dev.zyko.starfight.client.netcode.NetworkManager;
 import dev.zyko.starfight.client.renderer.GameRenderer;
 import dev.zyko.starfight.entity.EntityPlayerSpaceship;
 
+import java.util.UUID;
+
 public class StarfightClient {
 
     public static final String VERSION = "alpha-indev";
+    public static final String SIGNATURE = UUID.randomUUID().toString().replace("-", "");
 
     private static StarfightClient instance;
     private NetworkManager networkManager;
