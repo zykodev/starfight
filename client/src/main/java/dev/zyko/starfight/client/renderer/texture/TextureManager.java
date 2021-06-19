@@ -13,6 +13,7 @@ public class TextureManager {
 
     public void loadTextures() throws Exception {
         this.loadTexture("entity/spaceship", "spaceship.png");
+        this.loadTexture("ui/crosshair", "crosshair.png");
     }
 
     private void loadTexture(String alias, String resourceName) throws Exception {

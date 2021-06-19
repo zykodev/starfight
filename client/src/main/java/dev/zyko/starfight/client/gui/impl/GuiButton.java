@@ -16,8 +16,8 @@ public class GuiButton implements GuiComponent {
     }
 
     @Override
-    public void drawComponent(double mouseX, double mouseY, float partialTicks) {
-        System.out.println(this.text);
+    public void drawComponent(double mouseX, double mouseY, double partialTicks) {
+
     }
 
 }

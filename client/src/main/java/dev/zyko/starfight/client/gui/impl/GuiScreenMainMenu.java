@@ -10,7 +10,7 @@ public class GuiScreenMainMenu extends GuiScreen {
     }
 
     @Override
-    public void drawScreen(double mouseX, double mouseY, float partialTicks) {
+    public void drawScreen(double mouseX, double mouseY, double partialTicks) {
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
 

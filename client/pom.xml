@@ -130,6 +130,12 @@
             <classifier>${lwjgl.natives}</classifier>
             <version>${lwjgl.version}</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.joml/joml -->
+        <dependency>
+            <groupId>org.joml</groupId>
+            <artifactId>joml</artifactId>
+            <version>1.10.1</version>
+        </dependency>
     </dependencies>
     
 </project>

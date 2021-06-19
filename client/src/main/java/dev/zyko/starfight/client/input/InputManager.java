@@ -16,9 +16,10 @@ public class InputManager {
     }
 
     public double[] getMousePosition() {
-        double[] mousePosition = new double[2];
-        GLFW.glfwGetCursorPos(StarfightClient.getInstance().getDisplayManager().getWindowId(), mousePosition, mousePosition);
-        return mousePosition;
+        double[] mX = new double[1];
+        double[] mY = new double[1];
+        GLFW.glfwGetCursorPos(StarfightClient.getInstance().getDisplayManager().getWindowId(), mX, mY);
+        return new double[] { mX[0], mY[0] };
     }
 
 }

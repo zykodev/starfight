@@ -1,12 +1,15 @@
 package dev.zyko.starfight.client.display;
 
+import dev.zyko.starfight.client.renderer.texture.Texture;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
+import org.lwjgl.opengl.GL11;
 
 public class DisplayManager {
 
     private long windowId;
+    private int width, height;
 
     public void createDisplay(int width, int height, String title) throws Exception {
         if(!GLFW.glfwInit()) {
@@ -23,10 +26,31 @@ public class DisplayManager {
         GLFW.glfwMakeContextCurrent(this.windowId);
         GL.createCapabilities();
         GLFW.glfwSwapInterval(0);
+        GLFW.glfwSetInputMode(this.windowId, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_HIDDEN);
+        this.setViewport(0, 0, width, height);
+        this.width = width;
+        this.height = height;
     }
 
     public void updateDisplay() {
         GLFW.glfwPollEvents();
+        int[] width = new int[1];
+        int[] height = new int[1];
+        GLFW.glfwGetWindowSize(this.windowId, width, height);
+        this.setViewport(0, 0, width[0], height[0]);
+        this.width = width[0];
+        this.height = height[0];
+    }
+
+    public void setViewport(int x, int y, int width, int height) {
+        GL11.glViewport(0, 0, width, height);
+        GL11.glMatrixMode(GL11.GL_MODELVIEW);
+        GL11.glLoadIdentity();
+        GL11.glMatrixMode(GL11.GL_PROJECTION);
+        GL11.glLoadIdentity();
+        GL11.glOrtho(0, width, height, 0, 1, -1);
+        GL11.glMatrixMode(GL11.GL_MODELVIEW);
+        GL11.glLoadIdentity();
     }
 
     public void finishUpdate() {
@@ -43,5 +67,17 @@ public class DisplayManager {
 
     public long getWindowId() {
         return windowId;
+    }
+
+    public void setIcon(Texture texture) {
+        GLFW.glfwSetWindowIcon(this.windowId, texture.getTextureData());
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public int getWidth() {
+        return width;
     }
 }

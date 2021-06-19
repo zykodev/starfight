@@ -14,7 +14,7 @@ public class GuiScreen {
     protected void initializeComponents() {
     }
 
-    public void drawScreen(double mouseX, double mouseY, float partialTicks) {
+    public void drawScreen(double mouseX, double mouseY, double partialTicks) {
         this.componentList.forEach(c -> c.drawComponent(mouseX, mouseY, partialTicks));
     }
 
