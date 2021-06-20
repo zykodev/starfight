@@ -1,18 +1,21 @@
 package dev.zyko.starfight.client;
 
 import dev.zyko.starfight.client.display.DisplayManager;
+import dev.zyko.starfight.client.entity.EntityPlayerSpaceship;
+import dev.zyko.starfight.client.entity.EntitySpaceship;
 import dev.zyko.starfight.client.gui.impl.GuiScreenMainMenu;
 import dev.zyko.starfight.client.input.InputManager;
 import dev.zyko.starfight.client.netcode.NetworkManager;
 import dev.zyko.starfight.client.renderer.GameRenderer;
 import dev.zyko.starfight.client.renderer.font.FontManager;
+import dev.zyko.starfight.client.renderer.model.ModelManager;
 import dev.zyko.starfight.client.renderer.shader.ShaderManager;
 import dev.zyko.starfight.client.renderer.texture.TextureManager;
 import dev.zyko.starfight.client.thread.GameTickThread;
 import dev.zyko.starfight.client.util.IOHelper;
 import dev.zyko.starfight.client.util.TextureHelper;
 import dev.zyko.starfight.client.util.TimeHelper;
-import dev.zyko.starfight.entity.EntityPlayerSpaceship;
+import dev.zyko.starfight.client.world.World;
 
 import java.io.File;
 import java.nio.ByteBuffer;
@@ -24,14 +27,19 @@ public class StarfightClient {
     public static final String SIGNATURE = UUID.randomUUID().toString().replace("-", "");
 
     private static StarfightClient instance;
+
+    private EntityPlayerSpaceship playerSpaceship;
+    private World world;
+
     private NetworkManager networkManager;
     private DisplayManager displayManager;
     private GameRenderer gameRenderer;
     private InputManager inputManager;
-    private EntityPlayerSpaceship playerSpaceship;
+
     private TextureManager textureManager;
     private ShaderManager shaderManager;
     private FontManager fontManager;
+    private ModelManager modelManager;
 
     private TimeHelper gameTickTimer = new TimeHelper(48);
 
@@ -50,16 +58,19 @@ public class StarfightClient {
         this.networkManager = new NetworkManager();
         this.displayManager = new DisplayManager();
         this.textureManager = new TextureManager();
+        this.modelManager = new ModelManager();
         this.fontManager = new FontManager();
         this.shaderManager = new ShaderManager();
         this.displayManager.createDisplay(1280, 720, "Starfight (" + StarfightClient.VERSION + ")");
         this.textureManager.loadTextures();
+        this.modelManager.loadModels();
         this.fontManager.loadFonts();
         File iconAsset = IOHelper.extractAsset("textures/spaceship.png");
         ByteBuffer buffer = TextureHelper.fileToBuffer(iconAsset.getAbsolutePath());
         this.displayManager.setIcon(buffer);
         this.shaderManager.loadShaders();
         this.gameRenderer = new GameRenderer();
+        this.gameRenderer.getParticleRenderer().setup(0, 0, 1280, 720);
         this.inputManager = new InputManager();
         this.gameRenderer.displayGuiScreen(new GuiScreenMainMenu());
         this.run();
@@ -71,15 +82,19 @@ public class StarfightClient {
     }
 
     private void run() {
+        this.world = new World();
+        this.playerSpaceship = new EntityPlayerSpaceship(0, 0, 0, 0, "Player");
+        EntitySpaceship entitySpaceship = new EntitySpaceship(1, 100, 100, 90, "Player 2");
+        this.world.loadEntity(this.playerSpaceship);
+        this.world.loadEntity(entitySpaceship);
         this.gameTickThread = new GameTickThread();
+        this.gameTickThread.setName("game-tick-thread");
+        this.gameTickThread.setDaemon(true);
         this.gameTickThread.start();
-        TimeHelper fpsLock = new TimeHelper();
         while(!this.displayManager.shouldWindowClose()) {
             this.displayManager.updateDisplay();
             this.gameRenderer.renderGame(this.gameTickTimer.getPartialTicks());
             this.displayManager.finishUpdate();
-            while(!fpsLock.isDelayComplete(1000.0D / 203.0D)) {}
-            fpsLock.updateSystemTime();
         }
         this.exit();
     }
@@ -128,4 +143,15 @@ public class StarfightClient {
         return gameTickTimer;
     }
 
+    public World getWorld() {
+        return world;
+    }
+
+    public void setWorld(World world) {
+        this.world = world;
+    }
+
+    public ModelManager getModelManager() {
+        return modelManager;
+    }
 }

@@ -43,9 +43,10 @@ public class GuiButton implements GuiComponent {
             this.additionalLightness = 0;
         }
         int addedLightness = (int) (Math.cos(((2 * Math.PI) / StarfightClient.getInstance().getGameTickTimer().getTicksPerSecond()) * this.additionalLightness) * 30 + 30);
+        float yOffset = (float) (Math.sin(((2 * Math.PI) / StarfightClient.getInstance().getGameTickTimer().getTicksPerSecond()) * this.additionalLightness)) * 3.0F;
         StarfightClient.getInstance().getGameRenderer().drawRectangle(this.posX - this.xOffset, this.posY, this.width + 2 * this.xOffset, this.height, hovered ? new Color(60 + addedLightness, 60 + addedLightness, 60 + addedLightness, 80).getRGB() : 0x99111111);
         if(hovered) {
-            StarfightClient.getInstance().getFontManager().getFontRenderer("ui/basictext").drawCenteredStringWithShadow(this.text, this.posX + width / 2.0F, this.posY, -1);
+            StarfightClient.getInstance().getFontManager().getFontRenderer("ui/basictext").drawCenteredStringWithShadow(this.text, this.posX + width / 2.0F - yOffset, this.posY, -1);
         } else {
             StarfightClient.getInstance().getFontManager().getFontRenderer("ui/basictext").drawCenteredString(this.text, this.posX + width / 2.0F, this.posY, -1);
         }

@@ -6,11 +6,8 @@ import org.lwjgl.opengl.GL11;
 
 public class GuiScreenMainMenu extends GuiScreen {
 
-    private float time = 0;
-
     @Override
     public void runTick(double mouseX, double mouseY) {
-        this.time += 0.002F;
         super.runTick(mouseX, mouseY);
     }
 
@@ -33,10 +30,13 @@ public class GuiScreenMainMenu extends GuiScreen {
         int screenHeight = StarfightClient.getInstance().getDisplayManager().getHeight();
         int w = 350;
         int h = 40;
-        StarfightClient.getInstance().getShaderManager().getShader("stars").bindShader();
-        StarfightClient.getInstance().getShaderManager().getShader("stars").setUniform("time", this.time);
-        StarfightClient.getInstance().getGameRenderer().drawRectangle(-screenWidth, -screenHeight, screenWidth * 2, screenHeight * 4, -1);
-        StarfightClient.getInstance().getShaderManager().getShader("stars").unbindShader();
+        /*
+            StarfightClient.getInstance().getShaderManager().getShader("stars").bindShader();
+            StarfightClient.getInstance().getShaderManager().getShader("stars").setUniform("time", this.time);
+            StarfightClient.getInstance().getGameRenderer().drawRectangle(-screenWidth, -screenHeight, screenWidth * 2, screenHeight * 4, -1);
+            StarfightClient.getInstance().getShaderManager().getShader("stars").unbindShader();
+         */
+        StarfightClient.getInstance().getGameRenderer().getParticleRenderer().drawParticles(partialTicks);
         StarfightClient.getInstance().getGameRenderer().drawRectangle((screenWidth - w) / 2, screenHeight * 0.3 - 60, w, 100 + 5 * h + 10 + 80, 0x80111111);
         super.drawScreen(mouseX, mouseY, partialTicks);
         StarfightClient.getInstance().getFontManager().getFontRenderer("ui/logo").drawCenteredString("Starfight", StarfightClient.getInstance().getDisplayManager().getWidth() / 2.0F, StarfightClient.getInstance().getDisplayManager().getHeight() * 0.3F - 30, -1);

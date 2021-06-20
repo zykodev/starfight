@@ -4,25 +4,24 @@ import dev.zyko.starfight.client.StarfightClient;
 import dev.zyko.starfight.client.gui.GuiScreen;
 import dev.zyko.starfight.client.renderer.font.FontRenderer;
 import dev.zyko.starfight.client.renderer.model.Model;
-import dev.zyko.starfight.client.renderer.model.impl.ModelSpaceship;
+import dev.zyko.starfight.client.renderer.particle.ParticleRenderer;
 import dev.zyko.starfight.client.util.ColorUtil;
-import dev.zyko.starfight.client.util.MathHelper;
 import dev.zyko.starfight.client.util.TimeHelper;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.stb.STBEasyFont;
-import org.lwjgl.stb.STBTruetype;
-
-import java.awt.*;
 
 public class GameRenderer {
 
+    private ParticleRenderer particleRenderer;
     private GuiScreen currentScreen;
     private TimeHelper frameTimer = new TimeHelper();
     private int framesPerSecond = 0, framesDrawn = 0;
     private long frameTime = System.nanoTime(), prevNanos, postNanos;
 
-    private Model crosshairModel = new Model(StarfightClient.getInstance().getTextureManager().getTexture("ui/crosshair"), 0.1);
-    private Model spaceshipModel = new ModelSpaceship(Color.CYAN.getRGB());
+    public GameRenderer() {
+        this.particleRenderer = new ParticleRenderer();
+    }
+
+    private final Model crosshairModel = new Model(StarfightClient.getInstance().getTextureManager().getTexture("ui/crosshair"), 0.1);
 
     public void renderGame(double partialTicks) {
         this.prevNanos = System.nanoTime();
@@ -34,14 +33,12 @@ public class GameRenderer {
 
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
 
-        this.spaceshipModel.applyModelTransformation();
-        this.spaceshipModel.drawModel(-64/2, -64/2, 64, 64, partialTicks);
-
+        StarfightClient.getInstance().getWorld().renderWorld(partialTicks);
         this.renderOverlay(partialTicks);
 
         double[] mousePosition = StarfightClient.getInstance().getInputManager().getMousePosition();
         if(this.currentScreen != null) {
-            this.currentScreen.drawScreen(mousePosition[0], mousePosition[1], partialTicks);
+            // this.currentScreen.drawScreen(mousePosition[0], mousePosition[1], partialTicks);
         }
 
         this.renderDebugOverlay(partialTicks);
@@ -126,4 +123,9 @@ public class GameRenderer {
     public GuiScreen getCurrentScreen() {
         return currentScreen;
     }
+
+    public ParticleRenderer getParticleRenderer() {
+        return particleRenderer;
+    }
+
 }

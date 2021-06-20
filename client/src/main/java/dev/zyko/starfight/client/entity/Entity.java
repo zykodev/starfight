@@ -1,21 +1,39 @@
-package dev.zyko.starfight.entity;
+package dev.zyko.starfight.client.entity;
+
+import dev.zyko.starfight.client.renderer.model.Model;
+import org.lwjgl.opengl.GL11;
 
 import java.util.Objects;
 
 public abstract class Entity {
 
-    private int id;
-    private double posX, posY, width, height;
+    protected int id;
+    protected double posX, posY, width, height;
+    protected Model model;
 
-    public Entity(int id, double posX, double posY, double width, double height) {
+    public Entity(int id, double posX, double posY, double width, double height, Model model) {
         this.id = id;
         this.posX = posX;
         this.posY = posY;
         this.width = width;
         this.height = height;
+        this.model = model;
     }
 
     public abstract void updateEntity();
+
+    public void drawEntity(double partialTicks, double x, double y, double width, double height, double rotation) {
+        GL11.glPushMatrix();
+        GL11.glTranslated(x, y, 0);
+        GL11.glRotated(rotation, 0, 0, 1);
+        this.enableAdditionalFeatures();
+        this.getModel().drawModel(-width/2, -height/2, width, height, partialTicks);
+        this.disableAdditionalFeatures();
+        GL11.glPopMatrix();
+    }
+
+    protected void enableAdditionalFeatures() {}
+    protected void disableAdditionalFeatures() {}
 
     @Override
     public boolean equals(Object o) {
@@ -66,4 +84,7 @@ public abstract class Entity {
         this.height = height;
     }
 
+    public Model getModel() {
+        return model;
+    }
 }

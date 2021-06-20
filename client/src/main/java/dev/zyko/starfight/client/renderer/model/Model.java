@@ -34,10 +34,6 @@ public class Model {
         }, 0);
     }
 
-    public void applyModelTransformation() {
-        GL11.glPushMatrix();
-    }
-
     public void drawModel(double x, double y, double width, double height, double partialTicks) {
         this.texture.bindTexture();
         GL11.glEnable(GL11.GL_BLEND);
@@ -59,7 +55,6 @@ public class Model {
         GL11.glEnd();
         GL11.glDisable(GL11.GL_BLEND);
         this.texture.unbindTexture();
-        GL11.glPopMatrix();
     }
 
     private DoubleBuffer createDoubleBuffer(double[] data) {

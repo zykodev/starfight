@@ -22,6 +22,8 @@ public class GameTickThread extends Thread {
                 if (StarfightClient.getInstance().getGameRenderer().getCurrentScreen() != null) {
                     StarfightClient.getInstance().getGameRenderer().getCurrentScreen().runTick(StarfightClient.getInstance().getInputManager().getMousePosition()[0], StarfightClient.getInstance().getInputManager().getMousePosition()[1]);
                 }
+                StarfightClient.getInstance().getGameRenderer().getParticleRenderer().tickParticles();
+                StarfightClient.getInstance().getWorld().tickWorld();
                 updates++;
             }
         }
