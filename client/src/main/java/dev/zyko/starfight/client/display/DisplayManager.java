@@ -1,10 +1,14 @@
 package dev.zyko.starfight.client.display;
 
+import dev.zyko.starfight.client.StarfightClient;
 import dev.zyko.starfight.client.renderer.texture.Texture;
 import org.lwjgl.glfw.GLFW;
+import org.lwjgl.glfw.GLFWImage;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
+
+import java.nio.ByteBuffer;
 
 public class DisplayManager {
 
@@ -38,8 +42,18 @@ public class DisplayManager {
         int[] height = new int[1];
         GLFW.glfwGetWindowSize(this.windowId, width, height);
         this.setViewport(0, 0, width[0], height[0]);
+        int oldWidth = this.width;
+        int oldHeight = this.height;
         this.width = width[0];
         this.height = height[0];
+        if(StarfightClient.getInstance().getGameRenderer().getCurrentScreen() != null && (this.height != oldHeight || this.width != oldWidth)) {
+            try {
+                StarfightClient.getInstance().getGameRenderer().displayGuiScreen(StarfightClient.getInstance().getGameRenderer().getCurrentScreen().getClass().newInstance());
+                System.out.println("Resized gui screen.");
+            } catch (Exception e) {
+                System.out.println("Failed to re-display current gui screen to fit to new window size.");
+            }
+        }
     }
 
     public void setViewport(int x, int y, int width, int height) {
@@ -69,8 +83,12 @@ public class DisplayManager {
         return windowId;
     }
 
-    public void setIcon(Texture texture) {
-        GLFW.glfwSetWindowIcon(this.windowId, texture.getTextureData());
+    public void setIcon(ByteBuffer image) {
+        GLFWImage glfwImage = GLFWImage.malloc();
+        GLFWImage.Buffer glfwImages = GLFWImage.malloc(1);
+        glfwImage.set(32, 32, image);
+        glfwImages.put(0, glfwImage);
+        GLFW.glfwSetWindowIcon(this.windowId, glfwImages);
     }
 
     public int getHeight() {

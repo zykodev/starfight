@@ -5,12 +5,17 @@ import dev.zyko.starfight.client.gui.impl.GuiScreenMainMenu;
 import dev.zyko.starfight.client.input.InputManager;
 import dev.zyko.starfight.client.netcode.NetworkManager;
 import dev.zyko.starfight.client.renderer.GameRenderer;
-import dev.zyko.starfight.client.renderer.shader.Shader;
+import dev.zyko.starfight.client.renderer.font.FontManager;
 import dev.zyko.starfight.client.renderer.shader.ShaderManager;
 import dev.zyko.starfight.client.renderer.texture.TextureManager;
+import dev.zyko.starfight.client.thread.GameTickThread;
+import dev.zyko.starfight.client.util.IOHelper;
+import dev.zyko.starfight.client.util.TextureHelper;
 import dev.zyko.starfight.client.util.TimeHelper;
 import dev.zyko.starfight.entity.EntityPlayerSpaceship;
 
+import java.io.File;
+import java.nio.ByteBuffer;
 import java.util.UUID;
 
 public class StarfightClient {
@@ -26,8 +31,11 @@ public class StarfightClient {
     private EntityPlayerSpaceship playerSpaceship;
     private TextureManager textureManager;
     private ShaderManager shaderManager;
+    private FontManager fontManager;
 
     private TimeHelper gameTickTimer = new TimeHelper(48);
+
+    private GameTickThread gameTickThread;
 
     public static void main(String[] args) {
         try {
@@ -42,10 +50,14 @@ public class StarfightClient {
         this.networkManager = new NetworkManager();
         this.displayManager = new DisplayManager();
         this.textureManager = new TextureManager();
+        this.fontManager = new FontManager();
         this.shaderManager = new ShaderManager();
         this.displayManager.createDisplay(1280, 720, "Starfight (" + StarfightClient.VERSION + ")");
         this.textureManager.loadTextures();
-        this.displayManager.setIcon(this.textureManager.getTexture("entity/spaceship"));
+        this.fontManager.loadFonts();
+        File iconAsset = IOHelper.extractAsset("textures/spaceship.png");
+        ByteBuffer buffer = TextureHelper.fileToBuffer(iconAsset.getAbsolutePath());
+        this.displayManager.setIcon(buffer);
         this.shaderManager.loadShaders();
         this.gameRenderer = new GameRenderer();
         this.inputManager = new InputManager();
@@ -53,25 +65,23 @@ public class StarfightClient {
         this.run();
     }
 
+    private void exit() {
+        this.displayManager.destroyDisplay();
+        this.gameTickThread.terminate();
+    }
+
     private void run() {
-        TimeHelper timeHelper = new TimeHelper();
-        int updates = 0;
+        this.gameTickThread = new GameTickThread();
+        this.gameTickThread.start();
+        TimeHelper fpsLock = new TimeHelper();
         while(!this.displayManager.shouldWindowClose()) {
-            if(timeHelper.isDelayComplete(1000)) {
-                System.out.println("Updates last second: " + updates);
-                System.out.println("Frames per second: " + this.gameRenderer.getFramesPerSecond());
-                updates = 0;
-                timeHelper.updateSystemTime();
-            }
-            if(this.gameTickTimer.shouldTick()) {
-                this.gameTickTimer.updateSystemTime();
-                updates++;
-            }
             this.displayManager.updateDisplay();
             this.gameRenderer.renderGame(this.gameTickTimer.getPartialTicks());
             this.displayManager.finishUpdate();
+            while(!fpsLock.isDelayComplete(1000.0D / 203.0D)) {}
+            fpsLock.updateSystemTime();
         }
-        this.displayManager.destroyDisplay();
+        this.exit();
     }
 
     public static StarfightClient getInstance() {
@@ -109,4 +119,13 @@ public class StarfightClient {
     public ShaderManager getShaderManager() {
         return shaderManager;
     }
+
+    public FontManager getFontManager() {
+        return fontManager;
+    }
+
+    public TimeHelper getGameTickTimer() {
+        return gameTickTimer;
+    }
+
 }

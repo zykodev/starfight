@@ -17,6 +17,7 @@ public class ShaderManager {
 
     public void loadShaders() throws Exception {
         this.loadShader("basic");
+        this.loadShader("stars");
     }
 
     private void loadShader(String name) throws Exception {
@@ -30,6 +31,10 @@ public class ShaderManager {
 
     public Shader getShader(String alias) {
         return this.shaderMap.get(alias.toLowerCase(Locale.ROOT));
+    }
+
+    public void tickShaders() {
+        this.shaderMap.values().forEach(s -> s.runTick());
     }
 
     private String toString(InputStream inputStream) throws Exception {

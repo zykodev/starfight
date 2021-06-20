@@ -5,6 +5,7 @@ import org.lwjgl.glfw.GLFWImage;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
+import org.lwjgl.stb.STBImage;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -15,8 +16,6 @@ public class Texture {
 
     private int textureId;
     private int width, height;
-
-    private GLFWImage.Buffer textureData;
 
     public Texture(InputStream inputStream) throws Exception {
         BufferedImage bufferedImage = ImageIO.read(inputStream);
@@ -36,22 +35,12 @@ public class Texture {
         }
         buffer.flip();
 
-        GLFWImage image = GLFWImage.malloc();
-        GLFWImage.Buffer imgBuf = GLFWImage.malloc(1);
-        image.set(this.width, this.height, buffer);
-        imgBuf.put(0, image);
-
-        buffer.rewind();
         this.textureId = GL20.glGenTextures();
         GL20.glBindTexture(GL20.GL_TEXTURE_2D, this.textureId);
         GL20.glTexParameterf(GL20.GL_TEXTURE_2D, GL20.GL_TEXTURE_MIN_FILTER, GL20.GL_NEAREST);
         GL20.glTexParameterf(GL20.GL_TEXTURE_2D, GL20.GL_TEXTURE_MAG_FILTER, GL20.GL_NEAREST);
         GL20.glTexImage2D(GL20.GL_TEXTURE_2D, 0, GL20.GL_RGBA, width, height, 0, GL20.GL_RGBA, GL20.GL_UNSIGNED_BYTE, buffer);
         GL20.glBindTexture(GL20.GL_TEXTURE_2D, 0);
-    }
-
-    public GLFWImage.Buffer getTextureData() {
-        return textureData;
     }
 
     public void bindTexture() {

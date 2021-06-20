@@ -31,4 +31,7 @@ public class TimeHelper {
         return this.isDelayComplete(this.tickRate);
     }
 
+    public double getTicksPerSecond() {
+        return ticksPerSecond;
+    }
 }

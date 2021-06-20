@@ -9,6 +9,8 @@ public class Shader {
 
     private int programId, fragmentShaderId, vertexShaderId;
 
+    public void runTick() {}
+
     public Shader(String vertexShader, String fragmentShader) throws Exception {
         this.programId = GL20.glCreateProgram();
         this.vertexShaderId = GL20.glCreateShader(GL20.GL_VERTEX_SHADER);
@@ -47,6 +49,24 @@ public class Shader {
         int location = GL20.glGetUniformLocation(this.programId, paramName);
         if(location != -1) {
             GL20.glUniform1i(location, value);
+        } else {
+            System.out.println("Unable to find parameter \"" + paramName + "\".");
+        }
+    }
+
+    public void setUniform(String paramName, float value) {
+        int location = GL20.glGetUniformLocation(this.programId, paramName);
+        if(location != -1) {
+            GL20.glUniform1f(location, value);
+        } else {
+            System.out.println("Unable to find parameter \"" + paramName + "\".");
+        }
+    }
+
+    public void setUniform(String paramName, float x, float y) {
+        int location = GL20.glGetUniformLocation(this.programId, paramName);
+        if(location != -1) {
+            GL20.glUniform2f(location, x, y);
         } else {
             System.out.println("Unable to find parameter \"" + paramName + "\".");
         }
