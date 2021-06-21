@@ -174,7 +174,7 @@ public class FontRenderer {
     }
 
     public void drawCenteredString(String text, float x, float y, int color) {
-        y += this.height / 2.0F + 1;
+        y -= 1;
         double w = this.getStringWidth(text);
         x -= w / 2.0F;
         this.drawString(text, x, y, color);

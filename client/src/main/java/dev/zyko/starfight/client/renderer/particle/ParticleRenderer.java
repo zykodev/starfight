@@ -46,9 +46,6 @@ public class ParticleRenderer {
             GL11.glPopMatrix();
         }
         /*
-
-        CODE FOR "PARTICLE LINES" (big cpu hog tho)
-
         for (Particle particle : this.particles) {
             for (Particle particle2 : this.particles) {
                 if(particle == particle2) continue;
@@ -72,7 +69,7 @@ public class ParticleRenderer {
                 }
             }
         }
-        */
+         */
     }
 
 }

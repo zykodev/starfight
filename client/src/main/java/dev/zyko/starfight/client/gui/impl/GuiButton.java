@@ -25,7 +25,7 @@ public class GuiButton implements GuiComponent {
         boolean hovered = mouseX >= this.posX - this.xOffset && mouseX <= this.posX + width + this.xOffset && mouseY >= this.posY && mouseY <= this.posY + height;
         float maxOffset = 15;
         float diffOffset = maxOffset - this.xOffset;
-        if(this.xOffset <= 15 && hovered) {
+        if(this.xOffset <= maxOffset && hovered) {
             this.xOffset += diffOffset / 4;
             if(this.xOffset > maxOffset - 0.5) this.xOffset = maxOffset;
         }
@@ -46,9 +46,9 @@ public class GuiButton implements GuiComponent {
         float yOffset = (float) (Math.sin(((2 * Math.PI) / StarfightClient.getInstance().getGameTickTimer().getTicksPerSecond()) * this.additionalLightness)) * 3.0F;
         StarfightClient.getInstance().getGameRenderer().drawRectangle(this.posX - this.xOffset, this.posY, this.width + 2 * this.xOffset, this.height, hovered ? new Color(60 + addedLightness, 60 + addedLightness, 60 + addedLightness, 80).getRGB() : 0x99111111);
         if(hovered) {
-            StarfightClient.getInstance().getFontManager().getFontRenderer("ui/basictext").drawCenteredStringWithShadow(this.text, this.posX + width / 2.0F - yOffset, this.posY, -1);
+            StarfightClient.getInstance().getFontManager().getFontRenderer("ui/basictext").drawCenteredStringWithShadow(this.text, this.posX + width / 2.0F - yOffset, this.posY + this.height / 2.0F - 8, -1);
         } else {
-            StarfightClient.getInstance().getFontManager().getFontRenderer("ui/basictext").drawCenteredString(this.text, this.posX + width / 2.0F, this.posY, -1);
+            StarfightClient.getInstance().getFontManager().getFontRenderer("ui/basictext").drawCenteredString(this.text, this.posX + width / 2.0F, this.posY + this.height / 2.0F - 8, -1);
         }
     }
 

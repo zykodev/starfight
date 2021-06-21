@@ -3,6 +3,7 @@ package dev.zyko.starfight.client;
 import dev.zyko.starfight.client.display.DisplayManager;
 import dev.zyko.starfight.client.entity.EntityPlayerSpaceship;
 import dev.zyko.starfight.client.entity.EntitySpaceship;
+import dev.zyko.starfight.client.gui.impl.GuiIngameMenu;
 import dev.zyko.starfight.client.gui.impl.GuiScreenMainMenu;
 import dev.zyko.starfight.client.input.InputManager;
 import dev.zyko.starfight.client.netcode.NetworkManager;
@@ -73,6 +74,7 @@ public class StarfightClient {
         this.gameRenderer.getParticleRenderer().setup(0, 0, 1280, 720);
         this.inputManager = new InputManager();
         this.gameRenderer.displayGuiScreen(new GuiScreenMainMenu());
+        // this.gameRenderer.displayGuiScreen(new GuiIngameMenu());
         this.run();
     }
 

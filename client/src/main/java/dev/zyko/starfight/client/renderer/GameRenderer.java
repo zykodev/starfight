@@ -1,6 +1,7 @@
 package dev.zyko.starfight.client.renderer;
 
 import dev.zyko.starfight.client.StarfightClient;
+import dev.zyko.starfight.client.gui.GuiOverlay;
 import dev.zyko.starfight.client.gui.GuiScreen;
 import dev.zyko.starfight.client.renderer.font.FontRenderer;
 import dev.zyko.starfight.client.renderer.model.Model;
@@ -33,12 +34,21 @@ public class GameRenderer {
 
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
 
-        StarfightClient.getInstance().getWorld().renderWorld(partialTicks);
         this.renderOverlay(partialTicks);
 
         double[] mousePosition = StarfightClient.getInstance().getInputManager().getMousePosition();
         if(this.currentScreen != null) {
-            // this.currentScreen.drawScreen(mousePosition[0], mousePosition[1], partialTicks);
+            if(this.currentScreen instanceof GuiOverlay) {
+                if(StarfightClient.getInstance().getWorld() != null) {
+                    StarfightClient.getInstance().getWorld().renderWorld(partialTicks);
+                }
+            }
+            this.currentScreen.drawScreen(mousePosition[0], mousePosition[1], partialTicks);
+        }
+        else {
+            if(StarfightClient.getInstance().getWorld() != null) {
+                StarfightClient.getInstance().getWorld().renderWorld(partialTicks);
+            }
         }
 
         this.renderDebugOverlay(partialTicks);
