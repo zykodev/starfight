@@ -2,6 +2,7 @@ package dev.zyko.starfight.client.gui.impl;
 
 import dev.zyko.starfight.client.StarfightClient;
 import dev.zyko.starfight.client.gui.GuiComponent;
+import dev.zyko.starfight.client.input.InputManager;
 
 import java.awt.*;
 
@@ -11,13 +12,25 @@ public class GuiButton implements GuiComponent {
     private String text;
     private int additionalLightness = 0;
     private float xOffset = 0;
+    private ButtonRunnable runnable;
 
-    public GuiButton(int posX, int posY, int width, int height, String text) {
+    public GuiButton(int posX, int posY, int width, int height, String text, ButtonRunnable runnable) {
         this.posX = posX;
         this.posY = posY;
         this.width = width;
         this.height = height;
         this.text = text;
+        this.runnable = runnable;
+    }
+
+    @Override
+    public void mouseButtonPressed(int button, double x, double y) {
+        boolean hovered = x >= this.posX - this.xOffset && x <= this.posX + width + this.xOffset && y >= this.posY && y <= this.posY + height;
+        if(button == InputManager.MOUSE_LEFT && hovered) this.runnable.run();
+    }
+
+    @Override
+    public void mouseButtonReleased(int button, double x, double y) {
     }
 
     @Override
@@ -50,6 +63,10 @@ public class GuiButton implements GuiComponent {
         } else {
             StarfightClient.getInstance().getFontManager().getFontRenderer("ui/basictext").drawCenteredString(this.text, this.posX + width / 2.0F, this.posY + this.height / 2.0F - 8, -1);
         }
+    }
+
+    public interface ButtonRunnable {
+        void run();
     }
 
 }

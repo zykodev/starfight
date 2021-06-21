@@ -2,6 +2,7 @@ package dev.zyko.starfight.client.gui.impl;
 
 import dev.zyko.starfight.client.StarfightClient;
 import dev.zyko.starfight.client.gui.GuiScreen;
+import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 
 public class GuiScreenMainMenu extends GuiScreen {
@@ -20,11 +21,15 @@ public class GuiScreenMainMenu extends GuiScreen {
         int screenHeight = StarfightClient.getInstance().getDisplayManager().getHeight();
         int w = 300;
         int h = 40;
-        this.componentList.add(new GuiButton((screenWidth - w) / 2, (int) (screenHeight * 0.3F + 100F), w, h, "Connect to a Server"));
-        this.componentList.add(new GuiButton((screenWidth - w) / 2, (int) (screenHeight * 0.3F + 100F) + h + 2, w, h, "Customize Spaceship"));
-        this.componentList.add(new GuiButton((screenWidth - w) / 2, (int) (screenHeight * 0.3F + 100F)+ 2 * h + 4, w, h, "About this game"));
-        this.componentList.add(new GuiButton((screenWidth - w) / 2, (int) (screenHeight * 0.3F + 100F)+ 3 * h + 6, w, h, "Credits"));
-        this.componentList.add(new GuiButton((screenWidth - w) / 2, (int) (screenHeight * 0.3F + 100F)+ 4 * h + 8, w, h, "Exit Game"));
+        this.componentList.add(new GuiButton((screenWidth - w) / 2, (int) (screenHeight * 0.3F + 100F), w, h, "Connect to a Server", () -> {}));
+        this.componentList.add(new GuiButton((screenWidth - w) / 2, (int) (screenHeight * 0.3F + 100F) + h + 2, w, h, "Customize Spaceship", () -> {}));
+        this.componentList.add(new GuiButton((screenWidth - w) / 2, (int) (screenHeight * 0.3F + 100F)+ 2 * h + 4, w, h, "About this game", () -> {
+            StarfightClient.getInstance().openWebsite("https://starfight.zyko.dev/about");
+        }));
+        this.componentList.add(new GuiButton((screenWidth - w) / 2, (int) (screenHeight * 0.3F + 100F)+ 3 * h + 6, w, h, "Credits", () -> {}));
+        this.componentList.add(new GuiButton((screenWidth - w) / 2, (int) (screenHeight * 0.3F + 100F)+ 4 * h + 8, w, h, "Exit Game", () -> {
+            GLFW.glfwSetWindowShouldClose(StarfightClient.getInstance().getDisplayManager().getWindowId(), true);
+        }));
     }
 
     @Override

@@ -22,4 +22,12 @@ public class GuiScreen {
         this.componentList.forEach(c -> c.drawComponent(mouseX, mouseY, partialTicks));
     }
 
+    public void mouseButtonPressed(int button, double x, double y) {
+        this.componentList.forEach(c -> c.mouseButtonPressed(button, x, y));
+    }
+
+    public void mouseButtonReleased(int button, double x, double y) {
+        this.componentList.forEach(c -> c.mouseButtonReleased(button, x, y));
+    }
+
 }

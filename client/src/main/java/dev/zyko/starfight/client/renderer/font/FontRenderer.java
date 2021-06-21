@@ -20,7 +20,7 @@ import java.nio.IntBuffer;
 
 public class FontRenderer {
 
-    private final int charMallocSize = 96;
+    private final int charMallocSize = 1536;
     private final int fontTextureWidth = 512;
     private final int fontTextureHeight = fontTextureWidth;
     private final int bakeFirstChar = 32;

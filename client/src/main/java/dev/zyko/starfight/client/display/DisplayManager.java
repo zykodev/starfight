@@ -1,6 +1,7 @@
 package dev.zyko.starfight.client.display;
 
 import dev.zyko.starfight.client.StarfightClient;
+import dev.zyko.starfight.client.input.InputManager;
 import dev.zyko.starfight.client.renderer.texture.Texture;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWImage;
@@ -34,6 +35,8 @@ public class DisplayManager {
         this.setViewport(0, 0, width, height);
         this.width = width;
         this.height = height;
+        GLFW.glfwSetKeyCallback(this.windowId, new InputManager.KeyboardAdapter());
+        GLFW.glfwSetMouseButtonCallback(this.windowId, new InputManager.MouseAdapter());
     }
 
     public void updateDisplay() {

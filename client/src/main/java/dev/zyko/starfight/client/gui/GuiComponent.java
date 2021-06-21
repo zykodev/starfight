@@ -6,4 +6,8 @@ public interface GuiComponent {
 
     void runTick(double mouseX, double mouseY);
 
+    void mouseButtonPressed(int button, double x, double y);
+
+    void mouseButtonReleased(int button, double x, double y);
+
 }

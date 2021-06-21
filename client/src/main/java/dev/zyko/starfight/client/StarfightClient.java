@@ -19,7 +19,10 @@ import dev.zyko.starfight.client.util.TimeHelper;
 import dev.zyko.starfight.client.world.World;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.util.Locale;
+import java.util.Properties;
 import java.util.UUID;
 
 public class StarfightClient {
@@ -62,6 +65,7 @@ public class StarfightClient {
         this.modelManager = new ModelManager();
         this.fontManager = new FontManager();
         this.shaderManager = new ShaderManager();
+        this.inputManager = new InputManager();
         this.displayManager.createDisplay(1280, 720, "Starfight (" + StarfightClient.VERSION + ")");
         this.textureManager.loadTextures();
         this.modelManager.loadModels();
@@ -72,7 +76,6 @@ public class StarfightClient {
         this.shaderManager.loadShaders();
         this.gameRenderer = new GameRenderer();
         this.gameRenderer.getParticleRenderer().setup(0, 0, 1280, 720);
-        this.inputManager = new InputManager();
         this.gameRenderer.displayGuiScreen(new GuiScreenMainMenu());
         // this.gameRenderer.displayGuiScreen(new GuiIngameMenu());
         this.run();
@@ -99,6 +102,41 @@ public class StarfightClient {
             this.displayManager.finishUpdate();
         }
         this.exit();
+    }
+
+    public void routeMouseInput(int button, int action, double x, double y) {
+        if(this.gameRenderer.getCurrentScreen() != null) {
+            switch(action) {
+                case 1:
+                    StarfightClient.getInstance().getGameRenderer().getCurrentScreen().mouseButtonPressed(button, x, y);
+                    break;
+                case 0:
+                    StarfightClient.getInstance().getGameRenderer().getCurrentScreen().mouseButtonReleased(button, x, y);
+                    break;
+                default: break;
+            }
+        }
+    }
+
+    public void openWebsite(String url) {
+        try {
+            String command = "";
+            Properties properties = System.getProperties();
+            String os = properties.getProperty("os.name").toLowerCase(Locale.ROOT);
+            System.out.println(os);
+            if (os.indexOf("nix") >= 0 || os.indexOf("nux") >= 0 || os.indexOf("aix") > 0) {
+                command = "exec xdg-open " + url;
+            }
+            if (os.indexOf("win") >= 0) {
+                command = "cmd /c \"start " + url + "\"";
+            }
+            if (os.indexOf("mac") >= 0) {
+                command = "open " + url;
+            }
+            Runtime.getRuntime().exec(command);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public static StarfightClient getInstance() {
