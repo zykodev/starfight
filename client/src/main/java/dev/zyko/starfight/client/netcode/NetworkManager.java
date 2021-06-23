@@ -28,6 +28,7 @@ public class NetworkManager {
     }
 
     public static final boolean EPOLL = Epoll.isAvailable();
+    private EventLoopGroup eventLoopGroup;
     private Channel channel;
     private ConnectionStatus status = ConnectionStatus.OFFLINE;
 
@@ -45,7 +46,7 @@ public class NetworkManager {
         } else {
             hostname = remoteAddress;
         }
-        EventLoopGroup eventLoopGroup = EPOLL ? new EpollEventLoopGroup() : new NioEventLoopGroup();
+        this.eventLoopGroup = EPOLL ? new EpollEventLoopGroup() : new NioEventLoopGroup();
         try {
             this.status = ConnectionStatus.CONNECTING;
             this.channel = new Bootstrap()
@@ -61,22 +62,24 @@ public class NetworkManager {
             this.sendPacket(new C01PacketKeepAlive(System.currentTimeMillis()));
             this.sendPacket(new C03PacketConnect(nickname, StarfightClient.VERSION));
         } finally {
-            eventLoopGroup.shutdownGracefully();
         }
     }
 
     public void disconnect() {
+        System.out.println("Disconnecting!");
         this.status = ConnectionStatus.OFFLINE;
         if(this.channel != null) {
             if(this.channel.isOpen() || this.channel.isActive()) {
                 this.sendPacket(new C02PacketDisconnect());
                 this.channel.close().syncUninterruptibly();
-                this.channel = null;
             }
+            this.channel = null;
+            this.eventLoopGroup.shutdownGracefully();
         }
     }
 
     public void sendPacket(Packet packet) {
+        if(!this.isConnected()) return;
         this.channel.writeAndFlush(packet, this.channel.voidPromise());
     }
 
@@ -92,4 +95,7 @@ public class NetworkManager {
         return status;
     }
 
+    public Channel getChannel() {
+        return channel;
+    }
 }

@@ -10,16 +10,17 @@ public class S03PacketAcceptConnection extends Packet {
 
     private int entityId;
     private String nickname;
-    private double posX, posY;
+    private double posX, posY, worldRadius;
 
     public S03PacketAcceptConnection() {
     }
 
-    public S03PacketAcceptConnection(int entityId, String nickname, double posX, double posY) {
+    public S03PacketAcceptConnection(int entityId, String nickname, double posX, double posY, double worldRadius) {
         this.entityId = entityId;
         this.nickname = nickname;
         this.posX = posX;
         this.posY = posY;
+        this.worldRadius = worldRadius;
     }
 
     @Override
@@ -28,6 +29,7 @@ public class S03PacketAcceptConnection extends Packet {
         this.nickname = PacketUtil.readString(byteBuf);
         this.posX = byteBuf.readDouble();
         this.posY = byteBuf.readDouble();
+        this.worldRadius = byteBuf.readDouble();
     }
 
     @Override
@@ -36,6 +38,7 @@ public class S03PacketAcceptConnection extends Packet {
         PacketUtil.writeString(byteBuf, this.nickname);
         byteBuf.writeDouble(this.posX);
         byteBuf.writeDouble(this.posY);
+        byteBuf.writeDouble(this.worldRadius);
     }
 
     public int getEntityId() {
@@ -54,4 +57,7 @@ public class S03PacketAcceptConnection extends Packet {
         return posY;
     }
 
+    public double getWorldRadius() {
+        return worldRadius;
+    }
 }

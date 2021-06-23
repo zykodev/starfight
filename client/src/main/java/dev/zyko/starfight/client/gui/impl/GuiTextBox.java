@@ -45,7 +45,6 @@ public class GuiTextBox extends GuiComponent {
     @Override
     public void mouseButtonPressed(int button, double x, double y) {
         if(button == InputManager.MOUSE_LEFT) {
-            System.out.println(button);
             this.selected = this.isHovered(x, y);
         }
     }
@@ -85,4 +84,7 @@ public class GuiTextBox extends GuiComponent {
         return selected;
     }
 
+    public void setText(String text) {
+        this.text = text;
+    }
 }

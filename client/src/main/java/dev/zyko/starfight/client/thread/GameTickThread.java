@@ -6,6 +6,7 @@ import dev.zyko.starfight.client.util.TimeHelper;
 public class GameTickThread extends Thread {
 
     private boolean terminated = false;
+    private int updatesPerSecond = 0;
 
     @Override
     public void run() {
@@ -13,7 +14,7 @@ public class GameTickThread extends Thread {
         int updates = 0;
         while(!this.terminated) {
             if(helper.isDelayComplete(1000)) {
-                System.out.println("Updates: " + updates);
+                this.updatesPerSecond = updates;
                 updates = 0;
                 helper.updateSystemTime();
             }
@@ -23,11 +24,17 @@ public class GameTickThread extends Thread {
                     StarfightClient.getInstance().getGameRenderer().getCurrentScreen().runTick(StarfightClient.getInstance().getInputManager().getMousePosition()[0], StarfightClient.getInstance().getInputManager().getMousePosition()[1]);
                 }
                 StarfightClient.getInstance().getGameRenderer().getParticleRenderer().tickParticles();
-                StarfightClient.getInstance().getWorld().tickWorld();
+                if(StarfightClient.getInstance().getWorld() != null) {
+                    StarfightClient.getInstance().getWorld().tickWorld();
+                }
                 updates++;
             }
         }
         super.run();
+    }
+
+    public int getUpdatesPerSecond() {
+        return updatesPerSecond;
     }
 
     public void terminate() {

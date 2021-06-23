@@ -76,21 +76,16 @@ public class StarfightClient {
         this.gameRenderer = new GameRenderer();
         this.gameRenderer.getParticleRenderer().setup(0, 0, 1280, 720);
         this.gameRenderer.displayGuiScreen(new GuiScreenMainMenu());
-        // this.gameRenderer.displayGuiScreen(new GuiIngameMenu());
         this.run();
     }
 
     private void exit() {
+        this.networkManager.disconnect();
         this.displayManager.destroyDisplay();
         this.gameTickThread.terminate();
     }
 
     private void run() {
-        this.world = new World();
-        this.playerSpaceship = new EntityPlayerSpaceship(0, 0, 0, 0, "Player");
-        EntitySpaceship entitySpaceship = new EntitySpaceship(1, 100, 100, 90, "Player 2");
-        this.world.loadEntity(this.playerSpaceship);
-        this.world.loadEntity(entitySpaceship);
         this.gameTickThread = new GameTickThread();
         this.gameTickThread.setName("game-tick-thread");
         this.gameTickThread.setDaemon(true);

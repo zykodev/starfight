@@ -38,4 +38,8 @@ public class GuiScreen {
         this.componentList.forEach(co -> co.keyInput(keyCode, action));
     }
 
+    public GuiScreen clone() {
+        return null;
+    }
+
 }

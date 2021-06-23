@@ -34,7 +34,7 @@ public class ServerNetworkHandler extends SimpleChannelInboundHandler<Packet> {
                 for(Entity e : StarfightServer.getInstance().getWorld().getEntityList()) {
                     if(e instanceof EntityPlayerSpaceship) {
                         if(((EntityPlayerSpaceship) e).getName().equalsIgnoreCase(packet.getNickname())) {
-                            this.sendPacket(new S02PacketDisconnect("The name you entered is already in use.\nPlease choose another name."));
+                            this.sendPacket(new S02PacketDisconnect("The name you entered is already in use. Please choose another name."));
                             this.channel.close().sync();
                             return;
                         }
@@ -44,7 +44,7 @@ public class ServerNetworkHandler extends SimpleChannelInboundHandler<Packet> {
                 int entityId = StarfightServer.getInstance().getWorld().getNextEntityID();
                 EntityPlayerSpaceship entitySpaceship = new EntityPlayerSpaceship(entityId, entitySpawnPosition[0], entitySpawnPosition[1], 0, packet.getNickname(), this);
                 StarfightServer.getInstance().getWorld().spawnEntity(entitySpaceship);
-                this.sendPacket(new S03PacketAcceptConnection(entityId, packet.getNickname(), entitySpawnPosition[0], entitySpawnPosition[1]));
+                this.sendPacket(new S03PacketAcceptConnection(entityId, packet.getNickname(), entitySpawnPosition[0], entitySpawnPosition[1], StarfightServer.getInstance().getWorld().getRadius()));
             }
         }
     }

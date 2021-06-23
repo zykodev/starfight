@@ -2,6 +2,7 @@ package dev.zyko.starfight.client.gui.impl;
 
 import dev.zyko.starfight.client.StarfightClient;
 import dev.zyko.starfight.client.gui.GuiOverlay;
+import dev.zyko.starfight.client.gui.GuiScreen;
 
 public class GuiOverlayIngameMenu extends GuiOverlay {
 
@@ -18,4 +19,8 @@ public class GuiOverlayIngameMenu extends GuiOverlay {
         StarfightClient.getInstance().getFontManager().getFontRenderer("ui/logo").drawCenteredString("Starfight", screenWidth / 2, screenHeight / 2, -1);
     }
 
+    @Override
+    public GuiScreen clone() {
+        return new GuiOverlayIngameMenu();
+    }
 }

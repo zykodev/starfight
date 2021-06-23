@@ -52,12 +52,7 @@ public class DisplayManager {
         this.height = height[0];
         if(this.height != oldHeight || this.width != oldWidth) {
             if(StarfightClient.getInstance().getGameRenderer().getCurrentScreen() != null) {
-                try {
-                    StarfightClient.getInstance().getGameRenderer().displayGuiScreen(StarfightClient.getInstance().getGameRenderer().getCurrentScreen().getClass().newInstance());
-                    System.out.println("Resized gui screen.");
-                } catch (Exception e) {
-                    System.out.println("Failed to re-display current gui screen to fit to new window size.");
-                }
+                StarfightClient.getInstance().getGameRenderer().displayGuiScreen(StarfightClient.getInstance().getGameRenderer().getCurrentScreen().clone());
             }
             StarfightClient.getInstance().getGameRenderer().getParticleRenderer().setup(0, 0, this.width, this.height);
         }

@@ -11,6 +11,11 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class World {
 
     private CopyOnWriteArrayList<Entity> loadedEntityList = new CopyOnWriteArrayList<>();
+    private double radius;
+
+    public World(double radius) {
+        this.radius = radius;
+    }
 
     public void loadEntity(Entity entity) {
         if(!this.loadedEntityList.contains(entity))

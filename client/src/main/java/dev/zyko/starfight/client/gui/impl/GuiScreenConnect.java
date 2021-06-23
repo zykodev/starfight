@@ -69,4 +69,12 @@ public class GuiScreenConnect extends GuiScreen {
             this.connectButton.executeRunnable();
         }
     }
+
+    @Override
+    public GuiScreen clone() {
+        GuiScreenConnect screenConnect = new GuiScreenConnect();
+        screenConnect.nicknameInput.setText(this.nicknameInput.getText());
+        screenConnect.serverAddressInput.setText(this.serverAddressInput.getText());
+        return screenConnect;
+    }
 }

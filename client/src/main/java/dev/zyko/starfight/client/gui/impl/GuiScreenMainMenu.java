@@ -63,4 +63,8 @@ public class GuiScreenMainMenu extends GuiScreen {
         GL11.glPopMatrix();
     }
 
+    @Override
+    public GuiScreen clone() {
+        return new GuiScreenMainMenu();
+    }
 }

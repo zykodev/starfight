@@ -3,9 +3,12 @@ package dev.zyko.starfight.client.gui.impl;
 import dev.zyko.starfight.client.StarfightClient;
 import dev.zyko.starfight.client.gui.GuiScreen;
 
-public class GuiScreenConnecting extends GuiScreen {
+public class GuiScreenDisconnected extends GuiScreen {
 
-    public GuiScreenConnecting() {
+    private String text;
+
+    public GuiScreenDisconnected(String text) {
+        this.text = text;
     }
 
     @Override
@@ -28,12 +31,12 @@ public class GuiScreenConnecting extends GuiScreen {
         StarfightClient.getInstance().getGameRenderer().getParticleRenderer().drawParticles(partialTicks);
         StarfightClient.getInstance().getGameRenderer().drawRectangle((screenWidth - w) / 2, screenHeight * 0.3 - 60, w, 100 + 5 * h + 10 + 80, 0x80111111);
         super.drawScreen(mouseX, mouseY, partialTicks);
-        StarfightClient.getInstance().getFontManager().getFontRenderer("ui/basictext").drawCenteredStringWithShadow(StarfightClient.getInstance().getNetworkManager().getStatus().name(), (float) screenWidth / 2, (float) screenHeight * 0.3F + 40, -1);
+        StarfightClient.getInstance().getFontManager().getFontRenderer("ui/basictext").drawCenteredStringWithShadow(this.text, (float) screenWidth / 2, (float) screenHeight * 0.3F + 40, -1);
     }
 
     @Override
     public GuiScreen clone() {
-        return new GuiScreenConnecting();
+        return new GuiScreenDisconnected(this.text);
     }
 
 }
