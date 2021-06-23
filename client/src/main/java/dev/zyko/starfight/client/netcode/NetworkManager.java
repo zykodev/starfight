@@ -19,8 +19,21 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 
 public class NetworkManager {
 
+    public enum ConnectionStatus {
+        CONNECTING,
+        LOGGING_IN,
+        RETRIEVING_WORLD_DATA,
+        CONNECTED,
+        OFFLINE
+    }
+
     public static final boolean EPOLL = Epoll.isAvailable();
     private Channel channel;
+    private ConnectionStatus status = ConnectionStatus.OFFLINE;
+
+    public NetworkManager() {
+        Runtime.getRuntime().addShutdownHook(new Thread(this::disconnect));
+    }
 
     public void connect(String remoteAddress, String nickname) throws Exception {
         int port = 26800;
@@ -34,6 +47,7 @@ public class NetworkManager {
         }
         EventLoopGroup eventLoopGroup = EPOLL ? new EpollEventLoopGroup() : new NioEventLoopGroup();
         try {
+            this.status = ConnectionStatus.CONNECTING;
             this.channel = new Bootstrap()
                     .group(eventLoopGroup)
                     .channel(EPOLL ? EpollSocketChannel.class : NioSocketChannel.class)
@@ -42,14 +56,17 @@ public class NetworkManager {
                         protected void initChannel(Channel ch) throws Exception {
                             ch.pipeline().addLast("encoder", new ClientPacketEncoder()).addLast("decoder", new ClientPacketDecoder()).addLast("nethandler", new ClientNetworkHandler(ch));
                         }
-                    }).connect("127.0.0.1", 8000).sync().channel();
-            this.channel.writeAndFlush(new C03PacketConnect(StarfightClient.VERSION, nickname));
+                    }).connect(hostname, port).sync().channel();
+            this.status = ConnectionStatus.LOGGING_IN;
+            this.sendPacket(new C01PacketKeepAlive(System.currentTimeMillis()));
+            this.sendPacket(new C03PacketConnect(nickname, StarfightClient.VERSION));
         } finally {
             eventLoopGroup.shutdownGracefully();
         }
     }
 
     public void disconnect() {
+        this.status = ConnectionStatus.OFFLINE;
         if(this.channel != null) {
             if(this.channel.isOpen() || this.channel.isActive()) {
                 this.sendPacket(new C02PacketDisconnect());
@@ -65,6 +82,14 @@ public class NetworkManager {
 
     public boolean isConnected() {
         return this.channel != null && this.channel.isActive();
+    }
+
+    public void setStatus(ConnectionStatus status) {
+        this.status = status;
+    }
+
+    public ConnectionStatus getStatus() {
+        return status;
     }
 
 }

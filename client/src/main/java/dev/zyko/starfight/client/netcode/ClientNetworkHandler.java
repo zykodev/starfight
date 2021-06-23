@@ -24,8 +24,10 @@ public class ClientNetworkHandler extends SimpleChannelInboundHandler<Packet> {
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, Packet msg) throws Exception {
+        System.out.println(msg.getClass().getSimpleName());
         if(msg instanceof S01PacketKeepAlive) {
             this.latency = System.currentTimeMillis() - ((S01PacketKeepAlive) msg).getSystemTime();
+            System.out.println(this.latency);
         }
     }
 

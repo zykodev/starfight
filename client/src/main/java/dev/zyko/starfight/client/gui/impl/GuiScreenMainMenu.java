@@ -21,7 +21,10 @@ public class GuiScreenMainMenu extends GuiScreen {
         int screenHeight = StarfightClient.getInstance().getDisplayManager().getHeight();
         int w = 300;
         int h = 40;
-        this.componentList.add(new GuiButton((screenWidth - w) / 2, (int) (screenHeight * 0.3F + 100F), w, h, "Connect to a Server", () -> {}));
+
+        this.componentList.add(new GuiButton((screenWidth - w) / 2, (int) (screenHeight * 0.3F + 100F), w, h, "Connect to a Server", () -> {
+            StarfightClient.getInstance().getGameRenderer().displayGuiScreen(new GuiScreenConnect());
+        }));
         this.componentList.add(new GuiButton((screenWidth - w) / 2, (int) (screenHeight * 0.3F + 100F) + h + 2, w, h, "Customize Spaceship", () -> {}));
         this.componentList.add(new GuiButton((screenWidth - w) / 2, (int) (screenHeight * 0.3F + 100F)+ 2 * h + 4, w, h, "About this game", () -> {
             StarfightClient.getInstance().openWebsite("https://starfight.zyko.dev/about");

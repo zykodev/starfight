@@ -30,4 +30,12 @@ public class GuiScreen {
         this.componentList.forEach(c -> c.mouseButtonReleased(button, x, y));
     }
 
+    public void charInput(char c) {
+        this.componentList.forEach(co -> co.charInput(c));
+    }
+
+    public void keyInput(int keyCode, int action) {
+        this.componentList.forEach(co -> co.keyInput(keyCode, action));
+    }
+
 }

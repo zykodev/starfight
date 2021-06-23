@@ -37,6 +37,7 @@ public class DisplayManager {
         this.height = height;
         GLFW.glfwSetKeyCallback(this.windowId, new InputManager.KeyboardAdapter());
         GLFW.glfwSetMouseButtonCallback(this.windowId, new InputManager.MouseAdapter());
+        GLFW.glfwSetCharCallback(this.windowId, new InputManager.KeyboardCharAdapter());
     }
 
     public void updateDisplay() {

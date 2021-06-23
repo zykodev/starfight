@@ -6,19 +6,16 @@ import dev.zyko.starfight.client.input.InputManager;
 
 import java.awt.*;
 
-public class GuiButton implements GuiComponent {
+public class GuiButton extends GuiComponent {
 
-    private int posX, posY, width, height;
     private String text;
+    private boolean active = true;
     private int additionalLightness = 0;
     private float xOffset = 0;
     private ButtonRunnable runnable;
 
-    public GuiButton(int posX, int posY, int width, int height, String text, ButtonRunnable runnable) {
-        this.posX = posX;
-        this.posY = posY;
-        this.width = width;
-        this.height = height;
+    public GuiButton(float posX, float posY, float width, float height, String text, ButtonRunnable runnable) {
+        super(posX, posY, width, height);
         this.text = text;
         this.runnable = runnable;
     }
@@ -26,7 +23,7 @@ public class GuiButton implements GuiComponent {
     @Override
     public void mouseButtonPressed(int button, double x, double y) {
         boolean hovered = x >= this.posX - this.xOffset && x <= this.posX + width + this.xOffset && y >= this.posY && y <= this.posY + height;
-        if(button == InputManager.MOUSE_LEFT && hovered) this.runnable.run();
+        if(button == InputManager.MOUSE_LEFT && hovered && this.isActive()) this.runnable.run();
     }
 
     @Override
@@ -57,16 +54,41 @@ public class GuiButton implements GuiComponent {
         }
         int addedLightness = (int) (Math.cos(((2 * Math.PI) / StarfightClient.getInstance().getGameTickTimer().getTicksPerSecond()) * this.additionalLightness) * 30 + 30);
         float yOffset = (float) (Math.sin(((2 * Math.PI) / StarfightClient.getInstance().getGameTickTimer().getTicksPerSecond()) * this.additionalLightness)) * 3.0F;
-        StarfightClient.getInstance().getGameRenderer().drawRectangle(this.posX - this.xOffset, this.posY, this.width + 2 * this.xOffset, this.height, hovered ? new Color(60 + addedLightness, 60 + addedLightness, 60 + addedLightness, 80).getRGB() : 0x99111111);
-        if(hovered) {
+        if(this.active) {
+            StarfightClient.getInstance().getGameRenderer().drawRectangle(this.posX - this.xOffset, this.posY, this.width + 2 * this.xOffset, this.height, hovered ? new Color(60 + addedLightness, 60 + addedLightness, 60 + addedLightness, 80).getRGB() : 0x99111111);
+        } else {
+            StarfightClient.getInstance().getGameRenderer().drawRectangle(this.posX, this.posY, this.width, this.height, 0x99111111);
+        }
+        if(hovered && this.isActive()) {
             StarfightClient.getInstance().getFontManager().getFontRenderer("ui/basictext").drawCenteredStringWithShadow(this.text, this.posX + width / 2.0F - yOffset, this.posY + this.height / 2.0F - 8, -1);
         } else {
-            StarfightClient.getInstance().getFontManager().getFontRenderer("ui/basictext").drawCenteredString(this.text, this.posX + width / 2.0F, this.posY + this.height / 2.0F - 8, -1);
+            StarfightClient.getInstance().getFontManager().getFontRenderer("ui/basictext").drawCenteredString(this.text, this.posX + width / 2.0F, this.posY + this.height / 2.0F - 8, this.active ? -1 : 0xFF666666);
         }
+    }
+
+    @Override
+    public void keyInput(int keyCode, int action) {
+    }
+
+    @Override
+    public void charInput(char c) {
+    }
+
+    public void executeRunnable() {
+        if(!this.isActive()) return;
+        this.runnable.run();
     }
 
     public interface ButtonRunnable {
         void run();
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
 }

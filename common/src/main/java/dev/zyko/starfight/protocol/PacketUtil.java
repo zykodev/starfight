@@ -13,7 +13,9 @@ public class PacketUtil {
 
     public static String readString(ByteBuf byteBuf) {
         int length = byteBuf.readInt();
-        return new String(byteBuf.readBytes(length).array(), StandardCharsets.UTF_8);
+        byte[] data = new byte[length];
+        byteBuf.readBytes(data);
+        return new String(data, StandardCharsets.UTF_8);
     }
 
 }

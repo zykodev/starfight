@@ -3,7 +3,6 @@ package dev.zyko.starfight.client;
 import dev.zyko.starfight.client.display.DisplayManager;
 import dev.zyko.starfight.client.entity.EntityPlayerSpaceship;
 import dev.zyko.starfight.client.entity.EntitySpaceship;
-import dev.zyko.starfight.client.gui.impl.GuiIngameMenu;
 import dev.zyko.starfight.client.gui.impl.GuiScreenMainMenu;
 import dev.zyko.starfight.client.input.InputManager;
 import dev.zyko.starfight.client.netcode.NetworkManager;
@@ -115,6 +114,18 @@ public class StarfightClient {
                     break;
                 default: break;
             }
+        }
+    }
+
+    public void routeCharInput(char c) {
+        if(this.gameRenderer.getCurrentScreen() != null) {
+            this.gameRenderer.getCurrentScreen().charInput(c);
+        }
+    }
+
+    public void routeKeyInput(int keyCode, int action) {
+        if(this.gameRenderer.getCurrentScreen() != null) {
+            this.gameRenderer.getCurrentScreen().keyInput(keyCode, action);
         }
     }
 

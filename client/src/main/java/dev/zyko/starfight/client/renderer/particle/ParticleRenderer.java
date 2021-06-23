@@ -8,8 +8,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class ParticleRenderer {
 
-    private Random random = new Random();
-    private CopyOnWriteArrayList<Particle> particles = new CopyOnWriteArrayList<>();
+    private final Random random = new Random();
+    private final CopyOnWriteArrayList<Particle> particles = new CopyOnWriteArrayList<>();
 
     public void tickParticles() {
         double screenWidth = StarfightClient.getInstance().getDisplayManager().getWidth();

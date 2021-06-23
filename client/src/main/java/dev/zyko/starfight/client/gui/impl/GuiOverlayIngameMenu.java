@@ -3,7 +3,7 @@ package dev.zyko.starfight.client.gui.impl;
 import dev.zyko.starfight.client.StarfightClient;
 import dev.zyko.starfight.client.gui.GuiOverlay;
 
-public class GuiIngameMenu extends GuiOverlay {
+public class GuiOverlayIngameMenu extends GuiOverlay {
 
     @Override
     protected void initializeComponents() {

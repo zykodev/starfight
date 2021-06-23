@@ -13,6 +13,7 @@ public class ClientPacketDecoder extends ByteToMessageDecoder {
 
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
+        System.out.println("Received a packet.");
         Class<? extends Packet> packetClass = PacketRegistry.SERVER_PACKETS.get(in.readInt());
         if(packetClass == null) {
             throw new IOException("Received an invalid packet from server.");
