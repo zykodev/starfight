@@ -34,7 +34,11 @@ public class World {
         for(Entity e : this.entityList) {
             if(e instanceof EntityPlayerSpaceship) {
                 for(Entity ent : this.entityList) {
-                    ((EntityPlayerSpaceship) e).getNetHandler().sendPacket(new S05PacketPlayOutEntityPosition(ent.getId(), ent.getPosX(), ent.getPosY(), 0));
+                    if(ent instanceof EntityPlayerSpaceship) {
+                        ((EntityPlayerSpaceship) e).getNetHandler().sendPacket(new S05PacketPlayOutEntityPosition(ent.getId(), ent.getPosX(), ent.getPosY(), ((EntityPlayerSpaceship) ent).getRotation()));
+                    } else {
+                        ((EntityPlayerSpaceship) e).getNetHandler().sendPacket(new S05PacketPlayOutEntityPosition(ent.getId(), ent.getPosX(), ent.getPosY(), 0));
+                    }
                 }
             }
         }
@@ -53,12 +57,20 @@ public class World {
         for(Entity e : this.entityList) {
             if(e instanceof EntityPlayerSpaceship) {
                 if(e != entity) {
-                    ((EntityPlayerSpaceship) e).getNetHandler().sendPacket(new S04PacketPlayOutEntitySpawn(entity.getId(), 1, entity.getPosX(), entity.getPosY(), 0, "Test Entity"));
+                    if(entity instanceof EntityPlayerSpaceship) {
+                        ((EntityPlayerSpaceship) e).getNetHandler().sendPacket(new S04PacketPlayOutEntitySpawn(entity.getId(), 1, entity.getPosX(), entity.getPosY(), ((EntityPlayerSpaceship) entity).getRotation(), ((EntityPlayerSpaceship) entity).getName()));
+                    } else {
+                        ((EntityPlayerSpaceship) e).getNetHandler().sendPacket(new S04PacketPlayOutEntitySpawn(entity.getId(), 2, entity.getPosX(), entity.getPosY(), 0, "Entity"));
+                    }
                 }
             }
             if(entity instanceof EntityPlayerSpaceship) {
                 if(e != entity) {
-                    ((EntityPlayerSpaceship) entity).getNetHandler().sendPacket(new S04PacketPlayOutEntitySpawn(e.getId(), 1, e.getPosX(), e.getPosY(), 0, "Test Entity 2"));
+                    if(e instanceof EntityPlayerSpaceship) {
+                        ((EntityPlayerSpaceship) entity).getNetHandler().sendPacket(new S04PacketPlayOutEntitySpawn(e.getId(), 1, e.getPosX(), e.getPosY(), ((EntityPlayerSpaceship) e).getRotation(), ((EntityPlayerSpaceship) e).getName()));
+                    } else {
+                        ((EntityPlayerSpaceship) entity).getNetHandler().sendPacket(new S04PacketPlayOutEntitySpawn(e.getId(), 2, e.getPosX(), e.getPosY(), 0, "Entity"));
+                    }
                 }
             }
         }

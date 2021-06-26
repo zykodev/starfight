@@ -45,6 +45,14 @@ public class ClientNetworkHandler extends SimpleChannelInboundHandler<Packet> {
             S02PacketDisconnect packet = (S02PacketDisconnect) msg;
             StarfightClient.getInstance().getGameRenderer().displayGuiScreen(new GuiScreenDisconnected(packet.getMessage()));
         }
+        if(msg instanceof S04PacketPlayOutEntitySpawn) {
+            S04PacketPlayOutEntitySpawn packet = (S04PacketPlayOutEntitySpawn) msg;
+            System.out.println(packet.getType());
+            if(packet.getType() == S04PacketPlayOutEntitySpawn.SPACESHIP) {
+                EntitySpaceship entitySpaceship = new EntitySpaceship(packet.getEntityId(), packet.getPosX(), packet.getPosY(), packet.getRotation(), packet.getName());
+                StarfightClient.getInstance().getWorld().loadEntity(entitySpaceship);
+            }
+        }
         if(msg instanceof S05PacketPlayOutEntityPosition) {
             int id = ((S05PacketPlayOutEntityPosition) msg).getId();
             double x = ((S05PacketPlayOutEntityPosition) msg).getPosX();

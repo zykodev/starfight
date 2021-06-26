@@ -18,7 +18,6 @@ public class ClientPacketEncoder extends MessageToByteEncoder<Packet> {
             throw new IOException("Tried to encode a packet with an unknown id.");
         }
         out.writeInt(packetId);
-        msg.sign(out, StarfightClient.SIGNATURE);
         msg.write(out);
     }
 

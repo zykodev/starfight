@@ -55,10 +55,10 @@ public class ServerNetworkHandler extends SimpleChannelInboundHandler<Packet> {
                 }
                 double[] entitySpawnPosition = StarfightServer.getInstance().getWorld().getRandomSpawnPosition();
                 int entityId = StarfightServer.getInstance().getWorld().getNextEntityID();
+                this.sendPacket(new S03PacketAcceptConnection(entityId, packet.getNickname(), entitySpawnPosition[0], entitySpawnPosition[1], StarfightServer.getInstance().getWorld().getRadius()));
                 EntityPlayerSpaceship entitySpaceship = new EntityPlayerSpaceship(entityId, entitySpawnPosition[0], entitySpawnPosition[1], 0, packet.getNickname(), this);
                 StarfightServer.getInstance().getWorld().spawnEntity(entitySpaceship);
                 this.entityPlayerSpaceship = entitySpaceship;
-                this.sendPacket(new S03PacketAcceptConnection(entityId, packet.getNickname(), entitySpawnPosition[0], entitySpawnPosition[1], StarfightServer.getInstance().getWorld().getRadius()));
             } else {
                 this.sendPacket(new S02PacketDisconnect("The client version does not match the server version. Please update."));
                 this.channel.close().sync();

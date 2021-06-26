@@ -46,4 +46,27 @@ public class S04PacketPlayOutEntitySpawn extends Packet {
         PacketUtil.writeString(byteBuf, this.name);
     }
 
+    public int getEntityId() {
+        return entityId;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public double getPosX() {
+        return posX;
+    }
+
+    public double getPosY() {
+        return posY;
+    }
+
+    public double getRotation() {
+        return rotation;
+    }
+
+    public String getName() {
+        return name;
+    }
 }
