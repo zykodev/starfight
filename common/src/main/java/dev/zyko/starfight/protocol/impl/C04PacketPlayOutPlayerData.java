@@ -25,4 +25,8 @@ public class C04PacketPlayOutPlayerData extends Packet {
         this.rotation = byteBuf.readDouble();
     }
 
+    public double getRotation() {
+        return rotation;
+    }
+
 }

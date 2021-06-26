@@ -2,7 +2,6 @@ package dev.zyko.starfight.client;
 
 import dev.zyko.starfight.client.display.DisplayManager;
 import dev.zyko.starfight.client.entity.EntityPlayerSpaceship;
-import dev.zyko.starfight.client.entity.EntitySpaceship;
 import dev.zyko.starfight.client.gui.impl.GuiScreenMainMenu;
 import dev.zyko.starfight.client.input.InputManager;
 import dev.zyko.starfight.client.netcode.NetworkManager;
@@ -14,7 +13,7 @@ import dev.zyko.starfight.client.renderer.texture.TextureManager;
 import dev.zyko.starfight.client.thread.GameTickThread;
 import dev.zyko.starfight.client.util.IOHelper;
 import dev.zyko.starfight.client.util.TextureHelper;
-import dev.zyko.starfight.client.util.TimeHelper;
+import dev.zyko.starfight.util.TimeHelper;
 import dev.zyko.starfight.client.world.World;
 
 import java.io.File;
@@ -200,4 +199,9 @@ public class StarfightClient {
     public ModelManager getModelManager() {
         return modelManager;
     }
+
+    public GameTickThread getGameTickThread() {
+        return gameTickThread;
+    }
+
 }

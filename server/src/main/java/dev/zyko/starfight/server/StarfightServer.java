@@ -4,6 +4,7 @@ import dev.zyko.starfight.logging.StarfightLogger;
 import dev.zyko.starfight.server.netcode.ServerNetworkHandler;
 import dev.zyko.starfight.server.netcode.encoding.ServerPacketDecoder;
 import dev.zyko.starfight.server.netcode.encoding.ServerPacketEncoder;
+import dev.zyko.starfight.server.thread.ServerTickThread;
 import dev.zyko.starfight.server.world.World;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
@@ -23,6 +24,7 @@ public class StarfightServer {
 
     private static StarfightServer instance;
     private StarfightLogger logger = new StarfightLogger();
+    private ServerTickThread serverTickThread = new ServerTickThread();
 
     private final World world;
 
@@ -30,6 +32,8 @@ public class StarfightServer {
         this.logger.log(this.getClass(), "Starting Starfight server on port 26800...");
         instance = this;
         this.world = new World(2000.0D);
+        this.serverTickThread.setName("server-tick-thread");
+        this.serverTickThread.start();
         EventLoopGroup eventLoopGroup = EPOLL ? new EpollEventLoopGroup() : new NioEventLoopGroup();
         try {
             new ServerBootstrap()
@@ -50,6 +54,7 @@ public class StarfightServer {
                     })
                     .bind(26800).sync().channel().closeFuture().syncUninterruptibly();
         } finally {
+            this.serverTickThread.terminate();
             eventLoopGroup.shutdownGracefully();
         }
     }

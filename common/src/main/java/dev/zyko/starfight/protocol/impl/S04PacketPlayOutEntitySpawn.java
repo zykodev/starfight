@@ -8,6 +8,8 @@ import java.io.IOException;
 
 public class S04PacketPlayOutEntitySpawn extends Packet {
 
+    public static final int SPACESHIP = 1;
+
     private int entityId, type;
     private double posX, posY, rotation;
     private String name;

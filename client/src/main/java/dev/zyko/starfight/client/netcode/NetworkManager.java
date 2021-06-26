@@ -47,22 +47,19 @@ public class NetworkManager {
             hostname = remoteAddress;
         }
         this.eventLoopGroup = EPOLL ? new EpollEventLoopGroup() : new NioEventLoopGroup();
-        try {
-            this.status = ConnectionStatus.CONNECTING;
-            this.channel = new Bootstrap()
-                    .group(eventLoopGroup)
-                    .channel(EPOLL ? EpollSocketChannel.class : NioSocketChannel.class)
-                    .handler(new ChannelInitializer<Channel>() {
-                        @Override
-                        protected void initChannel(Channel ch) throws Exception {
-                            ch.pipeline().addLast("encoder", new ClientPacketEncoder()).addLast("decoder", new ClientPacketDecoder()).addLast("nethandler", new ClientNetworkHandler(ch));
-                        }
-                    }).connect(hostname, port).sync().channel();
-            this.status = ConnectionStatus.LOGGING_IN;
-            this.sendPacket(new C01PacketKeepAlive(System.currentTimeMillis()));
-            this.sendPacket(new C03PacketConnect(nickname, StarfightClient.VERSION));
-        } finally {
-        }
+        this.status = ConnectionStatus.CONNECTING;
+        this.channel = new Bootstrap()
+                .group(eventLoopGroup)
+                .channel(EPOLL ? EpollSocketChannel.class : NioSocketChannel.class)
+                .handler(new ChannelInitializer<Channel>() {
+                    @Override
+                    protected void initChannel(Channel ch) throws Exception {
+                        ch.pipeline().addLast("encoder", new ClientPacketEncoder()).addLast("decoder", new ClientPacketDecoder()).addLast("nethandler", new ClientNetworkHandler(ch));
+                    }
+                }).connect(hostname, port).sync().channel();
+        this.status = ConnectionStatus.LOGGING_IN;
+        this.sendPacket(new C01PacketKeepAlive(System.currentTimeMillis()));
+        this.sendPacket(new C03PacketConnect(nickname, StarfightClient.VERSION));
     }
 
     public void disconnect() {

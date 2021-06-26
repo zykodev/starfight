@@ -1,4 +1,4 @@
-package dev.zyko.starfight.client.util;
+package dev.zyko.starfight.util;
 
 public class TimeHelper {
 

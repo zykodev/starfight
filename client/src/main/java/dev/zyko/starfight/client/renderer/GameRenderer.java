@@ -7,7 +7,7 @@ import dev.zyko.starfight.client.renderer.font.FontRenderer;
 import dev.zyko.starfight.client.renderer.model.Model;
 import dev.zyko.starfight.client.renderer.particle.ParticleRenderer;
 import dev.zyko.starfight.client.util.ColorUtil;
-import dev.zyko.starfight.client.util.TimeHelper;
+import dev.zyko.starfight.util.TimeHelper;
 import org.lwjgl.opengl.GL11;
 
 public class GameRenderer {
@@ -75,6 +75,11 @@ public class GameRenderer {
         fontRenderer.drawString("client version " + StarfightClient.VERSION, 1, 1, -1);
         fontRenderer.drawString("fps: " + this.framesPerSecond, 1, 1 + 18, -1);
         fontRenderer.drawString("frametime (ms): " + (this.frameTime / 1000000.0D), 1, 1 + 18 + 18, -1);
+        fontRenderer.drawString("updates/second: " + StarfightClient.getInstance().getGameTickThread().getUpdatesPerSecond(), 1, 1 + 18 + 18 + 18, -1);
+        if(StarfightClient.getInstance().getPlayerSpaceship() != null) {
+            fontRenderer.drawString("posX: " + StarfightClient.getInstance().getPlayerSpaceship().getPosX(), 1, 1 + 18 + 18 + 18 + 18, -1);
+            fontRenderer.drawString("posY: " + StarfightClient.getInstance().getPlayerSpaceship().getPosY(), 1, 1 + 18 + 18 + 18 + 18 + 18, -1);
+        }
         GL11.glPopMatrix();
     }
 

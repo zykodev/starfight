@@ -1,14 +1,14 @@
 package dev.zyko.starfight.client.netcode;
 
 import dev.zyko.starfight.client.StarfightClient;
+import dev.zyko.starfight.client.entity.Entity;
+import dev.zyko.starfight.client.entity.EntityMovable;
 import dev.zyko.starfight.client.entity.EntityPlayerSpaceship;
+import dev.zyko.starfight.client.entity.EntitySpaceship;
 import dev.zyko.starfight.client.gui.impl.GuiScreenDisconnected;
 import dev.zyko.starfight.client.world.World;
 import dev.zyko.starfight.protocol.Packet;
-import dev.zyko.starfight.protocol.impl.C01PacketKeepAlive;
-import dev.zyko.starfight.protocol.impl.S01PacketKeepAlive;
-import dev.zyko.starfight.protocol.impl.S02PacketDisconnect;
-import dev.zyko.starfight.protocol.impl.S03PacketAcceptConnection;
+import dev.zyko.starfight.protocol.impl.*;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
@@ -44,6 +44,20 @@ public class ClientNetworkHandler extends SimpleChannelInboundHandler<Packet> {
         if(msg instanceof S02PacketDisconnect) {
             S02PacketDisconnect packet = (S02PacketDisconnect) msg;
             StarfightClient.getInstance().getGameRenderer().displayGuiScreen(new GuiScreenDisconnected(packet.getMessage()));
+        }
+        if(msg instanceof S05PacketPlayOutEntityPosition) {
+            int id = ((S05PacketPlayOutEntityPosition) msg).getId();
+            double x = ((S05PacketPlayOutEntityPosition) msg).getPosX();
+            double y = ((S05PacketPlayOutEntityPosition) msg).getPosY();
+            double rot = ((S05PacketPlayOutEntityPosition) msg).getRotation();
+            Entity entity = StarfightClient.getInstance().getWorld().getEntity(id);
+            if(entity != null) {
+                entity.setPosX(x);
+                entity.setPosY(y);
+                if(entity instanceof EntityMovable && entity != StarfightClient.getInstance().getPlayerSpaceship()) {
+                    ((EntityMovable)entity).setRotation(rot);
+                }
+            }
         }
     }
 

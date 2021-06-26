@@ -45,4 +45,11 @@ public class World {
         this.loadedEntityList.forEach(Entity::updateEntity);
     }
 
+    public Entity getEntity(int id) {
+        for(Entity e : this.loadedEntityList) {
+            if(e.getId() == id)
+                return e;
+        }
+        return null;
+    }
 }

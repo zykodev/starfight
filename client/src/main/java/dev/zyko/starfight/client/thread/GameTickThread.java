@@ -1,7 +1,7 @@
 package dev.zyko.starfight.client.thread;
 
 import dev.zyko.starfight.client.StarfightClient;
-import dev.zyko.starfight.client.util.TimeHelper;
+import dev.zyko.starfight.util.TimeHelper;
 
 public class GameTickThread extends Thread {
 

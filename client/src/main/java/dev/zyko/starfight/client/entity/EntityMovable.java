@@ -34,4 +34,7 @@ public class EntityMovable extends Entity {
         return rotation;
     }
 
+    public void setRotation(double rotation) {
+        this.rotation = rotation;
+    }
 }

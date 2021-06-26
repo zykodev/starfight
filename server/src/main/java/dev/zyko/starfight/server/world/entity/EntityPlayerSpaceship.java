@@ -30,4 +30,8 @@ public class EntityPlayerSpaceship extends EntitySpaceship {
         return name;
     }
 
+    public ServerNetworkHandler getNetHandler() {
+        return netHandler;
+    }
+
 }
