@@ -1,14 +1,11 @@
 package dev.zyko.starfight.protocol.impl;
 
 import dev.zyko.starfight.protocol.Packet;
-import dev.zyko.starfight.protocol.PacketUtil;
-import io.netty.buffer.ByteBuf;
 
-import java.io.IOException;
-
-public class S04PacketPlayOutEntitySpawn extends Packet {
+public class S04PacketPlayOutEntitySpawn implements Packet {
 
     public static final int SPACESHIP = 1;
+    public static final int POWER_UP = 2;
 
     private int entityId, type;
     private double posX, posY, rotation;
@@ -24,26 +21,6 @@ public class S04PacketPlayOutEntitySpawn extends Packet {
     }
 
     public S04PacketPlayOutEntitySpawn() {
-    }
-
-    @Override
-    public void read(ByteBuf byteBuf) throws IOException {
-        this.entityId = byteBuf.readInt();
-        this.type = byteBuf.readInt();
-        this.posX = byteBuf.readDouble();
-        this.posY = byteBuf.readDouble();
-        this.rotation = byteBuf.readDouble();
-        this.name = PacketUtil.readString(byteBuf);
-    }
-
-    @Override
-    public void write(ByteBuf byteBuf) throws IOException {
-        byteBuf.writeInt(this.entityId);
-        byteBuf.writeInt(this.type);
-        byteBuf.writeDouble(this.posX);
-        byteBuf.writeDouble(this.posY);
-        byteBuf.writeDouble(this.rotation);
-        PacketUtil.writeString(byteBuf, this.name);
     }
 
     public int getEntityId() {

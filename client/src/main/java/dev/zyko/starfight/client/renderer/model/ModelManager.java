@@ -15,6 +15,9 @@ public class ModelManager {
 
     public void loadModels() {
         this.loadModel("spaceship", new Model(StarfightClient.getInstance().getTextureManager().getTexture("entity/spaceship")));
+        this.loadModel("powerup_cdr", new Model(StarfightClient.getInstance().getTextureManager().getTexture("entity/powerup_cdr")));
+        this.loadModel("powerup_health", new Model(StarfightClient.getInstance().getTextureManager().getTexture("entity/powerup_health")));
+        this.loadModel("powerup_speed", new Model(StarfightClient.getInstance().getTextureManager().getTexture("entity/powerup_speed")));
     }
 
     public Model getModel(String alias) {

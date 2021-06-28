@@ -1,5 +1,7 @@
 package dev.zyko.starfight.server.world.entity;
 
+import dev.zyko.starfight.protocol.impl.S04PacketPlayOutEntitySpawn;
+
 import java.util.Objects;
 
 public abstract class Entity {
@@ -65,4 +67,5 @@ public abstract class Entity {
     public void setHeight(double height) {
         this.height = height;
     }
+
 }

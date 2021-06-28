@@ -1,23 +1,16 @@
 package dev.zyko.starfight.client.netcode;
 
+import com.esotericsoftware.kryonet.Client;
+import com.esotericsoftware.minlog.Log;
 import dev.zyko.starfight.client.StarfightClient;
-import dev.zyko.starfight.client.netcode.encoding.ClientPacketDecoder;
-import dev.zyko.starfight.client.netcode.encoding.ClientPacketEncoder;
+import dev.zyko.starfight.client.gui.impl.GuiScreenDisconnected;
 import dev.zyko.starfight.protocol.Packet;
+import dev.zyko.starfight.protocol.PacketRegistry;
 import dev.zyko.starfight.protocol.impl.C01PacketKeepAlive;
 import dev.zyko.starfight.protocol.impl.C02PacketDisconnect;
 import dev.zyko.starfight.protocol.impl.C03PacketConnect;
-import io.netty.bootstrap.Bootstrap;
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelInitializer;
-import io.netty.channel.EventLoopGroup;
-import io.netty.channel.epoll.Epoll;
-import io.netty.channel.epoll.EpollEventLoopGroup;
-import io.netty.channel.epoll.EpollSocketChannel;
-import io.netty.channel.nio.NioEventLoopGroup;
-import io.netty.channel.socket.nio.NioSocketChannel;
 
-public class NetworkManager {
+public class NetworkManager extends Client {
 
     public enum ConnectionStatus {
         CONNECTING,
@@ -26,13 +19,12 @@ public class NetworkManager {
         CONNECTED,
         OFFLINE
     }
-
-    public static final boolean EPOLL = Epoll.isAvailable();
-    private EventLoopGroup eventLoopGroup;
-    private Channel channel;
     private ConnectionStatus status = ConnectionStatus.OFFLINE;
 
     public NetworkManager() {
+        Log.set(Log.LEVEL_DEBUG);
+        PacketRegistry.apply(this.getKryo());
+        this.addListener(new ClientNetworkHandler());
         Runtime.getRuntime().addShutdownHook(new Thread(this::disconnect));
     }
 
@@ -46,42 +38,36 @@ public class NetworkManager {
         } else {
             hostname = remoteAddress;
         }
-        this.eventLoopGroup = EPOLL ? new EpollEventLoopGroup() : new NioEventLoopGroup();
-        this.status = ConnectionStatus.CONNECTING;
-        this.channel = new Bootstrap()
-                .group(eventLoopGroup)
-                .channel(EPOLL ? EpollSocketChannel.class : NioSocketChannel.class)
-                .handler(new ChannelInitializer<Channel>() {
-                    @Override
-                    protected void initChannel(Channel ch) throws Exception {
-                        ch.pipeline().addLast("encoder", new ClientPacketEncoder()).addLast("decoder", new ClientPacketDecoder()).addLast("nethandler", new ClientNetworkHandler(ch));
-                    }
-                }).connect(hostname, port).sync().channel();
-        this.status = ConnectionStatus.LOGGING_IN;
-        this.sendPacket(new C01PacketKeepAlive(System.currentTimeMillis()));
-        this.sendPacket(new C03PacketConnect(nickname, StarfightClient.VERSION));
+        this.start();
+        final int finalPort = port;
+        final String finalHostname = hostname;
+        new Thread(() -> {
+            try {
+                this.status = ConnectionStatus.CONNECTING;
+                this.connect(5000, finalHostname, finalPort);
+                this.status = ConnectionStatus.LOGGING_IN;
+                this.sendPacket(new C01PacketKeepAlive(System.currentTimeMillis()));
+                this.sendPacket(new C03PacketConnect(nickname, StarfightClient.VERSION));
+            } catch (Exception e) {
+                this.stop();
+                StarfightClient.getInstance().getGameRenderer().displayGuiScreen(new GuiScreenDisconnected("Failed to connect to server: " + e.getMessage()));
+            }
+        }).start();
     }
 
     public void disconnect() {
-        System.out.println("Disconnecting!");
-        this.status = ConnectionStatus.OFFLINE;
-        if(this.channel != null) {
-            if(this.channel.isOpen() || this.channel.isActive()) {
-                this.sendPacket(new C02PacketDisconnect());
-                this.channel.close().syncUninterruptibly();
-            }
-            this.channel = null;
-            this.eventLoopGroup.shutdownGracefully();
+        if(this.isConnected()) {
+            this.sendPacket(new C02PacketDisconnect());
+            this.close();
+            this.stop();
         }
+        this.status = ConnectionStatus.OFFLINE;
     }
 
     public void sendPacket(Packet packet) {
-        if(!this.isConnected()) return;
-        this.channel.writeAndFlush(packet, this.channel.voidPromise());
-    }
-
-    public boolean isConnected() {
-        return this.channel != null && this.channel.isActive();
+        if(this.isConnected()) {
+            this.sendTCP(packet);
+        }
     }
 
     public void setStatus(ConnectionStatus status) {
@@ -92,7 +78,4 @@ public class NetworkManager {
         return status;
     }
 
-    public Channel getChannel() {
-        return channel;
-    }
 }

@@ -1,12 +1,8 @@
 package dev.zyko.starfight.protocol.impl;
 
 import dev.zyko.starfight.protocol.Packet;
-import dev.zyko.starfight.protocol.PacketUtil;
-import io.netty.buffer.ByteBuf;
 
-import java.io.IOException;
-
-public class S03PacketAcceptConnection extends Packet {
+public class S03PacketAcceptConnection implements Packet {
 
     private int entityId;
     private String nickname;
@@ -21,24 +17,6 @@ public class S03PacketAcceptConnection extends Packet {
         this.posX = posX;
         this.posY = posY;
         this.worldRadius = worldRadius;
-    }
-
-    @Override
-    public void read(ByteBuf byteBuf) throws IOException {
-        this.entityId = byteBuf.readInt();
-        this.nickname = PacketUtil.readString(byteBuf);
-        this.posX = byteBuf.readDouble();
-        this.posY = byteBuf.readDouble();
-        this.worldRadius = byteBuf.readDouble();
-    }
-
-    @Override
-    public void write(ByteBuf byteBuf) throws IOException {
-        byteBuf.writeInt(this.entityId);
-        PacketUtil.writeString(byteBuf, this.nickname);
-        byteBuf.writeDouble(this.posX);
-        byteBuf.writeDouble(this.posY);
-        byteBuf.writeDouble(this.worldRadius);
     }
 
     public int getEntityId() {

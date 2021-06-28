@@ -1,34 +1,22 @@
 package dev.zyko.starfight.client.netcode;
 
+import com.esotericsoftware.kryonet.Connection;
+import com.esotericsoftware.kryonet.Listener;
 import dev.zyko.starfight.client.StarfightClient;
-import dev.zyko.starfight.client.entity.Entity;
-import dev.zyko.starfight.client.entity.EntityMovable;
-import dev.zyko.starfight.client.entity.EntityPlayerSpaceship;
-import dev.zyko.starfight.client.entity.EntitySpaceship;
+import dev.zyko.starfight.client.entity.*;
 import dev.zyko.starfight.client.gui.impl.GuiScreenDisconnected;
 import dev.zyko.starfight.client.world.World;
 import dev.zyko.starfight.protocol.Packet;
 import dev.zyko.starfight.protocol.impl.*;
-import io.netty.buffer.ByteBuf;
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.SimpleChannelInboundHandler;
 
-public class ClientNetworkHandler extends SimpleChannelInboundHandler<Packet> {
+public class ClientNetworkHandler extends Listener {
 
-    private Channel channel;
     private long latency;
 
-    public ClientNetworkHandler(Channel channel) {
-        this.channel = channel;
-    }
-
-    public Channel getChannel() {
-        return channel;
-    }
-
     @Override
-    protected void channelRead0(ChannelHandlerContext ctx, Packet msg) throws Exception {
+    public void received(Connection connection, Object o) {
+        if(!(o instanceof Packet)) return;
+        Packet msg = (Packet) o;
         if(msg instanceof S01PacketKeepAlive) {
             this.latency = System.currentTimeMillis() - ((S01PacketKeepAlive) msg).getSystemTime();
         }
@@ -52,6 +40,10 @@ public class ClientNetworkHandler extends SimpleChannelInboundHandler<Packet> {
                 EntitySpaceship entitySpaceship = new EntitySpaceship(packet.getEntityId(), packet.getPosX(), packet.getPosY(), packet.getRotation(), packet.getName());
                 StarfightClient.getInstance().getWorld().loadEntity(entitySpaceship);
             }
+            if(packet.getType() == S04PacketPlayOutEntitySpawn.POWER_UP) {
+                EntityPowerUp entityPowerUp = new EntityPowerUp(packet.getEntityId(), packet.getPosX(), packet.getPosY(), packet.getRotation());
+                StarfightClient.getInstance().getWorld().loadEntity(entityPowerUp);
+            }
         }
         if(msg instanceof S05PacketPlayOutEntityPosition) {
             int id = ((S05PacketPlayOutEntityPosition) msg).getId();
@@ -67,6 +59,12 @@ public class ClientNetworkHandler extends SimpleChannelInboundHandler<Packet> {
                 }
             }
         }
+        super.received(connection, o);
+    }
+
+    @Override
+    public void disconnected(Connection connection) {
+        super.disconnected(connection);
     }
 
     public long getLatency() {

@@ -1,25 +1,21 @@
 package dev.zyko.starfight.server;
 
+import com.esotericsoftware.kryonet.Connection;
+import com.esotericsoftware.kryonet.Server;
+import com.esotericsoftware.minlog.Log;
 import dev.zyko.starfight.logging.StarfightLogger;
+import dev.zyko.starfight.protocol.PacketRegistry;
+import dev.zyko.starfight.server.netcode.PlayerConnection;
 import dev.zyko.starfight.server.netcode.ServerNetworkHandler;
-import dev.zyko.starfight.server.netcode.encoding.ServerPacketDecoder;
-import dev.zyko.starfight.server.netcode.encoding.ServerPacketEncoder;
 import dev.zyko.starfight.server.thread.ServerTickThread;
 import dev.zyko.starfight.server.world.World;
-import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.*;
-import io.netty.channel.epoll.Epoll;
-import io.netty.channel.epoll.EpollEventLoopGroup;
-import io.netty.channel.epoll.EpollServerSocketChannel;
-import io.netty.channel.nio.NioEventLoopGroup;
-import io.netty.channel.socket.nio.NioServerSocketChannel;
+import dev.zyko.starfight.server.world.entity.EntityPowerUp;
 
 import java.util.UUID;
 
-public class StarfightServer {
+public class StarfightServer extends Server {
 
     public static final String VERSION = "alpha-indev";
-    public static final boolean EPOLL = Epoll.isAvailable();
     public static final String SIGNATURE = UUID.randomUUID().toString().replace("-", "");
 
     private static StarfightServer instance;
@@ -32,31 +28,21 @@ public class StarfightServer {
         this.logger.log(this.getClass(), "Starting Starfight server on port 26800...");
         instance = this;
         this.world = new World(2000.0D);
+        this.world.spawnEntity(new EntityPowerUp(this.world.getNextEntityID(), 100, 100, EntityPowerUp.TYPE_SPEED));
         this.serverTickThread.setName("server-tick-thread");
         this.serverTickThread.start();
-        EventLoopGroup eventLoopGroup = EPOLL ? new EpollEventLoopGroup() : new NioEventLoopGroup();
-        try {
-            new ServerBootstrap()
-                    .group(eventLoopGroup)
-                    .channel(EPOLL ? EpollServerSocketChannel.class : NioServerSocketChannel.class)
-                    .childHandler(new ChannelInitializer<Channel>() {
-                        @Override
-                        protected void initChannel(Channel ch) throws Exception {
-                            logger.log(this.getClass(), "[+] Connection: " + ch.remoteAddress().toString());
-                            ch.pipeline().addLast("encoder", new ServerPacketEncoder()).addLast("decoder", new ServerPacketDecoder()).addLast("nethandler", new ServerNetworkHandler(ch));
-                        }
-
-                        @Override
-                        public void channelUnregistered(ChannelHandlerContext ctx) throws Exception {
-                            logger.log(this.getClass(), "[-] Connection: " + ctx.channel().remoteAddress().toString());
-                            super.channelUnregistered(ctx);
-                        }
-                    })
-                    .bind(26800).sync().channel().closeFuture().syncUninterruptibly();
-        } finally {
-            this.serverTickThread.terminate();
-            eventLoopGroup.shutdownGracefully();
+        Log.set(Log.LEVEL_DEBUG);
+        this.prepareNetworking();
+        this.bind(26800);
+        while(true) {
+            this.update(1);
         }
+        // this.serverTickThread.terminate();
+    }
+
+    private void prepareNetworking() {
+        this.addListener(new ServerNetworkHandler());
+        PacketRegistry.apply(this.getKryo());
     }
 
     public static StarfightServer getInstance() {
@@ -79,4 +65,8 @@ public class StarfightServer {
         return world;
     }
 
+    @Override
+    protected Connection newConnection() {
+        return new PlayerConnection();
+    }
 }

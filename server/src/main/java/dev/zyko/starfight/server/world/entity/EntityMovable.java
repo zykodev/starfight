@@ -14,8 +14,8 @@ public class EntityMovable extends Entity {
 
     @Override
     public void updateEntity() {
-        this.posX += Math.sin(Math.toRadians(this.rotation));
-        this.posY += Math.cos(Math.toRadians(this.rotation));
+        this.posX += -Math.sin(Math.toRadians(this.rotation)) * 4;
+        this.posY += Math.cos(Math.toRadians(this.rotation)) * 4;
     }
 
     @Override
