@@ -13,11 +13,22 @@ import dev.zyko.starfight.protocol.impl.C03PacketConnect;
 public class NetworkManager extends Client {
 
     public enum ConnectionStatus {
-        CONNECTING,
-        LOGGING_IN,
-        RETRIEVING_WORLD_DATA,
-        CONNECTED,
-        OFFLINE
+        CONNECTING("Connecting..."),
+        LOGGING_IN("Logging in..."),
+        RETRIEVING_WORLD_DATA("Retrieving world data..."),
+        CONNECTED("Online"),
+        OFFLINE("Offline");
+
+        private String displayName;
+
+        ConnectionStatus(String displayName) {
+            this.displayName = displayName;
+        }
+
+        public String getDisplayName() {
+            return displayName;
+        }
+
     }
     private ConnectionStatus status = ConnectionStatus.OFFLINE;
 
@@ -50,7 +61,7 @@ public class NetworkManager extends Client {
                 this.sendPacket(new C03PacketConnect(nickname, StarfightClient.VERSION));
             } catch (Exception e) {
                 this.stop();
-                StarfightClient.getInstance().getGameRenderer().displayGuiScreen(new GuiScreenDisconnected("Failed to connect to server: " + e.getMessage()));
+                StarfightClient.getInstance().getGameRenderer().displayGuiScreen(new GuiScreenDisconnected("Failed to connect to server:\n" + e.getMessage()));
             }
         }).start();
     }

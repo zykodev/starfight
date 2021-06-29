@@ -174,10 +174,19 @@ public class FontRenderer {
     }
 
     public void drawCenteredString(String text, float x, float y, int color) {
-        y -= 1;
-        double w = this.getStringWidth(text);
-        x -= w / 2.0F;
-        this.drawString(text, x, y, color);
+        if(text.contains("\n")) {
+            String[] texts = text.split("\n");
+            int yOffset = 0;
+            for(String s : texts) {
+                this.drawCenteredString(s, x, y + yOffset, color);
+                yOffset += this.height + 1;
+            }
+        } else {
+            y -= 1;
+            double w = this.getStringWidth(text);
+            x -= w / 2.0F;
+            this.drawString(text, x, y, color);
+        }
     }
 
     public void drawCenteredStringWithShadow(String text, float x, float y, int color) {

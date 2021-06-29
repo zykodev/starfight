@@ -52,4 +52,8 @@ public class World {
         }
         return null;
     }
+
+    public void unloadEntity(Entity entity) {
+        this.loadedEntityList.remove(entity);
+    }
 }

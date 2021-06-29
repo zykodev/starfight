@@ -21,7 +21,6 @@ public class ServerNetworkHandler extends Listener {
             if(packetRaw instanceof C03PacketConnect) {
                 C03PacketConnect packet = (C03PacketConnect) packetRaw;
                 if(packet.getVersion().equalsIgnoreCase(StarfightServer.VERSION)) {
-                    System.out.println(packet.getNickname());
                     for(Entity e : StarfightServer.getInstance().getWorld().getEntityList()) {
                         if(e instanceof EntityPlayerSpaceship) {
                             if(((EntityPlayerSpaceship) e).getName().equalsIgnoreCase(packet.getNickname())) {

@@ -1,6 +1,7 @@
 package dev.zyko.starfight.client.entity;
 
 import dev.zyko.starfight.client.StarfightClient;
+import dev.zyko.starfight.client.input.InputManager;
 import dev.zyko.starfight.client.renderer.model.Model;
 import dev.zyko.starfight.client.util.MathHelper;
 import dev.zyko.starfight.protocol.impl.C04PacketPlayOutPlayerData;
@@ -8,6 +9,7 @@ import dev.zyko.starfight.protocol.impl.C04PacketPlayOutPlayerData;
 public class EntityPlayerSpaceship extends EntitySpaceship {
 
     private double prevRotation;
+    private boolean prevShooting, prevUsingPowerup, shooting, usingPowerup;
 
     public EntityPlayerSpaceship(int id, double posX, double posY, double rotation, String name) {
         super(id, posX, posY, rotation, name);
@@ -15,8 +17,12 @@ public class EntityPlayerSpaceship extends EntitySpaceship {
 
     @Override
     public void updateEntity() {
-        if(this.rotation != this.prevRotation) {
-            StarfightClient.getInstance().getNetworkManager().sendPacket(new C04PacketPlayOutPlayerData(this.rotation));
+        this.prevShooting = this.shooting;
+        this.prevUsingPowerup = this.usingPowerup;
+        this.shooting = StarfightClient.getInstance().getInputManager().isMouseButtonDown(InputManager.MOUSE_LEFT);
+        this.usingPowerup = StarfightClient.getInstance().getInputManager().isMouseButtonDown(InputManager.MOUSE_RIGHT);
+        if(this.rotation != this.prevRotation || this.prevShooting != this.shooting || this.prevUsingPowerup != this.usingPowerup) {
+            StarfightClient.getInstance().getNetworkManager().sendPacket(new C04PacketPlayOutPlayerData(this.rotation, this.shooting, this.usingPowerup));
         }
         super.updateEntity();
         this.prevRotation = rotation;

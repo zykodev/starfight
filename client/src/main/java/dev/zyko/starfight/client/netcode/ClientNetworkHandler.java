@@ -21,6 +21,7 @@ public class ClientNetworkHandler extends Listener {
             this.latency = System.currentTimeMillis() - ((S01PacketKeepAlive) msg).getSystemTime();
         }
         if(msg instanceof S03PacketAcceptConnection) {
+            StarfightClient.getInstance().getNetworkManager().setStatus(NetworkManager.ConnectionStatus.CONNECTED);
             S03PacketAcceptConnection packet = (S03PacketAcceptConnection) msg;
             World world = new World(packet.getWorldRadius());
             EntityPlayerSpaceship entityPlayerSpaceship = new EntityPlayerSpaceship(packet.getEntityId(), packet.getPosX(), packet.getPosY(), 0, packet.getNickname());
@@ -30,6 +31,7 @@ public class ClientNetworkHandler extends Listener {
             StarfightClient.getInstance().getGameRenderer().displayGuiScreen(null);
         }
         if(msg instanceof S02PacketDisconnect) {
+            StarfightClient.getInstance().getNetworkManager().setStatus(NetworkManager.ConnectionStatus.OFFLINE);
             S02PacketDisconnect packet = (S02PacketDisconnect) msg;
             StarfightClient.getInstance().getGameRenderer().displayGuiScreen(new GuiScreenDisconnected(packet.getMessage()));
         }
@@ -57,6 +59,13 @@ public class ClientNetworkHandler extends Listener {
                 if(entity instanceof EntityMovable && entity != StarfightClient.getInstance().getPlayerSpaceship()) {
                     ((EntityMovable)entity).setRotation(rot);
                 }
+            }
+        }
+        if(msg instanceof S06PacketPlayOutEntityDespawn) {
+            int id = ((S06PacketPlayOutEntityDespawn) msg).getEntityId();
+            Entity entity = StarfightClient.getInstance().getWorld().getEntity(id);
+            if(entity != null) {
+                StarfightClient.getInstance().getWorld().unloadEntity(entity);
             }
         }
         super.received(connection, o);

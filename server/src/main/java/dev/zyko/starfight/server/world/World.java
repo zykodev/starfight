@@ -2,6 +2,7 @@ package dev.zyko.starfight.server.world;
 
 import dev.zyko.starfight.protocol.impl.S04PacketPlayOutEntitySpawn;
 import dev.zyko.starfight.protocol.impl.S05PacketPlayOutEntityPosition;
+import dev.zyko.starfight.protocol.impl.S06PacketPlayOutEntityDespawn;
 import dev.zyko.starfight.server.world.entity.Entity;
 import dev.zyko.starfight.server.world.entity.EntityPlayerSpaceship;
 import dev.zyko.starfight.server.world.entity.EntityPowerUp;
@@ -51,6 +52,11 @@ public class World {
 
     public void despawnEntity(Entity e) {
         this.entityList.remove(e);
+        for (Entity entity : this.entityList) {
+            if(entity instanceof EntityPlayerSpaceship) {
+                ((EntityPlayerSpaceship) entity).sendPacket(new S06PacketPlayOutEntityDespawn(e.getId()));
+            }
+        }
     }
 
     public void spawnEntity(Entity entity) {
