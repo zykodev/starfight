@@ -33,7 +33,7 @@ public class NetworkManager extends Client {
     private ConnectionStatus status = ConnectionStatus.OFFLINE;
 
     public NetworkManager() {
-        Log.set(Log.LEVEL_DEBUG);
+        // Log.set(Log.LEVEL_DEBUG);
         PacketRegistry.apply(this.getKryo());
         this.addListener(new ClientNetworkHandler());
         Runtime.getRuntime().addShutdownHook(new Thread(this::disconnect));

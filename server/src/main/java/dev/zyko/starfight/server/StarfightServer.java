@@ -27,11 +27,11 @@ public class StarfightServer extends Server {
     public StarfightServer() throws Exception {
         this.logger.log(this.getClass(), "Starting Starfight server on port 26800...");
         instance = this;
-        this.world = new World(2000.0D);
-        this.world.spawnEntity(new EntityPowerUp(this.world.getNextEntityID(), 100, 100, EntityPowerUp.TYPE_SPEED));
+        this.world = new World(4000.0D);
+        this.world.spawnPowerUps();
         this.serverTickThread.setName("server-tick-thread");
         this.serverTickThread.start();
-        Log.set(Log.LEVEL_DEBUG);
+        // Log.set(Log.LEVEL_DEBUG);
         this.prepareNetworking();
         this.bind(26800);
         while(true) {

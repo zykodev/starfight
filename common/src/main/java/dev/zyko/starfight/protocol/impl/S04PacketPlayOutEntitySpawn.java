@@ -6,6 +6,7 @@ public class S04PacketPlayOutEntitySpawn implements Packet {
 
     public static final int SPACESHIP = 1;
     public static final int POWER_UP = 2;
+    public static final int PROJECTILE = 3;
 
     private int entityId, type;
     private double posX, posY, rotation;

@@ -12,6 +12,7 @@ public class ServerNetworkHandler extends Listener {
 
     @Override
     public void received(Connection connection, Object o) {
+        if(!(o instanceof Packet)) return;
         PlayerConnection playerConnection = (PlayerConnection) connection;
         Packet packetRaw = (Packet) o;
         if(packetRaw instanceof C01PacketKeepAlive) {
@@ -49,6 +50,8 @@ public class ServerNetworkHandler extends Listener {
             if(packetRaw instanceof C04PacketPlayOutPlayerData) {
                 C04PacketPlayOutPlayerData packet = (C04PacketPlayOutPlayerData) packetRaw;
                 playerConnection.getPlayerSpaceship().setRotation(packet.getRotation());
+                playerConnection.getPlayerSpaceship().setShooting(packet.isShooting());
+                playerConnection.getPlayerSpaceship().setUsingPowerup(packet.isUsingPowerup());
             }
             if(packetRaw instanceof C02PacketDisconnect) {
                 StarfightServer.getInstance().getWorld().despawnEntity(playerConnection.getPlayerSpaceship());

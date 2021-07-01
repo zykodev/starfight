@@ -37,4 +37,12 @@ public class EntityMovable extends Entity {
     public void setRotation(double rotation) {
         this.rotation = rotation;
     }
+
+    public double getLastPosY() {
+        return lastPosY;
+    }
+
+    public double getLastPosX() {
+        return lastPosX;
+    }
 }

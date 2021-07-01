@@ -1,5 +1,7 @@
 package dev.zyko.starfight.server.world.entity;
 
+import dev.zyko.starfight.server.StarfightServer;
+
 public class EntityMovable extends Entity {
 
     protected double rotation;
@@ -14,8 +16,14 @@ public class EntityMovable extends Entity {
 
     @Override
     public void updateEntity() {
-        this.posX += -Math.sin(Math.toRadians(this.rotation)) * 4;
-        this.posY += Math.cos(Math.toRadians(this.rotation)) * 4;
+        double newPosX = this.posX - Math.sin(Math.toRadians(this.rotation)) * 4;
+        double newPosY = this.posY + Math.cos(Math.toRadians(this.rotation)) * 4;
+        double distance = Math.hypot(Math.abs(newPosX), Math.abs(newPosY));
+        if(distance >= StarfightServer.getInstance().getWorld().getRadius()) {
+            return;
+        }
+        this.posX = newPosX;
+        this.posY = newPosY;
     }
 
     @Override
@@ -36,5 +44,13 @@ public class EntityMovable extends Entity {
 
     public void setRotation(double rotation) {
         this.rotation = rotation;
+    }
+
+    public double getLastPosX() {
+        return lastPosX;
+    }
+
+    public double getLastPosY() {
+        return lastPosY;
     }
 }

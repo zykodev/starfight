@@ -17,6 +17,7 @@ public class TextureManager {
         this.loadTexture("entity/powerup_cdr", "pu_time.png");
         this.loadTexture("entity/powerup_health", "pu_heart.png");
         this.loadTexture("entity/powerup_speed", "pu_lightning.png");
+        this.loadTexture("entity/projectile", "projectile.png");
     }
 
     private void loadTexture(String alias, String resourceName) throws Exception {

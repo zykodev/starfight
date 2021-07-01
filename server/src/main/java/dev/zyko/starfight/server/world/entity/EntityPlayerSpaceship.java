@@ -2,12 +2,15 @@ package dev.zyko.starfight.server.world.entity;
 
 import com.esotericsoftware.kryonet.Connection;
 import dev.zyko.starfight.protocol.Packet;
+import dev.zyko.starfight.server.StarfightServer;
 import dev.zyko.starfight.server.netcode.PlayerConnection;
 import dev.zyko.starfight.server.netcode.ServerNetworkHandler;
 
 public class EntityPlayerSpaceship extends EntitySpaceship {
 
     private PlayerConnection connection;
+    private boolean shooting, usingPowerup;
+    private int ticksSinceLastShot = 0;
 
     public EntityPlayerSpaceship(int id, double posX, double posY, double rotation, String name, PlayerConnection playerConnection) {
         super(id, posX, posY, rotation, name);
@@ -15,6 +18,8 @@ public class EntityPlayerSpaceship extends EntitySpaceship {
         this.health = 3;
         this.connection = playerConnection;
         this.connection.setPlayerSpaceship(this);
+        this.shooting = this.usingPowerup = false;
+        this.ticksSinceLastShot = 0;
     }
 
     public int getHealth() {
@@ -27,7 +32,34 @@ public class EntityPlayerSpaceship extends EntitySpaceship {
 
     @Override
     public void updateEntity() {
+        if(this.shooting) {
+            if(this.ticksSinceLastShot >= 24) {
+                this.ticksSinceLastShot = 0;
+                this.shoot();
+            } else {
+                this.ticksSinceLastShot++;
+            }
+        } else {
+            this.ticksSinceLastShot++;
+        }
         super.updateEntity();
+    }
+
+    private void shoot() {
+        double generalOffsetX = -Math.sin(Math.toRadians(this.rotation)) * 9;
+        double generalOffsetY = Math.cos(Math.toRadians(this.rotation)) * 9;
+
+        double leftOffsetPosX = -Math.sin(Math.toRadians(this.rotation - 90)) * 21 + generalOffsetX;
+        double leftOffsetPosY = Math.cos(Math.toRadians(this.rotation - 90)) * 21 + generalOffsetY;
+
+        double rightOffsetPosX = -Math.sin(Math.toRadians(this.rotation + 90)) * 21 + generalOffsetX;
+        double rightOffsetPosY = Math.cos(Math.toRadians(this.rotation + 90)) * 21 + generalOffsetY;
+
+        EntityProjectile leftProjectile = new EntityProjectile(this, StarfightServer.getInstance().getWorld().getNextEntityID(), this.posX + leftOffsetPosX, this.posY + leftOffsetPosY, this.rotation);
+        EntityProjectile rightProjectile = new EntityProjectile(this, StarfightServer.getInstance().getWorld().getNextEntityID(), this.posX + rightOffsetPosX, this.posY + rightOffsetPosY, this.rotation);
+
+        StarfightServer.getInstance().getWorld().spawnEntity(leftProjectile);
+        StarfightServer.getInstance().getWorld().spawnEntity(rightProjectile);
     }
 
     public String getName() {
@@ -42,6 +74,14 @@ public class EntityPlayerSpaceship extends EntitySpaceship {
         if(this.connection.isConnected()) {
             this.connection.sendTCP(packet);
         }
+    }
+
+    public void setShooting(boolean shooting) {
+        this.shooting = shooting;
+    }
+
+    public void setUsingPowerup(boolean usingPowerup) {
+        this.usingPowerup = usingPowerup;
     }
 
 }

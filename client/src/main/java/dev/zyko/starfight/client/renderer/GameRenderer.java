@@ -101,6 +101,27 @@ public class GameRenderer {
         GL11.glPopMatrix();
     }
 
+    public void drawCircle(double centerX, double centerY, double radius, int color, float thickness) {
+        float[] colorArray = ColorUtil.hexToRGBA(color);
+        GL11.glPushMatrix();
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glColor4f(colorArray[0], colorArray[1], colorArray[2], colorArray[3]);
+        GL11.glLineWidth(thickness);
+        GL11.glBegin(GL11.GL_LINE_STRIP);
+        {
+            for(int i = 0; i <= 360; i++) {
+                double vertexX = centerX + Math.sin(Math.toRadians(i)) * radius;
+                double vertexY = centerY + Math.cos(Math.toRadians(i)) * radius;
+                GL11.glVertex3d(vertexX, vertexY, 0);
+            }
+        }
+        GL11.glEnd();
+        GL11.glLineWidth(1);
+        GL11.glDisable(GL11.GL_BLEND);
+        GL11.glColor4f(1,1,1,1);
+        GL11.glPopMatrix();
+    }
+
     public void drawTexturableRectangle(double x, double y, double width, double height) {
         GL11.glPushMatrix();
         GL11.glEnable(GL11.GL_BLEND);

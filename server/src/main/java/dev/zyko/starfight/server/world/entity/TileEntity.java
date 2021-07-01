@@ -1,15 +1,14 @@
 package dev.zyko.starfight.server.world.entity;
 
-import dev.zyko.starfight.protocol.impl.S04PacketPlayOutEntitySpawn;
-
+import java.util.Comparator;
 import java.util.Objects;
 
-public abstract class Entity {
+public class TileEntity {
 
     protected int id;
     protected double posX, posY, width, height;
 
-    public Entity(int id, double posX, double posY, double width, double height) {
+    public TileEntity(int id, double posX, double posY, double width, double height) {
         this.id = id;
         this.posX = posX;
         this.posY = posY;
@@ -17,7 +16,9 @@ public abstract class Entity {
         this.height = height;
     }
 
-    public abstract void updateEntity();
+    public boolean isCollidingWith(TileEntity e) {
+        return false;
+    }
 
     public boolean isCollidingWith(Entity e) {
         return false;
@@ -39,7 +40,7 @@ public abstract class Entity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Entity entity = (Entity) o;
+        TileEntity entity = (TileEntity) o;
         return id == entity.id;
     }
 

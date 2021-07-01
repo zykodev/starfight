@@ -27,9 +27,26 @@ public class World {
         EntityPlayerSpaceship playerEntity = StarfightClient.getInstance().getPlayerSpaceship();
         double screenWidth = StarfightClient.getInstance().getDisplayManager().getWidth();
         double screenHeight = StarfightClient.getInstance().getDisplayManager().getHeight();
+        double circleCenterX = (playerEntity.getPosX() - 0) + screenWidth / 2;
+        double circleCenterY = (playerEntity.getPosY() - 0) + screenHeight / 2;
+
+        StarfightClient.getInstance().getGameRenderer().drawCircle(circleCenterX, circleCenterY, this.radius, -1, 2.5F);
+
         this.loadedEntityList.forEach(entity -> {
-            double renderPosX = (playerEntity.getPosX() - entity.getPosX()) + screenWidth / 2;
-            double renderPosY = (playerEntity.getPosY() - entity.getPosY()) + screenHeight / 2;
+            double interpolatedPlayerX = playerEntity.getPosX() + (playerEntity.getLastPosX() - playerEntity.getPosX()) * partialTicks;
+            double interpolatedPlayerY = playerEntity.getPosY() + (playerEntity.getLastPosY() - playerEntity.getPosY()) * partialTicks;
+            double interpolatedEntityX = entity.getPosX();
+            double interpolatedEntityY = entity.getPosY();
+            if(entity instanceof EntityMovable) {
+                interpolatedEntityX = entity.getPosX() + (((EntityMovable) entity).getLastPosX() - entity.getPosX()) * partialTicks;
+                interpolatedEntityY = entity.getPosY() + (((EntityMovable) entity).getLastPosY() - entity.getPosY()) * partialTicks;
+            }
+            if(entity == playerEntity) {
+                interpolatedEntityX = playerEntity.getPosX();
+                interpolatedEntityY = playerEntity.getPosY();
+            }
+            double renderPosX = (playerEntity.getPosX() - interpolatedEntityX) + screenWidth / 2;
+            double renderPosY = (playerEntity.getPosY() - interpolatedEntityY) + screenHeight / 2;
 
             double rotation = 0;
             if(entity instanceof EntityMovable) {

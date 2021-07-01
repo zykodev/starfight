@@ -37,7 +37,6 @@ public class ClientNetworkHandler extends Listener {
         }
         if(msg instanceof S04PacketPlayOutEntitySpawn) {
             S04PacketPlayOutEntitySpawn packet = (S04PacketPlayOutEntitySpawn) msg;
-            System.out.println(packet.getType());
             if(packet.getType() == S04PacketPlayOutEntitySpawn.SPACESHIP) {
                 EntitySpaceship entitySpaceship = new EntitySpaceship(packet.getEntityId(), packet.getPosX(), packet.getPosY(), packet.getRotation(), packet.getName());
                 StarfightClient.getInstance().getWorld().loadEntity(entitySpaceship);
@@ -45,6 +44,10 @@ public class ClientNetworkHandler extends Listener {
             if(packet.getType() == S04PacketPlayOutEntitySpawn.POWER_UP) {
                 EntityPowerUp entityPowerUp = new EntityPowerUp(packet.getEntityId(), packet.getPosX(), packet.getPosY(), packet.getRotation());
                 StarfightClient.getInstance().getWorld().loadEntity(entityPowerUp);
+            }
+            if(packet.getType() == S04PacketPlayOutEntitySpawn.PROJECTILE) {
+                EntityProjectile entityProjectile = new EntityProjectile(packet.getEntityId(), packet.getPosX(), packet.getPosY(), packet.getRotation());
+                StarfightClient.getInstance().getWorld().loadEntity(entityProjectile);
             }
         }
         if(msg instanceof S05PacketPlayOutEntityPosition) {
@@ -56,7 +59,7 @@ public class ClientNetworkHandler extends Listener {
             if(entity != null) {
                 entity.setPosX(x);
                 entity.setPosY(y);
-                if(entity instanceof EntityMovable && entity != StarfightClient.getInstance().getPlayerSpaceship()) {
+                if(entity instanceof EntityMovable && entity != StarfightClient.getInstance().getPlayerSpaceship() && !(entity instanceof EntityProjectile)) {
                     ((EntityMovable)entity).setRotation(rot);
                 }
             }
