@@ -12,6 +12,10 @@ import dev.zyko.starfight.protocol.impl.C03PacketConnect;
 
 public class NetworkManager extends Client {
 
+    public enum OpferEnum {
+        ERIK, ERIK2, ERIK3
+    }
+
     public enum ConnectionStatus {
         CONNECTING("Connecting..."),
         LOGGING_IN("Logging in..."),
@@ -28,8 +32,8 @@ public class NetworkManager extends Client {
         public String getDisplayName() {
             return displayName;
         }
-
     }
+
     private ConnectionStatus status = ConnectionStatus.OFFLINE;
 
     public NetworkManager() {
@@ -69,6 +73,8 @@ public class NetworkManager extends Client {
     public void disconnect() {
         if(this.isConnected()) {
             this.sendPacket(new C02PacketDisconnect());
+            StarfightClient.getInstance().setWorld(null);
+            StarfightClient.getInstance().setPlayerSpaceship(null);
             this.close();
             this.stop();
         }

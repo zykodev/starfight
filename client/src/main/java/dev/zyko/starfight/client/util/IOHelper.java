@@ -26,6 +26,26 @@ public class IOHelper {
         return null;
     }
 
+    public static String readFile(File f) throws Exception {
+        BufferedReader bufferedReader = new BufferedReader(new FileReader(f));
+        String readLine = "", totalText = "";
+        while((readLine = bufferedReader.readLine()) != null) {
+            totalText += readLine;
+        }
+        bufferedReader.close();
+        return readLine;
+    }
+
+    public static void writeFile(File f, String text) throws Exception {
+        FileWriter fw = new FileWriter(f);
+        if(f.exists()) {
+            f.delete();
+        }
+        fw.write(text);
+        fw.flush();
+        fw.close();
+    }
+
     public static ByteBuffer streamToByteBuffer(InputStream inputStream) throws Exception {
         ByteBuffer buffer = BufferUtils.createByteBuffer(inputStream.available());
         byte[] bBuf = new byte[inputStream.available()];

@@ -71,6 +71,14 @@ public class ClientNetworkHandler extends Listener {
                 StarfightClient.getInstance().getWorld().unloadEntity(entity);
             }
         }
+        if(msg instanceof S07PacketPlayOutEntityHealth) {
+            int id = ((S07PacketPlayOutEntityHealth) msg).getEntityId();
+            Entity e = StarfightClient.getInstance().getWorld().getEntity(id);
+            System.out.println("Update health! " + id + ", " + ((S07PacketPlayOutEntityHealth) msg).getHealth());
+            if(e instanceof EntitySpaceship) {
+                ((EntitySpaceship) e).setHealth(((S07PacketPlayOutEntityHealth) msg).getHealth());
+            }
+        }
         super.received(connection, o);
     }
 

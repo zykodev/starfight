@@ -2,6 +2,13 @@ package dev.zyko.starfight.client.entity;
 
 import dev.zyko.starfight.client.StarfightClient;
 import dev.zyko.starfight.client.renderer.model.Model;
+import dev.zyko.starfight.client.renderer.texture.Texture;
+import org.lwjgl.opengl.GL11;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 
 public class EntitySpaceship extends EntityMovable {
 
@@ -33,6 +40,17 @@ public class EntitySpaceship extends EntityMovable {
         double nameWidth = StarfightClient.getInstance().getFontManager().getFontRenderer("ui/basictext").getStringWidth(this.name);
         StarfightClient.getInstance().getGameRenderer().drawRectangle(x - nameWidth / 2 - 2, y + height / 2 + 2, nameWidth + 4, 19, 0x80333333);
         StarfightClient.getInstance().getFontManager().getFontRenderer("ui/basictext").drawCenteredStringWithShadow(this.name, (float) x, (float) (y + height / 2 + 2), -1);
+        Texture texture = StarfightClient.getInstance().getTextureManager().getTexture("ui/heart");
+        double size = 16;
+        double totalWidth = size * this.health;
+        double leftOffset = totalWidth / 2.0D + size;
+        for(int i = 1; i <= this.health; i++) {
+            GL11.glPushMatrix();
+            texture.bindTexture();
+            StarfightClient.getInstance().getGameRenderer().drawTexturableRectangle(x - leftOffset + i * size, y + height / 2.0D + 24, size, size);
+            texture.unbindTexture();
+            GL11.glPopMatrix();
+        }
     }
 
     public String getName() {

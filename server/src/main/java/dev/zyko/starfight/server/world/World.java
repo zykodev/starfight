@@ -184,4 +184,7 @@ public class World {
         return unloadedTileEntityList;
     }
 
+    public CopyOnWriteArrayList<EntityPlayerSpaceship> getPlayerSpaceshipList() {
+        return playerSpaceshipList;
+    }
 }

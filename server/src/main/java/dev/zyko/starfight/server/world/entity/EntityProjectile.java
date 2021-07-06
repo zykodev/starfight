@@ -47,6 +47,7 @@ public class EntityProjectile extends EntityMovable {
             if(e instanceof EntityPowerUp) {
                 StarfightServer.getInstance().getWorld().despawnEntity(this);
                 StarfightServer.getInstance().getWorld().despawnEntity(e);
+                this.firedBy.setHealth(this.firedBy.getHealth() - 1);
             }
             return;
         }

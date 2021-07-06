@@ -44,9 +44,11 @@ public class World {
             if(entity == playerEntity) {
                 interpolatedEntityX = playerEntity.getPosX();
                 interpolatedEntityY = playerEntity.getPosY();
+                interpolatedPlayerX = playerEntity.getPosX();
+                interpolatedPlayerY = playerEntity.getPosY();
             }
-            double renderPosX = (playerEntity.getPosX() - interpolatedEntityX) + screenWidth / 2;
-            double renderPosY = (playerEntity.getPosY() - interpolatedEntityY) + screenHeight / 2;
+            double renderPosX = (interpolatedPlayerX - interpolatedEntityX) + screenWidth / 2;
+            double renderPosY = (interpolatedPlayerY - interpolatedEntityY) + screenHeight / 2;
 
             double rotation = 0;
             if(entity instanceof EntityMovable) {

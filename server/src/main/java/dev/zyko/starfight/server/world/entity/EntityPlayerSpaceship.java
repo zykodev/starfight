@@ -2,6 +2,7 @@ package dev.zyko.starfight.server.world.entity;
 
 import com.esotericsoftware.kryonet.Connection;
 import dev.zyko.starfight.protocol.Packet;
+import dev.zyko.starfight.protocol.impl.S07PacketPlayOutEntityHealth;
 import dev.zyko.starfight.server.StarfightServer;
 import dev.zyko.starfight.server.netcode.PlayerConnection;
 import dev.zyko.starfight.server.netcode.ServerNetworkHandler;
@@ -28,6 +29,9 @@ public class EntityPlayerSpaceship extends EntitySpaceship {
 
     public void setHealth(int health) {
         this.health = health;
+        for(EntityPlayerSpaceship p : StarfightServer.getInstance().getWorld().getPlayerSpaceshipList()) {
+            p.sendPacket(new S07PacketPlayOutEntityHealth(this.id, this.health));
+        }
     }
 
     @Override

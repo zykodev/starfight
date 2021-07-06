@@ -21,8 +21,9 @@ public class EntityPlayerSpaceship extends EntitySpaceship {
         this.prevUsingPowerup = this.usingPowerup;
         this.shooting = StarfightClient.getInstance().getInputManager().isMouseButtonDown(InputManager.MOUSE_LEFT);
         this.usingPowerup = StarfightClient.getInstance().getInputManager().isMouseButtonDown(InputManager.MOUSE_RIGHT);
+        boolean useAction = StarfightClient.getInstance().getGameRenderer().getCurrentScreen() == null;
         if(this.rotation != this.prevRotation || this.prevShooting != this.shooting || this.prevUsingPowerup != this.usingPowerup) {
-            StarfightClient.getInstance().getNetworkManager().sendPacket(new C04PacketPlayOutPlayerData(this.rotation, this.shooting, this.usingPowerup));
+            StarfightClient.getInstance().getNetworkManager().sendPacket(new C04PacketPlayOutPlayerData(this.rotation, this.shooting && useAction, this.usingPowerup && useAction));
         }
         super.updateEntity();
         this.prevRotation = rotation;

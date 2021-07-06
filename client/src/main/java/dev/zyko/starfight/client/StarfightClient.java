@@ -2,6 +2,7 @@ package dev.zyko.starfight.client;
 
 import dev.zyko.starfight.client.display.DisplayManager;
 import dev.zyko.starfight.client.entity.EntityPlayerSpaceship;
+import dev.zyko.starfight.client.gui.impl.GuiOverlayIngameMenu;
 import dev.zyko.starfight.client.gui.impl.GuiScreenMainMenu;
 import dev.zyko.starfight.client.input.InputManager;
 import dev.zyko.starfight.client.netcode.NetworkManager;
@@ -15,6 +16,7 @@ import dev.zyko.starfight.client.util.IOHelper;
 import dev.zyko.starfight.client.util.TextureHelper;
 import dev.zyko.starfight.util.TimeHelper;
 import dev.zyko.starfight.client.world.World;
+import org.lwjgl.glfw.GLFW;
 
 import java.io.File;
 import java.io.IOException;
@@ -120,6 +122,10 @@ public class StarfightClient {
     public void routeKeyInput(int keyCode, int action) {
         if(this.gameRenderer.getCurrentScreen() != null) {
             this.gameRenderer.getCurrentScreen().keyInput(keyCode, action);
+        } else {
+            if(keyCode == GLFW.GLFW_KEY_ESCAPE && action == 1) {
+                this.gameRenderer.displayGuiScreen(new GuiOverlayIngameMenu());
+            }
         }
     }
 
