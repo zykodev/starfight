@@ -4,6 +4,7 @@ import dev.zyko.starfight.client.StarfightClient;
 import dev.zyko.starfight.client.entity.Entity;
 import dev.zyko.starfight.client.entity.EntityMovable;
 import dev.zyko.starfight.client.entity.EntityPlayerSpaceship;
+import dev.zyko.starfight.client.world.data.Scoreboard;
 import org.lwjgl.opengl.GL11;
 
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -11,10 +12,12 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class World {
 
     private CopyOnWriteArrayList<Entity> loadedEntityList = new CopyOnWriteArrayList<>();
+    private Scoreboard scoreboard;
     private double radius;
 
     public World(double radius) {
         this.radius = radius;
+        this.scoreboard = new Scoreboard();
     }
 
     public void loadEntity(Entity entity) {
@@ -75,4 +78,9 @@ public class World {
     public void unloadEntity(Entity entity) {
         this.loadedEntityList.remove(entity);
     }
+
+    public Scoreboard getScoreboard() {
+        return scoreboard;
+    }
+
 }

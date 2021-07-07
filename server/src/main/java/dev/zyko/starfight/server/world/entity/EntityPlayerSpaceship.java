@@ -11,7 +11,7 @@ public class EntityPlayerSpaceship extends EntitySpaceship {
 
     private PlayerConnection connection;
     private boolean shooting, usingPowerup;
-    private int ticksSinceLastShot = 0;
+    private int ticksSinceLastShot = 0, score = 0, deaths = 0;
 
     public EntityPlayerSpaceship(int id, double posX, double posY, double rotation, String name, PlayerConnection playerConnection) {
         super(id, posX, posY, rotation, name);
@@ -86,6 +86,22 @@ public class EntityPlayerSpaceship extends EntitySpaceship {
 
     public void setUsingPowerup(boolean usingPowerup) {
         this.usingPowerup = usingPowerup;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public void setDeaths(int deaths) {
+        this.deaths = deaths;
+    }
+
+    public int getDeaths() {
+        return deaths;
     }
 
 }

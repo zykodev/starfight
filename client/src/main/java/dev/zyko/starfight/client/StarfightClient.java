@@ -3,6 +3,7 @@ package dev.zyko.starfight.client;
 import dev.zyko.starfight.client.display.DisplayManager;
 import dev.zyko.starfight.client.entity.EntityPlayerSpaceship;
 import dev.zyko.starfight.client.gui.impl.GuiOverlayIngameMenu;
+import dev.zyko.starfight.client.gui.impl.GuiOverlayScoreboard;
 import dev.zyko.starfight.client.gui.impl.GuiScreenMainMenu;
 import dev.zyko.starfight.client.input.InputManager;
 import dev.zyko.starfight.client.netcode.NetworkManager;
@@ -125,6 +126,9 @@ public class StarfightClient {
         } else {
             if(keyCode == GLFW.GLFW_KEY_ESCAPE && action == 1) {
                 this.gameRenderer.displayGuiScreen(new GuiOverlayIngameMenu());
+            }
+            if(keyCode == GLFW.GLFW_KEY_TAB && action == 1) {
+                this.gameRenderer.displayGuiScreen(new GuiOverlayScoreboard());
             }
         }
     }

@@ -47,7 +47,6 @@ public class EntityProjectile extends EntityMovable {
             if(e instanceof EntityPowerUp) {
                 StarfightServer.getInstance().getWorld().despawnEntity(this);
                 StarfightServer.getInstance().getWorld().despawnEntity(e);
-                this.firedBy.setHealth(this.firedBy.getHealth() - 1);
             }
             return;
         }
@@ -62,6 +61,15 @@ public class EntityProjectile extends EntityMovable {
             if(e instanceof EntityPlayerSpaceship) {
                 StarfightServer.getInstance().getWorld().despawnEntity(this);
                 ((EntityPlayerSpaceship) e).setHealth(((EntityPlayerSpaceship) e).getHealth() - 1);
+                if(((EntityPlayerSpaceship) e).getHealth() == 0) {
+                    double[] newPos = StarfightServer.getInstance().getWorld().getRandomSpawnPosition();
+                    e.setPosX(newPos[0]);
+                    e.setPosY(newPos[1]);
+                    ((EntityPlayerSpaceship) e).setHealth(3);
+                    ((EntityPlayerSpaceship) e).setDeaths(((EntityPlayerSpaceship) e).getDeaths() + 1);
+                    this.firedBy.setScore(this.firedBy.getScore() + 1);
+                    this.firedBy.setHealth(3);
+                }
             }
         }
     }

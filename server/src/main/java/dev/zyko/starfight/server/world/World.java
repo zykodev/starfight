@@ -1,10 +1,15 @@
 package dev.zyko.starfight.server.world;
 
+import dev.zyko.starfight.data.ScoreboardEntry;
 import dev.zyko.starfight.protocol.impl.S04PacketPlayOutEntitySpawn;
 import dev.zyko.starfight.protocol.impl.S05PacketPlayOutEntityPosition;
 import dev.zyko.starfight.protocol.impl.S06PacketPlayOutEntityDespawn;
+import dev.zyko.starfight.protocol.impl.S08PacketPlayOutScoreboardData;
 import dev.zyko.starfight.server.world.entity.*;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -65,6 +70,19 @@ public class World {
             if(despawnable) {
                 this.unloadEntity(tileEntity);
             }
+        }
+        ArrayList<EntityPlayerSpaceship> sortableList = new ArrayList<>();
+        for(EntityPlayerSpaceship entityPlayerSpaceship : this.playerSpaceshipList) {
+            sortableList.add(entityPlayerSpaceship);
+        }
+        sortableList.sort((o1, o2) -> Double.compare(o2.getScore() / (double) (o2.getDeaths() == 0 ? 1 : o2.getDeaths()), o1.getScore() / (double) (o1.getDeaths() == 0 ? 1 : o1.getDeaths())));
+        for(EntityPlayerSpaceship entityPlayerSpaceship : this.playerSpaceshipList) {
+            ArrayList<ScoreboardEntry> sortedTopList = new ArrayList<>();
+            for(EntityPlayerSpaceship scoreboardEntity : sortableList) {
+                if(sortableList.indexOf(scoreboardEntity) > 9 && !scoreboardEntity.getName().equalsIgnoreCase(entityPlayerSpaceship.getName())) continue;
+                sortedTopList.add(new ScoreboardEntry(scoreboardEntity.getName(), scoreboardEntity.getScore() / (double) (scoreboardEntity.getDeaths() == 0 ? 1 : scoreboardEntity.getDeaths()), sortableList.indexOf(scoreboardEntity) + 1));
+            }
+            entityPlayerSpaceship.sendPacket(new S08PacketPlayOutScoreboardData(sortedTopList));
         }
         for(Entity e : this.entityList) e.updateEntity();
         for(Entity e : this.entityList) {

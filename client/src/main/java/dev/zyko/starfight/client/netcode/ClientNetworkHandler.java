@@ -79,6 +79,9 @@ public class ClientNetworkHandler extends Listener {
                 ((EntitySpaceship) e).setHealth(((S07PacketPlayOutEntityHealth) msg).getHealth());
             }
         }
+        if(msg instanceof S08PacketPlayOutScoreboardData) {
+            StarfightClient.getInstance().getWorld().getScoreboard().updateScoreboard(((S08PacketPlayOutScoreboardData) msg).getScoreboardEntries());
+        }
         super.received(connection, o);
     }
 
