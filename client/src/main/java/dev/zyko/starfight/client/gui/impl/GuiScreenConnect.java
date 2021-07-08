@@ -16,10 +16,10 @@ public class GuiScreenConnect extends GuiScreen {
         int w = 300;
         int h = 40;
         this.serverAddressInput = new GuiTextBox((float) screenWidth / 2 - w / 2.0F, (int) (screenHeight * 0.3F + 100F) - 10, w, h);
-        this.nicknameInput = new GuiTextBox((float) screenWidth / 2 - w / 2.0F, (int) (screenHeight * 0.3F + 100F)+ 2 * h - 10, w, h);
+        this.nicknameInput = new GuiTextBox((float) screenWidth / 2 - w / 2.0F, (int) (screenHeight * 0.3F + 100F) + 2 * h - 10, w, h);
         this.componentList.add(this.serverAddressInput);
         this.componentList.add(this.nicknameInput);
-        this.componentList.add(this.connectButton = new GuiButton((float) screenWidth / 2 - w / 2.0F, (int) (screenHeight * 0.3F + 100F)+ 3 * h + 6, w, h, "Connect", () -> {
+        this.componentList.add(this.connectButton = new GuiButton((float) screenWidth / 2 - w / 2.0F, (int) (screenHeight * 0.3F + 100F) + 3 * h + 6, w, h, "Connect", () -> {
             try {
                 StarfightClient.getInstance().getGameRenderer().displayGuiScreen(new GuiScreenConnecting());
                 StarfightClient.getInstance().getNetworkManager().connect(this.serverAddressInput.getText(), this.nicknameInput.getText());
@@ -28,7 +28,7 @@ public class GuiScreenConnect extends GuiScreen {
                 StarfightClient.getInstance().getGameRenderer().displayGuiScreen(new GuiScreenConnect());
             }
         }));
-        this.componentList.add(new GuiButton((float) screenWidth / 2 - w / 2.0F, (int) (screenHeight * 0.3F + 100F)+ 4 * h + 8, w, h, "Back to Main Menu", () -> {
+        this.componentList.add(new GuiButton((float) screenWidth / 2 - w / 2.0F, (int) (screenHeight * 0.3F + 100F) + 4 * h + 8, w, h, "Back to Main Menu", () -> {
             StarfightClient.getInstance().getGameRenderer().displayGuiScreen(new GuiScreenMainMenu());
         }));
         super.initializeComponents();
@@ -52,12 +52,12 @@ public class GuiScreenConnect extends GuiScreen {
     @Override
     public void keyInput(int keyCode, int action) {
         super.keyInput(keyCode, action);
-        if(keyCode == GLFW.GLFW_KEY_TAB && action == 1) {
-            if(this.serverAddressInput.isSelected()) {
+        if (keyCode == GLFW.GLFW_KEY_TAB && action == 1) {
+            if (this.serverAddressInput.isSelected()) {
                 this.serverAddressInput.setSelected(false);
                 this.nicknameInput.setSelected(true);
             } else {
-                if(this.nicknameInput.isSelected()) {
+                if (this.nicknameInput.isSelected()) {
                     this.nicknameInput.setSelected(false);
                     this.serverAddressInput.setSelected(true);
                 } else {
@@ -65,7 +65,7 @@ public class GuiScreenConnect extends GuiScreen {
                 }
             }
         }
-        if(keyCode == GLFW.GLFW_KEY_ENTER && action == 1) {
+        if (keyCode == GLFW.GLFW_KEY_ENTER && action == 1) {
             this.connectButton.executeRunnable();
         }
     }

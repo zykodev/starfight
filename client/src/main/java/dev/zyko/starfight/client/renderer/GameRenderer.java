@@ -26,7 +26,7 @@ public class GameRenderer {
 
     public void renderGame(double partialTicks) {
         this.prevNanos = System.nanoTime();
-        if(this.frameTimer.isDelayComplete(1000)) {
+        if (this.frameTimer.isDelayComplete(1000)) {
             this.framesPerSecond = framesDrawn - 1;
             this.framesDrawn = 0;
             this.frameTimer.updateSystemTime();
@@ -37,16 +37,15 @@ public class GameRenderer {
         this.renderOverlay(partialTicks);
 
         double[] mousePosition = StarfightClient.getInstance().getInputManager().getMousePosition();
-        if(this.currentScreen != null) {
-            if(this.currentScreen instanceof GuiOverlay) {
-                if(StarfightClient.getInstance().getWorld() != null) {
+        if (this.currentScreen != null) {
+            if (this.currentScreen instanceof GuiOverlay) {
+                if (StarfightClient.getInstance().getWorld() != null) {
                     StarfightClient.getInstance().getWorld().renderWorld(partialTicks);
                 }
             }
             this.currentScreen.drawScreen(mousePosition[0], mousePosition[1], partialTicks);
-        }
-        else {
-            if(StarfightClient.getInstance().getWorld() != null) {
+        } else {
+            if (StarfightClient.getInstance().getWorld() != null) {
                 StarfightClient.getInstance().getWorld().renderWorld(partialTicks);
             }
         }
@@ -76,7 +75,7 @@ public class GameRenderer {
         fontRenderer.drawString("fps: " + this.framesPerSecond, 1, 1 + 18, -1);
         fontRenderer.drawString("frametime (ms): " + (this.frameTime / 1000000.0D), 1, 1 + 18 + 18, -1);
         fontRenderer.drawString("updates/second: " + StarfightClient.getInstance().getGameTickThread().getUpdatesPerSecond(), 1, 1 + 18 + 18 + 18, -1);
-        if(StarfightClient.getInstance().getPlayerSpaceship() != null) {
+        if (StarfightClient.getInstance().getPlayerSpaceship() != null) {
             fontRenderer.drawString("posX: " + StarfightClient.getInstance().getPlayerSpaceship().getPosX(), 1, 1 + 18 + 18 + 18 + 18, -1);
             fontRenderer.drawString("posY: " + StarfightClient.getInstance().getPlayerSpaceship().getPosY(), 1, 1 + 18 + 18 + 18 + 18 + 18, -1);
         }
@@ -97,7 +96,7 @@ public class GameRenderer {
         }
         GL11.glEnd();
         GL11.glDisable(GL11.GL_BLEND);
-        GL11.glColor4f(1,1,1,1);
+        GL11.glColor4f(1, 1, 1, 1);
         GL11.glPopMatrix();
     }
 
@@ -109,7 +108,7 @@ public class GameRenderer {
         GL11.glLineWidth(thickness);
         GL11.glBegin(GL11.GL_LINE_STRIP);
         {
-            for(int i = 0; i <= 360; i++) {
+            for (int i = 0; i <= 360; i++) {
                 double vertexX = centerX + Math.sin(Math.toRadians(i)) * radius;
                 double vertexY = centerY + Math.cos(Math.toRadians(i)) * radius;
                 GL11.glVertex3d(vertexX, vertexY, 0);
@@ -118,7 +117,7 @@ public class GameRenderer {
         GL11.glEnd();
         GL11.glLineWidth(1);
         GL11.glDisable(GL11.GL_BLEND);
-        GL11.glColor4f(1,1,1,1);
+        GL11.glColor4f(1, 1, 1, 1);
         GL11.glPopMatrix();
     }
 

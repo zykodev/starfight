@@ -7,7 +7,8 @@ public class C04PacketPlayOutPlayerData implements Packet {
     private double rotation;
     private boolean shooting, usingPowerup;
 
-    public C04PacketPlayOutPlayerData() {}
+    public C04PacketPlayOutPlayerData() {
+    }
 
     public C04PacketPlayOutPlayerData(double rotation, boolean shooting, boolean usingPowerup) {
         this.rotation = rotation;

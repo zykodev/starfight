@@ -1,7 +1,5 @@
 package dev.zyko.starfight.client.renderer.shader;
 
-import dev.zyko.starfight.client.renderer.texture.Texture;
-
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -23,7 +21,7 @@ public class ShaderManager {
     private void loadShader(String name) throws Exception {
         InputStream vertex = ClassLoader.getSystemResourceAsStream("assets/shaders/" + name + ".vertex");
         InputStream fragment = ClassLoader.getSystemResourceAsStream("assets/shaders/" + name + ".fragment");
-        if(vertex != null && fragment != null) {
+        if (vertex != null && fragment != null) {
             Shader shader = new Shader(this.toString(vertex), this.toString(fragment));
             this.shaderMap.put(name.toLowerCase(Locale.ROOT), shader);
         } else throw new Exception("Failed to load shader \"" + name + "\". Resource missing.");
@@ -41,7 +39,7 @@ public class ShaderManager {
         StringBuilder stringBuilder = new StringBuilder();
         String read = "";
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-        while((read = bufferedReader.readLine()) != null) {
+        while ((read = bufferedReader.readLine()) != null) {
             stringBuilder.append(read).append("\n");
         }
         return stringBuilder.toString();

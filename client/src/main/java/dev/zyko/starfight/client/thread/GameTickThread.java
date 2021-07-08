@@ -12,19 +12,19 @@ public class GameTickThread extends Thread {
     public void run() {
         TimeHelper helper = new TimeHelper();
         int updates = 0;
-        while(!this.terminated) {
-            if(helper.isDelayComplete(1000)) {
+        while (!this.terminated) {
+            if (helper.isDelayComplete(1000)) {
                 this.updatesPerSecond = updates;
                 updates = 0;
                 helper.updateSystemTime();
             }
-            if(StarfightClient.getInstance().getGameTickTimer().shouldTick()) {
+            if (StarfightClient.getInstance().getGameTickTimer().shouldTick()) {
                 StarfightClient.getInstance().getGameTickTimer().updateSystemTime();
                 if (StarfightClient.getInstance().getGameRenderer().getCurrentScreen() != null) {
                     StarfightClient.getInstance().getGameRenderer().getCurrentScreen().runTick(StarfightClient.getInstance().getInputManager().getMousePosition()[0], StarfightClient.getInstance().getInputManager().getMousePosition()[1]);
                 }
                 StarfightClient.getInstance().getGameRenderer().getParticleRenderer().tickParticles();
-                if(StarfightClient.getInstance().getWorld() != null) {
+                if (StarfightClient.getInstance().getWorld() != null) {
                     StarfightClient.getInstance().getWorld().tickWorld();
                 }
                 updates++;

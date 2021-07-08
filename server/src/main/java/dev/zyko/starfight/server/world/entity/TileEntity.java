@@ -1,6 +1,5 @@
 package dev.zyko.starfight.server.world.entity;
 
-import java.util.Comparator;
 import java.util.Objects;
 
 public class TileEntity {

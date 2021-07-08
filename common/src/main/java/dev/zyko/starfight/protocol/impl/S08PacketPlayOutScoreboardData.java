@@ -4,7 +4,6 @@ import dev.zyko.starfight.data.ScoreboardEntry;
 import dev.zyko.starfight.protocol.Packet;
 
 import java.util.ArrayList;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 public class S08PacketPlayOutScoreboardData implements Packet {
 

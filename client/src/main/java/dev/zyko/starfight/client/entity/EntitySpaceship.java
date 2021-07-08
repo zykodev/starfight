@@ -1,14 +1,8 @@
 package dev.zyko.starfight.client.entity;
 
 import dev.zyko.starfight.client.StarfightClient;
-import dev.zyko.starfight.client.renderer.model.Model;
 import dev.zyko.starfight.client.renderer.texture.Texture;
 import org.lwjgl.opengl.GL11;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
 
 public class EntitySpaceship extends EntityMovable {
 
@@ -44,7 +38,7 @@ public class EntitySpaceship extends EntityMovable {
         double size = 16;
         double totalWidth = size * this.health;
         double leftOffset = totalWidth / 2.0D + size;
-        for(int i = 1; i <= this.health; i++) {
+        for (int i = 1; i <= this.health; i++) {
             GL11.glPushMatrix();
             texture.bindTexture();
             StarfightClient.getInstance().getGameRenderer().drawTexturableRectangle(x - leftOffset + i * size, y + height / 2.0D + 24, size, size);

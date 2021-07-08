@@ -13,8 +13,8 @@ public class GuiOverlayScoreboard extends GuiOverlay {
 
     @Override
     public void keyInput(int keyCode, int action) {
-        if(action == 1) {
-            if(keyCode == GLFW.GLFW_KEY_TAB || keyCode == GLFW.GLFW_KEY_ESCAPE) {
+        if (action == 1) {
+            if (keyCode == GLFW.GLFW_KEY_TAB || keyCode == GLFW.GLFW_KEY_ESCAPE) {
                 StarfightClient.getInstance().getGameRenderer().displayGuiScreen(null);
             }
         }
@@ -32,8 +32,9 @@ public class GuiOverlayScoreboard extends GuiOverlay {
         StarfightClient.getInstance().getGameRenderer().drawRectangle(backgroundX, backgroundY, backgroundWidth, backgroundHeight, 0x80111111);
         StarfightClient.getInstance().getFontManager().getFontRenderer("ui/logo").drawCenteredStringWithShadow("Scoreboard", (float) backgroundWidth, (float) backgroundY + 30, -1);
         int yOffset = 70;
-        for(ScoreboardEntry entry : StarfightClient.getInstance().getWorld().getScoreboard().getEntryList()) {
-            if(entry.getPlayerRank() > 10 && !entry.getPlayerName().equalsIgnoreCase(StarfightClient.getInstance().getPlayerSpaceship().getName())) continue;
+        for (ScoreboardEntry entry : StarfightClient.getInstance().getWorld().getScoreboard().getEntryList()) {
+            if (entry.getPlayerRank() > 10 && !entry.getPlayerName().equalsIgnoreCase(StarfightClient.getInstance().getPlayerSpaceship().getName()))
+                continue;
             StarfightClient.getInstance().getFontManager().getFontRenderer("ui/basictext").drawCenteredString("#" + entry.getPlayerRank() + ": " + entry.getPlayerName() + " with a score of " + this.decimalFormat.format(entry.getPlayerScore()), (float) backgroundWidth, (float) backgroundY + 20 + yOffset, entry.getPlayerName().equalsIgnoreCase(StarfightClient.getInstance().getPlayerSpaceship().getName()) ? 0xFFEEEEFF : -1);
             yOffset += 20;
         }

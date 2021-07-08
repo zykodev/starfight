@@ -6,6 +6,7 @@ public class EntityMovable extends Entity {
 
     protected double rotation;
     protected double lastPosX, lastPosY;
+    private double speed = 1;
 
     public EntityMovable(int id, double posX, double posY, double width, double height, double rotation) {
         super(id, posX, posY, width, height);
@@ -16,10 +17,10 @@ public class EntityMovable extends Entity {
 
     @Override
     public void updateEntity() {
-        double newPosX = this.posX - Math.sin(Math.toRadians(this.rotation)) * 4;
-        double newPosY = this.posY + Math.cos(Math.toRadians(this.rotation)) * 4;
+        double newPosX = this.posX - Math.sin(Math.toRadians(this.rotation)) * 4 * speed;
+        double newPosY = this.posY + Math.cos(Math.toRadians(this.rotation)) * 4 * speed;
         double distance = Math.hypot(Math.abs(newPosX), Math.abs(newPosY));
-        if(distance >= StarfightServer.getInstance().getWorld().getRadius()) {
+        if (distance >= StarfightServer.getInstance().getWorld().getRadius()) {
             return;
         }
         this.posX = newPosX;
@@ -53,4 +54,13 @@ public class EntityMovable extends Entity {
     public double getLastPosY() {
         return lastPosY;
     }
+
+    public double getSpeed() {
+        return speed;
+    }
+
+    public void setSpeed(double speed) {
+        this.speed = speed;
+    }
+
 }

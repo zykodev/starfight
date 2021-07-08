@@ -2,7 +2,6 @@ package dev.zyko.starfight.client.display;
 
 import dev.zyko.starfight.client.StarfightClient;
 import dev.zyko.starfight.client.input.InputManager;
-import dev.zyko.starfight.client.renderer.texture.Texture;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWImage;
 import org.lwjgl.glfw.GLFWVidMode;
@@ -17,12 +16,12 @@ public class DisplayManager {
     private int width, height;
 
     public void createDisplay(int width, int height, String title) throws Exception {
-        if(!GLFW.glfwInit()) {
+        if (!GLFW.glfwInit()) {
             throw new IllegalStateException("GLFW failed to initialize, application stuck in illegal state.");
         }
         GLFW.glfwWindowHint(GLFW.GLFW_VISIBLE, GLFW.GLFW_FALSE);
         this.windowId = GLFW.glfwCreateWindow(width, height, title, 0, 0);
-        if(this.windowId == 0) {
+        if (this.windowId == 0) {
             throw new IllegalStateException("GLFW failed to create a window to render to, application stuck in illegal state.");
         }
         GLFWVidMode videoMode = GLFW.glfwGetVideoMode(GLFW.glfwGetPrimaryMonitor());
@@ -50,8 +49,8 @@ public class DisplayManager {
         int oldHeight = this.height;
         this.width = width[0];
         this.height = height[0];
-        if(this.height != oldHeight || this.width != oldWidth) {
-            if(StarfightClient.getInstance().getGameRenderer().getCurrentScreen() != null) {
+        if (this.height != oldHeight || this.width != oldWidth) {
+            if (StarfightClient.getInstance().getGameRenderer().getCurrentScreen() != null) {
                 StarfightClient.getInstance().getGameRenderer().displayGuiScreen(StarfightClient.getInstance().getGameRenderer().getCurrentScreen().clone());
             }
             StarfightClient.getInstance().getGameRenderer().getParticleRenderer().setup(0, 0, this.width, this.height);

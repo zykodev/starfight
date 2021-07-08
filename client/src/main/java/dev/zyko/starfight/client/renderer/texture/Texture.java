@@ -1,11 +1,8 @@
 package dev.zyko.starfight.client.renderer.texture;
 
 import org.lwjgl.BufferUtils;
-import org.lwjgl.glfw.GLFWImage;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
-import org.lwjgl.stb.STBImage;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -24,8 +21,8 @@ public class Texture {
         this.height = bufferedImage.getHeight();
         int[] imageData = bufferedImage.getRGB(0, 0, width, height, null, 0, width);
         ByteBuffer buffer = BufferUtils.createByteBuffer(width * height * 4);
-        for(int x = 0; x < width; x++) {
-            for(int y = 0; y < height; y++) {
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
                 int pixelData = imageData[x * width + y];
                 buffer.put((byte) ((pixelData >> 16) & 0xFF));
                 buffer.put((byte) ((pixelData >> 8) & 0xFF));

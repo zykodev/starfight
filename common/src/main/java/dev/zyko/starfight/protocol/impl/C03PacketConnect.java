@@ -7,7 +7,8 @@ public class C03PacketConnect implements Packet {
     private String nickname;
     private String version;
 
-    public C03PacketConnect() {}
+    public C03PacketConnect() {
+    }
 
     public C03PacketConnect(String nickname, String version) {
         this.nickname = nickname;

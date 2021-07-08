@@ -21,7 +21,7 @@ public class World {
     }
 
     public void loadEntity(Entity entity) {
-        if(!this.loadedEntityList.contains(entity))
+        if (!this.loadedEntityList.contains(entity))
             this.loadedEntityList.add(entity);
     }
 
@@ -40,11 +40,11 @@ public class World {
             double interpolatedPlayerY = playerEntity.getPosY() + (playerEntity.getLastPosY() - playerEntity.getPosY()) * partialTicks;
             double interpolatedEntityX = entity.getPosX();
             double interpolatedEntityY = entity.getPosY();
-            if(entity instanceof EntityMovable) {
+            if (entity instanceof EntityMovable) {
                 interpolatedEntityX = entity.getPosX() + (((EntityMovable) entity).getLastPosX() - entity.getPosX()) * partialTicks;
                 interpolatedEntityY = entity.getPosY() + (((EntityMovable) entity).getLastPosY() - entity.getPosY()) * partialTicks;
             }
-            if(entity == playerEntity) {
+            if (entity == playerEntity) {
                 interpolatedEntityX = playerEntity.getPosX();
                 interpolatedEntityY = playerEntity.getPosY();
                 interpolatedPlayerX = playerEntity.getPosX();
@@ -54,7 +54,7 @@ public class World {
             double renderPosY = (interpolatedPlayerY - interpolatedEntityY) + screenHeight / 2;
 
             double rotation = 0;
-            if(entity instanceof EntityMovable) {
+            if (entity instanceof EntityMovable) {
                 rotation = ((EntityMovable) entity).getRotation();
             }
             GL11.glPushMatrix();
@@ -68,8 +68,8 @@ public class World {
     }
 
     public Entity getEntity(int id) {
-        for(Entity e : this.loadedEntityList) {
-            if(e.getId() == id)
+        for (Entity e : this.loadedEntityList) {
+            if (e.getId() == id)
                 return e;
         }
         return null;

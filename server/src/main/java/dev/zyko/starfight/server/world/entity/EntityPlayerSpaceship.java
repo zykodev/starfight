@@ -1,17 +1,19 @@
 package dev.zyko.starfight.server.world.entity;
 
-import com.esotericsoftware.kryonet.Connection;
 import dev.zyko.starfight.protocol.Packet;
 import dev.zyko.starfight.protocol.impl.S07PacketPlayOutEntityHealth;
 import dev.zyko.starfight.server.StarfightServer;
 import dev.zyko.starfight.server.netcode.PlayerConnection;
-import dev.zyko.starfight.server.netcode.ServerNetworkHandler;
+import dev.zyko.starfight.server.world.entity.stats.PowerUpType;
 
 public class EntityPlayerSpaceship extends EntitySpaceship {
 
     private PlayerConnection connection;
     private boolean shooting, usingPowerup;
     private int ticksSinceLastShot = 0, score = 0, deaths = 0;
+
+    public PowerUpType powerUpType = PowerUpType.NONE;
+    private int powerUpTicks = 0;
 
     public EntityPlayerSpaceship(int id, double posX, double posY, double rotation, String name, PlayerConnection playerConnection) {
         super(id, posX, posY, rotation, name);
@@ -29,15 +31,23 @@ public class EntityPlayerSpaceship extends EntitySpaceship {
 
     public void setHealth(int health) {
         this.health = health;
-        for(EntityPlayerSpaceship p : StarfightServer.getInstance().getWorld().getPlayerSpaceshipList()) {
+        for (EntityPlayerSpaceship p : StarfightServer.getInstance().getWorld().getPlayerSpaceshipList()) {
             p.sendPacket(new S07PacketPlayOutEntityHealth(this.id, this.health));
         }
     }
 
     @Override
     public void updateEntity() {
-        if(this.shooting) {
-            if(this.ticksSinceLastShot >= 24) {
+        this.powerUpTicks++;
+        if (this.powerUpTicks > this.powerUpType.getDuration() && this.getPowerUpType() != PowerUpType.NONE) {
+            this.setPowerUpType(PowerUpType.NONE);
+        }
+        this.setSpeed(1);
+        if (this.powerUpType == PowerUpType.SPEED) {
+            this.setSpeed(2);
+        }
+        if (this.shooting) {
+            if (this.ticksSinceLastShot >= (this.powerUpType == PowerUpType.CDR ? 12 : 24)) {
                 this.ticksSinceLastShot = 0;
                 this.shoot();
             } else {
@@ -75,7 +85,7 @@ public class EntityPlayerSpaceship extends EntitySpaceship {
     }
 
     public void sendPacket(Packet packet) {
-        if(this.connection.isConnected()) {
+        if (this.connection.isConnected()) {
             this.connection.sendTCP(packet);
         }
     }
@@ -98,6 +108,15 @@ public class EntityPlayerSpaceship extends EntitySpaceship {
 
     public void setDeaths(int deaths) {
         this.deaths = deaths;
+    }
+
+    public PowerUpType getPowerUpType() {
+        return powerUpType;
+    }
+
+    public void setPowerUpType(PowerUpType powerUpType) {
+        this.powerUpType = powerUpType;
+        this.powerUpTicks = 0;
     }
 
     public int getDeaths() {

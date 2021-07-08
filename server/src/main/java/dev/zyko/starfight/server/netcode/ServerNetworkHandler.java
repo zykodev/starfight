@@ -12,26 +12,26 @@ public class ServerNetworkHandler extends Listener {
 
     @Override
     public void received(Connection connection, Object o) {
-        if(!(o instanceof Packet)) return;
+        if (!(o instanceof Packet)) return;
         PlayerConnection playerConnection = (PlayerConnection) connection;
         Packet packetRaw = (Packet) o;
-        if(packetRaw instanceof C01PacketKeepAlive) {
+        if (packetRaw instanceof C01PacketKeepAlive) {
             connection.sendTCP(new S01PacketKeepAlive(((C01PacketKeepAlive) packetRaw).getSystemTime()));
         }
-        if(playerConnection.getPlayerSpaceship() == null) {
-            if(packetRaw instanceof C03PacketConnect) {
+        if (playerConnection.getPlayerSpaceship() == null) {
+            if (packetRaw instanceof C03PacketConnect) {
                 C03PacketConnect packet = (C03PacketConnect) packetRaw;
-                if(packet.getVersion().equalsIgnoreCase(StarfightServer.VERSION)) {
-                    for(Entity e : StarfightServer.getInstance().getWorld().getEntityList()) {
-                        if(e instanceof EntityPlayerSpaceship) {
-                            if(((EntityPlayerSpaceship) e).getName().equalsIgnoreCase(packet.getNickname())) {
+                if (packet.getVersion().equalsIgnoreCase(StarfightServer.VERSION)) {
+                    for (Entity e : StarfightServer.getInstance().getWorld().getEntityList()) {
+                        if (e instanceof EntityPlayerSpaceship) {
+                            if (((EntityPlayerSpaceship) e).getName().equalsIgnoreCase(packet.getNickname())) {
                                 connection.sendTCP(new S02PacketDisconnect("The name you entered is already in use. Please choose another name."));
                                 connection.close();
                                 return;
                             }
                         }
                     }
-                    if(packet.getNickname().equalsIgnoreCase("forbidden")) {
+                    if (packet.getNickname().equalsIgnoreCase("forbidden")) {
                         connection.sendTCP(new S02PacketDisconnect("That name is forbidden."));
                         connection.close();
                         return;
@@ -47,13 +47,13 @@ public class ServerNetworkHandler extends Listener {
                 }
             }
         } else {
-            if(packetRaw instanceof C04PacketPlayOutPlayerData) {
+            if (packetRaw instanceof C04PacketPlayOutPlayerData) {
                 C04PacketPlayOutPlayerData packet = (C04PacketPlayOutPlayerData) packetRaw;
                 playerConnection.getPlayerSpaceship().setRotation(packet.getRotation());
                 playerConnection.getPlayerSpaceship().setShooting(packet.isShooting());
                 playerConnection.getPlayerSpaceship().setUsingPowerup(packet.isUsingPowerup());
             }
-            if(packetRaw instanceof C02PacketDisconnect) {
+            if (packetRaw instanceof C02PacketDisconnect) {
                 StarfightServer.getInstance().getWorld().despawnEntity(playerConnection.getPlayerSpaceship());
                 playerConnection.close();
             }
@@ -64,7 +64,7 @@ public class ServerNetworkHandler extends Listener {
     @Override
     public void disconnected(Connection connection) {
         PlayerConnection playerConnection = (PlayerConnection) connection;
-        if(playerConnection.getPlayerSpaceship() != null)
+        if (playerConnection.getPlayerSpaceship() != null)
             StarfightServer.getInstance().getWorld().despawnEntity(playerConnection.getPlayerSpaceship());
         super.disconnected(connection);
     }

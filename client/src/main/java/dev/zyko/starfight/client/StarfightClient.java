@@ -15,8 +15,8 @@ import dev.zyko.starfight.client.renderer.texture.TextureManager;
 import dev.zyko.starfight.client.thread.GameTickThread;
 import dev.zyko.starfight.client.util.IOHelper;
 import dev.zyko.starfight.client.util.TextureHelper;
-import dev.zyko.starfight.util.TimeHelper;
 import dev.zyko.starfight.client.world.World;
+import dev.zyko.starfight.util.TimeHelper;
 import org.lwjgl.glfw.GLFW;
 
 import java.io.File;
@@ -92,7 +92,7 @@ public class StarfightClient {
         this.gameTickThread.setName("game-tick-thread");
         this.gameTickThread.setDaemon(true);
         this.gameTickThread.start();
-        while(!this.displayManager.shouldWindowClose()) {
+        while (!this.displayManager.shouldWindowClose()) {
             this.displayManager.updateDisplay();
             this.gameRenderer.renderGame(this.gameTickTimer.getPartialTicks());
             this.displayManager.finishUpdate();
@@ -101,33 +101,34 @@ public class StarfightClient {
     }
 
     public void routeMouseInput(int button, int action, double x, double y) {
-        if(this.gameRenderer.getCurrentScreen() != null) {
-            switch(action) {
+        if (this.gameRenderer.getCurrentScreen() != null) {
+            switch (action) {
                 case 1:
                     StarfightClient.getInstance().getGameRenderer().getCurrentScreen().mouseButtonPressed(button, x, y);
                     break;
                 case 0:
                     StarfightClient.getInstance().getGameRenderer().getCurrentScreen().mouseButtonReleased(button, x, y);
                     break;
-                default: break;
+                default:
+                    break;
             }
         }
     }
 
     public void routeCharInput(char c) {
-        if(this.gameRenderer.getCurrentScreen() != null) {
+        if (this.gameRenderer.getCurrentScreen() != null) {
             this.gameRenderer.getCurrentScreen().charInput(c);
         }
     }
 
     public void routeKeyInput(int keyCode, int action) {
-        if(this.gameRenderer.getCurrentScreen() != null) {
+        if (this.gameRenderer.getCurrentScreen() != null) {
             this.gameRenderer.getCurrentScreen().keyInput(keyCode, action);
         } else {
-            if(keyCode == GLFW.GLFW_KEY_ESCAPE && action == 1) {
+            if (keyCode == GLFW.GLFW_KEY_ESCAPE && action == 1) {
                 this.gameRenderer.displayGuiScreen(new GuiOverlayIngameMenu());
             }
-            if(keyCode == GLFW.GLFW_KEY_TAB && action == 1) {
+            if (keyCode == GLFW.GLFW_KEY_TAB && action == 1) {
                 this.gameRenderer.displayGuiScreen(new GuiOverlayScoreboard());
             }
         }

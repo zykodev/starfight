@@ -7,8 +7,8 @@ public class MathHelper {
     public static double calculateHorizontalAngle(double x1, double y1, double x2, double y2) {
         double diffX = x1 - x2;
         double diffY = y1 - y2;
-        if(diffX == 0) {
-            if(diffY > 0) {
+        if (diffX == 0) {
+            if (diffY > 0) {
                 return -90;
             } else {
                 return 90;

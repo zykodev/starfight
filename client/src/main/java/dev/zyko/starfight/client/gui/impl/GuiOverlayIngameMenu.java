@@ -15,10 +15,10 @@ public class GuiOverlayIngameMenu extends GuiOverlay {
         int w = 300;
         int h = 40;
 
-        this.componentList.add(new GuiButton((screenWidth - w) / 2, (int) (screenHeight * 0.3F + 100F)+ 3 * h + 6, w, h, "Back to game", () -> {
+        this.componentList.add(new GuiButton((screenWidth - w) / 2, (int) (screenHeight * 0.3F + 100F) + 3 * h + 6, w, h, "Back to game", () -> {
             StarfightClient.getInstance().getGameRenderer().displayGuiScreen(null);
         }));
-        this.componentList.add(new GuiButton((screenWidth - w) / 2, (int) (screenHeight * 0.3F + 100F)+ 4 * h + 8, w, h, "Disconnect", () -> {
+        this.componentList.add(new GuiButton((screenWidth - w) / 2, (int) (screenHeight * 0.3F + 100F) + 4 * h + 8, w, h, "Disconnect", () -> {
             StarfightClient.getInstance().getNetworkManager().disconnect();
             StarfightClient.getInstance().getGameRenderer().displayGuiScreen(new GuiScreenMainMenu());
         }));
@@ -54,7 +54,7 @@ public class GuiOverlayIngameMenu extends GuiOverlay {
 
     @Override
     public void keyInput(int keyCode, int action) {
-        if(keyCode == GLFW.GLFW_KEY_ESCAPE && action == 1) {
+        if (keyCode == GLFW.GLFW_KEY_ESCAPE && action == 1) {
             StarfightClient.getInstance().getGameRenderer().displayGuiScreen(null);
         }
         super.keyInput(keyCode, action);

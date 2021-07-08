@@ -3,7 +3,7 @@ package dev.zyko.starfight.client.renderer.particle;
 import dev.zyko.starfight.client.StarfightClient;
 import org.lwjgl.opengl.GL11;
 
-import java.util.*;
+import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class ParticleRenderer {
@@ -15,10 +15,10 @@ public class ParticleRenderer {
         double screenWidth = StarfightClient.getInstance().getDisplayManager().getWidth();
         double screenHeight = StarfightClient.getInstance().getDisplayManager().getHeight();
         for (Particle particle : this.particles) {
-            if(particle.getPosX() < -1 || particle.getPosY() < -1) {
+            if (particle.getPosX() < -1 || particle.getPosY() < -1) {
                 particle.setRotation(particle.getRotation() - 90);
             }
-            if(particle.getPosX() > screenWidth + 1 || particle.getPosY() > screenHeight + 1) {
+            if (particle.getPosX() > screenWidth + 1 || particle.getPosY() > screenHeight + 1) {
                 particle.setRotation(particle.getRotation() + 90);
             }
             particle.onTick();
@@ -27,7 +27,7 @@ public class ParticleRenderer {
 
     public void setup(double x, double y, double width, double height) {
         this.particles.clear();
-        for(int i = 1; i <= (width * height) * 0.00005D; i++) {
+        for (int i = 1; i <= (width * height) * 0.00005D; i++) {
             double posX = x + random.nextDouble() * width;
             double posY = y + random.nextDouble() * height;
             double rotation = 360 * random.nextDouble();

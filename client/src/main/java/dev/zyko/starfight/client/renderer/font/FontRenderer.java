@@ -1,10 +1,8 @@
 package dev.zyko.starfight.client.renderer.font;
 
-import dev.zyko.starfight.client.StarfightClient;
 import dev.zyko.starfight.client.util.ColorUtil;
 import dev.zyko.starfight.client.util.IOHelper;
 import org.lwjgl.BufferUtils;
-import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.stb.STBTTAlignedQuad;
 import org.lwjgl.stb.STBTTBakedChar;
@@ -43,7 +41,7 @@ public class FontRenderer {
             ByteBuffer fontBuffer = IOHelper.streamToByteBuffer(fontData);
             ByteBuffer textureBuffer = BufferUtils.createByteBuffer(this.fontTextureHeight * this.fontTextureWidth);
             int result = STBTruetype.stbtt_BakeFontBitmap(fontBuffer, this.height, textureBuffer, this.fontTextureWidth, this.fontTextureHeight, this.bakeFirstChar, this.charData);
-            if(result < 1) {
+            if (result < 1) {
                 System.out.println("Failed to create font \"" + fontName + "\".");
             }
             try (MemoryStack memoryStack = MemoryStack.stackPush()) {
@@ -135,7 +133,7 @@ public class FontRenderer {
                 GL11.glVertex2f(q.x0(), q.y0());
             }
             GL11.glEnd();
-            GL11.glColor4f(1,1,1,1);
+            GL11.glColor4f(1, 1, 1, 1);
             GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
             GL11.glDisable(GL11.GL_TEXTURE_2D);
             GL11.glDisable(GL11.GL_BLEND);
@@ -174,10 +172,10 @@ public class FontRenderer {
     }
 
     public void drawCenteredString(String text, float x, float y, int color) {
-        if(text.contains("\n")) {
+        if (text.contains("\n")) {
             String[] texts = text.split("\n");
             int yOffset = 0;
-            for(String s : texts) {
+            for (String s : texts) {
                 this.drawCenteredString(s, x, y + yOffset, color);
                 yOffset += this.height + 1;
             }

@@ -1,10 +1,10 @@
 package dev.zyko.starfight.client.input;
 
 import dev.zyko.starfight.client.StarfightClient;
-import org.lwjgl.glfw.*;
-
-import java.util.HashMap;
-import java.util.concurrent.CopyOnWriteArraySet;
+import org.lwjgl.glfw.GLFW;
+import org.lwjgl.glfw.GLFWCharCallback;
+import org.lwjgl.glfw.GLFWKeyCallback;
+import org.lwjgl.glfw.GLFWMouseButtonCallback;
 
 public class InputManager {
 
@@ -18,7 +18,7 @@ public class InputManager {
         double[] mX = new double[1];
         double[] mY = new double[1];
         GLFW.glfwGetCursorPos(StarfightClient.getInstance().getDisplayManager().getWindowId(), mX, mY);
-        return new double[] { mX[0], mY[0] };
+        return new double[]{mX[0], mY[0]};
     }
 
     public static class KeyboardAdapter extends GLFWKeyCallback {
@@ -39,7 +39,7 @@ public class InputManager {
     public static class KeyboardCharAdapter extends GLFWCharCallback {
         @Override
         public void invoke(long window, int codepoint) {
-            if(!Character.isValidCodePoint(codepoint)) return;
+            if (!Character.isValidCodePoint(codepoint)) return;
             char[] chars = Character.toChars(codepoint);
             for (char aChar : chars) {
                 StarfightClient.getInstance().routeCharInput(aChar);

@@ -9,12 +9,12 @@ public class IOHelper {
 
     public static File extractAsset(String assetName) throws Exception {
         InputStream inputStream = ClassLoader.getSystemResourceAsStream("assets/" + assetName);
-        if(inputStream != null) {
+        if (inputStream != null) {
             File assetFile = File.createTempFile("asset-", ".sfasset");
             FileOutputStream fileOutputStream = new FileOutputStream(assetFile);
             byte[] buffer = new byte[inputStream.available()];
             int read = 0;
-            while((read = inputStream.read(buffer, 0, buffer.length)) != -1) {
+            while ((read = inputStream.read(buffer, 0, buffer.length)) != -1) {
                 fileOutputStream.write(buffer);
             }
             inputStream.close();
@@ -29,7 +29,7 @@ public class IOHelper {
     public static String readFile(File f) throws Exception {
         BufferedReader bufferedReader = new BufferedReader(new FileReader(f));
         String readLine = "", totalText = "";
-        while((readLine = bufferedReader.readLine()) != null) {
+        while ((readLine = bufferedReader.readLine()) != null) {
             totalText += readLine;
         }
         bufferedReader.close();
@@ -38,7 +38,7 @@ public class IOHelper {
 
     public static void writeFile(File f, String text) throws Exception {
         FileWriter fw = new FileWriter(f);
-        if(f.exists()) {
+        if (f.exists()) {
             f.delete();
         }
         fw.write(text);
@@ -50,7 +50,7 @@ public class IOHelper {
         ByteBuffer buffer = BufferUtils.createByteBuffer(inputStream.available());
         byte[] bBuf = new byte[inputStream.available()];
         int read = 0;
-        while((read = inputStream.read(bBuf, 0, bBuf.length)) != -1) {
+        while ((read = inputStream.read(bBuf, 0, bBuf.length)) != -1) {
             buffer.put(bBuf);
         }
         buffer.flip();

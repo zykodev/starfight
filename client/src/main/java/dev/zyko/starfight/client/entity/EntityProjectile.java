@@ -2,8 +2,6 @@ package dev.zyko.starfight.client.entity;
 
 import dev.zyko.starfight.client.StarfightClient;
 
-import java.util.concurrent.CopyOnWriteArrayList;
-
 public class EntityProjectile extends EntityMovable {
 
     public EntityProjectile(int id, double posX, double posY, double rotation) {

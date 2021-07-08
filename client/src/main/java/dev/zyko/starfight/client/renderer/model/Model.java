@@ -1,11 +1,8 @@
 package dev.zyko.starfight.client.renderer.model;
 
-import dev.zyko.starfight.client.StarfightClient;
 import dev.zyko.starfight.client.renderer.texture.Texture;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL15;
-import org.lwjgl.opengl.GL20;
 
 import java.nio.DoubleBuffer;
 import java.nio.IntBuffer;
@@ -23,13 +20,13 @@ public class Model {
     }
 
     public Model(Texture texture, double zAxis) {
-        this(texture, new double[][] {
+        this(texture, new double[][]{
                 {0, 0}, {1, 0}, {1, 1}, {0, 1}
         }, 0);
     }
 
     public Model(Texture texture) {
-        this(texture, new double[][] {
+        this(texture, new double[][]{
                 {0, 0}, {1, 0}, {1, 1}, {0, 1}
         }, 0);
     }

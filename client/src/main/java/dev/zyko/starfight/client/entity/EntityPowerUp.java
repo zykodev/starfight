@@ -21,13 +21,13 @@ public class EntityPowerUp extends Entity {
     }
 
     private static Model getModelForType(double type) {
-        if(type == TYPE_SPEED) {
+        if (type == TYPE_SPEED) {
             return StarfightClient.getInstance().getModelManager().getModel("powerup_speed");
         }
-        if(type == TYPE_CDR) {
+        if (type == TYPE_CDR) {
             return StarfightClient.getInstance().getModelManager().getModel("powerup_cdr");
         }
-        if(type == TYPE_HEALTH) {
+        if (type == TYPE_HEALTH) {
             return StarfightClient.getInstance().getModelManager().getModel("powerup_health");
         }
         return null;

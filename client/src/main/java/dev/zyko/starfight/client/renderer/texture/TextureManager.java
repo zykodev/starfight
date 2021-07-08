@@ -19,11 +19,15 @@ public class TextureManager {
         this.loadTexture("entity/powerup_speed", "pu_lightning.png");
         this.loadTexture("entity/projectile", "projectile.png");
         this.loadTexture("ui/heart", "heart.png");
+        this.loadTexture("entity/explosion_1", "explosion_1.png");
+        this.loadTexture("entity/explosion_2", "explosion_2.png");
+        this.loadTexture("entity/explosion_3", "explosion_3.png");
+        this.loadTexture("entity/explosion_4", "explosion_4.png");
     }
 
     private void loadTexture(String alias, String resourceName) throws Exception {
         InputStream is = ClassLoader.getSystemResourceAsStream("assets/textures/" + resourceName);
-        if(is != null) {
+        if (is != null) {
             Texture texture = new Texture(is);
             this.textureMap.put(alias.toLowerCase(Locale.ROOT), texture);
         } else throw new Exception("Failed to load texture \"" + alias + "\". Resource missing.");

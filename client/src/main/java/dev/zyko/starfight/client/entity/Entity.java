@@ -27,13 +27,16 @@ public abstract class Entity {
         GL11.glTranslated(x, y, 0);
         GL11.glRotated(rotation, 0, 0, 1);
         this.enableAdditionalFeatures();
-        this.getModel().drawModel(-width/2, -height/2, width, height, partialTicks);
+        this.getModel().drawModel(-width / 2, -height / 2, width, height, partialTicks);
         this.disableAdditionalFeatures();
         GL11.glPopMatrix();
     }
 
-    protected void enableAdditionalFeatures() {}
-    protected void disableAdditionalFeatures() {}
+    protected void enableAdditionalFeatures() {
+    }
+
+    protected void disableAdditionalFeatures() {
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -87,4 +90,9 @@ public abstract class Entity {
     public Model getModel() {
         return model;
     }
+
+    public void setModel(Model model) {
+        this.model = model;
+    }
+
 }

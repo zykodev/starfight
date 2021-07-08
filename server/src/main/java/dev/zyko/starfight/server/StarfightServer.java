@@ -2,14 +2,12 @@ package dev.zyko.starfight.server;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Server;
-import com.esotericsoftware.minlog.Log;
 import dev.zyko.starfight.logging.StarfightLogger;
 import dev.zyko.starfight.protocol.PacketRegistry;
 import dev.zyko.starfight.server.netcode.PlayerConnection;
 import dev.zyko.starfight.server.netcode.ServerNetworkHandler;
 import dev.zyko.starfight.server.thread.ServerTickThread;
 import dev.zyko.starfight.server.world.World;
-import dev.zyko.starfight.server.world.entity.EntityPowerUp;
 
 import java.util.UUID;
 
@@ -34,7 +32,7 @@ public class StarfightServer extends Server {
         // Log.set(Log.LEVEL_DEBUG);
         this.prepareNetworking();
         this.bind(26800);
-        while(true) {
+        while (true) {
             this.update(1);
         }
         // this.serverTickThread.terminate();

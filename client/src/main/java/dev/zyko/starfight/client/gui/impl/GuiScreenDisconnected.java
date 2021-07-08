@@ -16,7 +16,7 @@ public class GuiScreenDisconnected extends GuiScreen {
         double screenWidth = StarfightClient.getInstance().getDisplayManager().getWidth();
         double screenHeight = StarfightClient.getInstance().getDisplayManager().getHeight();
         int w = 300, h = 40;
-        this.componentList.add(new GuiButton((float) screenWidth / 2 - w / 2.0F, (int) (screenHeight * 0.3F + 100F)+ 4 * h + 8, w, h, "Cancel", () -> {
+        this.componentList.add(new GuiButton((float) screenWidth / 2 - w / 2.0F, (int) (screenHeight * 0.3F + 100F) + 4 * h + 8, w, h, "Cancel", () -> {
             StarfightClient.getInstance().getGameRenderer().displayGuiScreen(new GuiScreenConnect());
         }));
         super.initializeComponents();

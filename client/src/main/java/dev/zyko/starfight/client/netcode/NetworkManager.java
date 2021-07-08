@@ -1,7 +1,6 @@
 package dev.zyko.starfight.client.netcode;
 
 import com.esotericsoftware.kryonet.Client;
-import com.esotericsoftware.minlog.Log;
 import dev.zyko.starfight.client.StarfightClient;
 import dev.zyko.starfight.client.gui.impl.GuiScreenDisconnected;
 import dev.zyko.starfight.protocol.Packet;
@@ -46,7 +45,7 @@ public class NetworkManager extends Client {
     public void connect(String remoteAddress, String nickname) throws Exception {
         int port = 26800;
         String hostname = "";
-        if(remoteAddress.contains(":")) {
+        if (remoteAddress.contains(":")) {
             String[] components = remoteAddress.split(":");
             hostname = components[0];
             port = Integer.parseInt(components[1]);
@@ -71,7 +70,7 @@ public class NetworkManager extends Client {
     }
 
     public void disconnect() {
-        if(this.isConnected()) {
+        if (this.isConnected()) {
             this.sendPacket(new C02PacketDisconnect());
             StarfightClient.getInstance().setWorld(null);
             StarfightClient.getInstance().setPlayerSpaceship(null);
@@ -82,7 +81,7 @@ public class NetworkManager extends Client {
     }
 
     public void sendPacket(Packet packet) {
-        if(this.isConnected()) {
+        if (this.isConnected()) {
             this.sendTCP(packet);
         }
     }

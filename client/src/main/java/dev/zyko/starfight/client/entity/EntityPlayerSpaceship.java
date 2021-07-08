@@ -2,7 +2,6 @@ package dev.zyko.starfight.client.entity;
 
 import dev.zyko.starfight.client.StarfightClient;
 import dev.zyko.starfight.client.input.InputManager;
-import dev.zyko.starfight.client.renderer.model.Model;
 import dev.zyko.starfight.client.util.MathHelper;
 import dev.zyko.starfight.protocol.impl.C04PacketPlayOutPlayerData;
 
@@ -22,7 +21,7 @@ public class EntityPlayerSpaceship extends EntitySpaceship {
         this.shooting = StarfightClient.getInstance().getInputManager().isMouseButtonDown(InputManager.MOUSE_LEFT);
         this.usingPowerup = StarfightClient.getInstance().getInputManager().isMouseButtonDown(InputManager.MOUSE_RIGHT);
         boolean useAction = StarfightClient.getInstance().getGameRenderer().getCurrentScreen() == null;
-        if(this.rotation != this.prevRotation || this.prevShooting != this.shooting || this.prevUsingPowerup != this.usingPowerup) {
+        if (this.rotation != this.prevRotation || this.prevShooting != this.shooting || this.prevUsingPowerup != this.usingPowerup) {
             StarfightClient.getInstance().getNetworkManager().sendPacket(new C04PacketPlayOutPlayerData(this.rotation, this.shooting && useAction, this.usingPowerup && useAction));
         }
         super.updateEntity();
