@@ -5,14 +5,6 @@ import java.util.Date;
 
 public class StarfightLogger {
 
-    public enum Level {
-        INFO,
-        WARN,
-        ERROR,
-        FATAL,
-        DEBUG
-    }
-
     private Level level = Level.INFO;
     private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 
@@ -24,6 +16,14 @@ public class StarfightLogger {
     public StarfightLogger setLevel(Level level) {
         this.level = level;
         return this;
+    }
+
+    public enum Level {
+        INFO,
+        WARN,
+        ERROR,
+        FATAL,
+        DEBUG
     }
 
 }

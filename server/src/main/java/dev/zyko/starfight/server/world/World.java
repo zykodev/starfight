@@ -19,8 +19,8 @@ public class World {
     private final CopyOnWriteArrayList<Entity> unloadedEntityList = new CopyOnWriteArrayList<>();
     private final CopyOnWriteArrayList<TileEntity> unloadedTileEntityList = new CopyOnWriteArrayList<>();
     private final CopyOnWriteArrayList<EntityPlayerSpaceship> playerSpaceshipList = new CopyOnWriteArrayList<>();
+    private final Random random = new Random();
     private int idCounter = 0;
-    private Random random = new Random();
 
     public World(double radius) {
         this.radius = radius;
@@ -68,10 +68,7 @@ public class World {
                 this.unloadEntity(tileEntity);
             }
         }
-        ArrayList<EntityPlayerSpaceship> sortableList = new ArrayList<>();
-        for (EntityPlayerSpaceship entityPlayerSpaceship : this.playerSpaceshipList) {
-            sortableList.add(entityPlayerSpaceship);
-        }
+        ArrayList<EntityPlayerSpaceship> sortableList = new ArrayList<>(this.playerSpaceshipList);
         sortableList.sort((o1, o2) -> Double.compare(o2.getScore() / (double) (o2.getDeaths() == 0 ? 1 : o2.getDeaths()), o1.getScore() / (double) (o1.getDeaths() == 0 ? 1 : o1.getDeaths())));
         for (EntityPlayerSpaceship entityPlayerSpaceship : this.playerSpaceshipList) {
             ArrayList<ScoreboardEntry> sortedTopList = new ArrayList<>();
@@ -180,7 +177,7 @@ public class World {
     }
 
     public void spawnPowerUps() {
-        for (double i = 0; i < 360; i += 1.0D) {
+        for (double i = 0; i < 360; i += 4.0D) {
             double x = Math.sin(Math.toRadians(i)) * this.random.nextDouble() * this.radius;
             double y = Math.cos(Math.toRadians(i)) * this.random.nextDouble() * this.radius;
             EntityPowerUp powerUp = new EntityPowerUp(this.getNextEntityID(), x, y, 2.0D + 2.0D * this.random.nextInt(3));

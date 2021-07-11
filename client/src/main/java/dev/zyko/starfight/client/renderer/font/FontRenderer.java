@@ -18,17 +18,16 @@ import java.nio.IntBuffer;
 
 public class FontRenderer {
 
-    private final int charMallocSize = 1536;
-    private final int fontTextureWidth = 512;
-    private final int fontTextureHeight = fontTextureWidth;
-    private final int bakeFirstChar = 32;
-    private final int glyphCount = charMallocSize;
-
     protected final STBTTBakedChar.Buffer charData;
     protected final STBTTFontinfo fontInfo;
     protected final int height, textureId;
     protected final float ascent, descent, gap;
     protected final String name;
+    private final int charMallocSize = 1536;
+    private final int fontTextureWidth = 512;
+    private final int fontTextureHeight = fontTextureWidth;
+    private final int bakeFirstChar = 32;
+    private final int glyphCount = charMallocSize;
 
     public FontRenderer(String fontName, InputStream fontData, int height) {
         this.name = fontName;

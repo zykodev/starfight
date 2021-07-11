@@ -50,14 +50,6 @@ public class StarfightClient {
 
     private GameTickThread gameTickThread;
 
-    public static void main(String[] args) {
-        try {
-            StarfightClient client = new StarfightClient();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     public StarfightClient() throws Exception {
         instance = this;
         this.networkManager = new NetworkManager();
@@ -79,6 +71,18 @@ public class StarfightClient {
         this.gameRenderer.getParticleRenderer().setup(0, 0, 1280, 720);
         this.gameRenderer.displayGuiScreen(new GuiScreenMainMenu());
         this.run();
+    }
+
+    public static void main(String[] args) {
+        try {
+            StarfightClient client = new StarfightClient();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static StarfightClient getInstance() {
+        return instance;
     }
 
     private void exit() {
@@ -153,10 +157,6 @@ public class StarfightClient {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public static StarfightClient getInstance() {
-        return instance;
     }
 
     public InputManager getInputManager() {

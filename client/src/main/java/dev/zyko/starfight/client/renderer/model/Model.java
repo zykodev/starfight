@@ -9,8 +9,8 @@ import java.nio.IntBuffer;
 
 public class Model {
 
-    private Texture texture;
     protected double zAxis = 0;
+    private Texture texture;
     private double[][] textureCoordinates;
 
     public Model(Texture texture, double[][] textureCoordinates, double zAxis) {

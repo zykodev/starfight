@@ -51,7 +51,6 @@ public class ServerNetworkHandler extends Listener {
                 C04PacketPlayOutPlayerData packet = (C04PacketPlayOutPlayerData) packetRaw;
                 playerConnection.getPlayerSpaceship().setRotation(packet.getRotation());
                 playerConnection.getPlayerSpaceship().setShooting(packet.isShooting());
-                playerConnection.getPlayerSpaceship().setUsingPowerup(packet.isUsingPowerup());
             }
             if (packetRaw instanceof C02PacketDisconnect) {
                 StarfightServer.getInstance().getWorld().despawnEntity(playerConnection.getPlayerSpaceship());

@@ -79,16 +79,16 @@ public class GuiButton extends GuiComponent {
         this.runnable.run();
     }
 
-    public interface ButtonRunnable {
-        void run();
-    }
-
     public boolean isActive() {
         return active;
     }
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public interface ButtonRunnable {
+        void run();
     }
 
 }

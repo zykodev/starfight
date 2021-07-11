@@ -20,16 +20,16 @@ public class Particle {
         this.posY += Math.cos(Math.toRadians(this.rotation)) * 0.5;
     }
 
-    public void setRotation(double rotation) {
-        this.rotation = rotation;
-    }
-
     public int getColor() {
         return color;
     }
 
     public double getRotation() {
         return rotation;
+    }
+
+    public void setRotation(double rotation) {
+        this.rotation = rotation;
     }
 
     public double getPosX() {

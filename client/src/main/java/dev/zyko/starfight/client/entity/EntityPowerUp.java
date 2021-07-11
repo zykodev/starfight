@@ -16,10 +16,6 @@ public class EntityPowerUp extends Entity {
         this.type = type;
     }
 
-    public double getType() {
-        return type;
-    }
-
     private static Model getModelForType(double type) {
         if (type == TYPE_SPEED) {
             return StarfightClient.getInstance().getModelManager().getModel("powerup_speed");
@@ -31,6 +27,10 @@ public class EntityPowerUp extends Entity {
             return StarfightClient.getInstance().getModelManager().getModel("powerup_health");
         }
         return null;
+    }
+
+    public double getType() {
+        return type;
     }
 
     @Override

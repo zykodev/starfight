@@ -5,7 +5,6 @@ import dev.zyko.starfight.server.StarfightServer;
 import dev.zyko.starfight.server.world.entity.stats.PowerUpType;
 
 import java.util.Collection;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class EntityProjectile extends EntityMovable {
@@ -35,12 +34,7 @@ public class EntityProjectile extends EntityMovable {
         this.posX = newPosX;
         this.posY = newPosY;
         final EntityProjectile comparableEntity = this;
-        Collection<TileEntity> collidingTileEntities = StarfightServer.getInstance().getWorld().getTileEntityList().parallelStream().filter(new Predicate<TileEntity>() {
-            @Override
-            public boolean test(TileEntity tileEntity) {
-                return comparableEntity.isCollidingWith(tileEntity);
-            }
-        }).collect(Collectors.toList());
+        Collection<TileEntity> collidingTileEntities = StarfightServer.getInstance().getWorld().getTileEntityList().parallelStream().filter(tileEntity -> comparableEntity.isCollidingWith(tileEntity)).collect(Collectors.toList());
         if (!collidingTileEntities.isEmpty()) {
             TileEntity e = collidingTileEntities.iterator().next();
             if (e instanceof EntityPowerUp) {
@@ -67,12 +61,7 @@ public class EntityProjectile extends EntityMovable {
             }
             return;
         }
-        Collection<Entity> collidingEntities = StarfightServer.getInstance().getWorld().getEntityList().parallelStream().filter(new Predicate<Entity>() {
-            @Override
-            public boolean test(Entity entity) {
-                return entity != comparableEntity && comparableEntity.isCollidingWith(entity) && entity != getFiredBy();
-            }
-        }).collect(Collectors.toList());
+        Collection<Entity> collidingEntities = StarfightServer.getInstance().getWorld().getEntityList().parallelStream().filter(entity -> entity != comparableEntity && comparableEntity.isCollidingWith(entity) && entity != getFiredBy()).collect(Collectors.toList());
         if (!collidingEntities.isEmpty()) {
             Entity e = collidingEntities.iterator().next();
             if (e instanceof EntityPlayerSpaceship) {

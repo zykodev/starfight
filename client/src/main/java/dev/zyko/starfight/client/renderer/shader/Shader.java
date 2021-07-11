@@ -7,9 +7,6 @@ public class Shader {
 
     private int programId, fragmentShaderId, vertexShaderId;
 
-    public void runTick() {
-    }
-
     public Shader(String vertexShader, String fragmentShader) throws Exception {
         this.programId = GL20.glCreateProgram();
         this.vertexShaderId = GL20.glCreateShader(GL20.GL_VERTEX_SHADER);
@@ -42,6 +39,9 @@ public class Shader {
             System.out.println(GL20.glGetProgramInfoLog(this.programId));
             throw new IllegalStateException("Failed to validate shader program. Application stuck in illegal state.");
         }
+    }
+
+    public void runTick() {
     }
 
     public void setUniform(String paramName, int value) {

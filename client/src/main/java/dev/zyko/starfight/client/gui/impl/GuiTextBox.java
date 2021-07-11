@@ -76,15 +76,15 @@ public class GuiTextBox extends GuiComponent {
         return text;
     }
 
-    public void setSelected(boolean selected) {
-        this.selected = selected;
+    public void setText(String text) {
+        this.text = text;
     }
 
     public boolean isSelected() {
         return selected;
     }
 
-    public void setText(String text) {
-        this.text = text;
+    public void setSelected(boolean selected) {
+        this.selected = selected;
     }
 }

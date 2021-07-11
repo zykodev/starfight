@@ -12,6 +12,7 @@ import org.lwjgl.opengl.GL11;
 
 public class GameRenderer {
 
+    private final Model crosshairModel = new Model(StarfightClient.getInstance().getTextureManager().getTexture("ui/crosshair"), 0.1);
     private ParticleRenderer particleRenderer;
     private GuiScreen currentScreen;
     private TimeHelper frameTimer = new TimeHelper();
@@ -21,8 +22,6 @@ public class GameRenderer {
     public GameRenderer() {
         this.particleRenderer = new ParticleRenderer();
     }
-
-    private final Model crosshairModel = new Model(StarfightClient.getInstance().getTextureManager().getTexture("ui/crosshair"), 0.1);
 
     public void renderGame(double partialTicks) {
         this.prevNanos = System.nanoTime();

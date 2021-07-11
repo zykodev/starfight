@@ -11,28 +11,6 @@ import dev.zyko.starfight.protocol.impl.C03PacketConnect;
 
 public class NetworkManager extends Client {
 
-    public enum OpferEnum {
-        ERIK, ERIK2, ERIK3
-    }
-
-    public enum ConnectionStatus {
-        CONNECTING("Connecting..."),
-        LOGGING_IN("Logging in..."),
-        RETRIEVING_WORLD_DATA("Retrieving world data..."),
-        CONNECTED("Online"),
-        OFFLINE("Offline");
-
-        private String displayName;
-
-        ConnectionStatus(String displayName) {
-            this.displayName = displayName;
-        }
-
-        public String getDisplayName() {
-            return displayName;
-        }
-    }
-
     private ConnectionStatus status = ConnectionStatus.OFFLINE;
 
     public NetworkManager() {
@@ -86,12 +64,34 @@ public class NetworkManager extends Client {
         }
     }
 
+    public ConnectionStatus getStatus() {
+        return status;
+    }
+
     public void setStatus(ConnectionStatus status) {
         this.status = status;
     }
 
-    public ConnectionStatus getStatus() {
-        return status;
+    public enum OpferEnum {
+        ERIK, ERIK2, ERIK3
+    }
+
+    public enum ConnectionStatus {
+        CONNECTING("Connecting..."),
+        LOGGING_IN("Logging in..."),
+        RETRIEVING_WORLD_DATA("Retrieving world data..."),
+        CONNECTED("Online"),
+        OFFLINE("Offline");
+
+        private String displayName;
+
+        ConnectionStatus(String displayName) {
+            this.displayName = displayName;
+        }
+
+        public String getDisplayName() {
+            return displayName;
+        }
     }
 
 }

@@ -8,11 +8,10 @@ import dev.zyko.starfight.server.world.entity.stats.PowerUpType;
 
 public class EntityPlayerSpaceship extends EntitySpaceship {
 
-    private PlayerConnection connection;
-    private boolean shooting, usingPowerup;
-    private int ticksSinceLastShot = 0, score = 0, deaths = 0;
-
     public PowerUpType powerUpType = PowerUpType.NONE;
+    private PlayerConnection connection;
+    private boolean shooting;
+    private int ticksSinceLastShot = 0, score = 0, deaths = 0;
     private int powerUpTicks = 0;
 
     public EntityPlayerSpaceship(int id, double posX, double posY, double rotation, String name, PlayerConnection playerConnection) {
@@ -21,7 +20,7 @@ public class EntityPlayerSpaceship extends EntitySpaceship {
         this.health = 3;
         this.connection = playerConnection;
         this.connection.setPlayerSpaceship(this);
-        this.shooting = this.usingPowerup = false;
+        this.shooting = false;
         this.ticksSinceLastShot = 0;
     }
 
@@ -94,20 +93,12 @@ public class EntityPlayerSpaceship extends EntitySpaceship {
         this.shooting = shooting;
     }
 
-    public void setUsingPowerup(boolean usingPowerup) {
-        this.usingPowerup = usingPowerup;
-    }
-
-    public void setScore(int score) {
-        this.score = score;
-    }
-
     public int getScore() {
         return score;
     }
 
-    public void setDeaths(int deaths) {
-        this.deaths = deaths;
+    public void setScore(int score) {
+        this.score = score;
     }
 
     public PowerUpType getPowerUpType() {
@@ -121,6 +112,10 @@ public class EntityPlayerSpaceship extends EntitySpaceship {
 
     public int getDeaths() {
         return deaths;
+    }
+
+    public void setDeaths(int deaths) {
+        this.deaths = deaths;
     }
 
 }

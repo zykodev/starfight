@@ -17,10 +17,9 @@ public class StarfightServer extends Server {
     public static final String SIGNATURE = UUID.randomUUID().toString().replace("-", "");
 
     private static StarfightServer instance;
+    private final World world;
     private StarfightLogger logger = new StarfightLogger();
     private ServerTickThread serverTickThread = new ServerTickThread();
-
-    private final World world;
 
     public StarfightServer() throws Exception {
         this.logger.log(this.getClass(), "Starting Starfight server on port 26800...");
@@ -38,11 +37,6 @@ public class StarfightServer extends Server {
         // this.serverTickThread.terminate();
     }
 
-    private void prepareNetworking() {
-        this.addListener(new ServerNetworkHandler());
-        PacketRegistry.apply(this.getKryo());
-    }
-
     public static StarfightServer getInstance() {
         return instance;
     }
@@ -53,6 +47,11 @@ public class StarfightServer extends Server {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void prepareNetworking() {
+        this.addListener(new ServerNetworkHandler());
+        PacketRegistry.apply(this.getKryo());
     }
 
     public StarfightLogger getLogger() {
