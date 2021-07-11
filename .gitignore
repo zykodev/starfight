@@ -6,3 +6,4 @@ starfight.iml
 /common/common.iml
 /client/client.iml
 /server/server.iml
+*.log
