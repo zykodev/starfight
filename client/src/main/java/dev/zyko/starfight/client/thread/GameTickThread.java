@@ -1,6 +1,9 @@
 package dev.zyko.starfight.client.thread;
 
 import dev.zyko.starfight.client.StarfightClient;
+import dev.zyko.starfight.client.netcode.NetworkManager;
+import dev.zyko.starfight.protocol.impl.C01PacketKeepAlive;
+import dev.zyko.starfight.protocol.impl.S01PacketKeepAlive;
 import dev.zyko.starfight.util.TimeHelper;
 
 public class GameTickThread extends Thread {
@@ -23,6 +26,10 @@ public class GameTickThread extends Thread {
                 this.updatesPerSecond = updates;
                 updates = 0;
                 helper.updateSystemTime();
+                NetworkManager networkManager = StarfightClient.getInstance().getNetworkManager();
+                if(networkManager.isConnected()) {
+                    networkManager.sendPacket(new C01PacketKeepAlive(System.currentTimeMillis()));
+                }
             }
             if (StarfightClient.getInstance().getGameTickTimer().shouldTick()) {
                 StarfightClient.getInstance().getGameTickTimer().updateSystemTime();

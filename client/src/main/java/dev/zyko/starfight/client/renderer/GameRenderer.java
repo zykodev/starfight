@@ -92,6 +92,7 @@ public class GameRenderer {
         if (StarfightClient.getInstance().getPlayerSpaceship() != null) {
             fontRenderer.drawString("posX: " + StarfightClient.getInstance().getPlayerSpaceship().getPosX(), 1, 1 + 18 + 18 + 18 + 18, -1);
             fontRenderer.drawString("posY: " + StarfightClient.getInstance().getPlayerSpaceship().getPosY(), 1, 1 + 18 + 18 + 18 + 18 + 18, -1);
+            fontRenderer.drawString("latency: " + StarfightClient.getInstance().getNetworkManager().getClientNetworkHandler().getLatency(), 1, 1 + 18 + 18 + 18 + 18 + 18 + 18, -1);
         }
         GL11.glPopMatrix();
     }

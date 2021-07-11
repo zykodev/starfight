@@ -15,11 +15,12 @@ public class NetworkManager extends Client {
      * Aktueller Netzwerk-Status
      */
     private ConnectionStatus status = ConnectionStatus.OFFLINE;
+    private ClientNetworkHandler clientNetworkHandler;
 
     public NetworkManager() {
         // Log.set(Log.LEVEL_DEBUG);
         PacketRegistry.apply(this.getKryo());
-        this.addListener(new ClientNetworkHandler());
+        this.addListener(this.clientNetworkHandler = new ClientNetworkHandler());
         Runtime.getRuntime().addShutdownHook(new Thread(this::disconnect));
     }
 
@@ -110,4 +111,7 @@ public class NetworkManager extends Client {
         }
     }
 
+    public ClientNetworkHandler getClientNetworkHandler() {
+        return clientNetworkHandler;
+    }
 }

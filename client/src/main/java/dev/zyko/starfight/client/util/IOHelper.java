@@ -75,13 +75,16 @@ public class IOHelper {
      * @throws Exception, falls der Stream nicht gelesen werden konnte.
      */
     public static ByteBuffer streamToByteBuffer(InputStream inputStream) throws Exception {
-        ByteBuffer buffer = BufferUtils.createByteBuffer(inputStream.available());
-        byte[] bBuf = new byte[inputStream.available()];
-        int read = 0;
-        while ((read = inputStream.read(bBuf, 0, bBuf.length)) != -1) {
-            buffer.put(bBuf);
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        byte[] bBuf = new byte[1];
+        while (inputStream.read(bBuf, 0, bBuf.length) != -1) {
+            byteArrayOutputStream.write(bBuf);
         }
+        byteArrayOutputStream.flush();
+        ByteBuffer buffer = BufferUtils.createByteBuffer(byteArrayOutputStream.size());
+        buffer.put(byteArrayOutputStream.toByteArray());
         buffer.flip();
+        byteArrayOutputStream.close();
         return buffer;
     }
 
