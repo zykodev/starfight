@@ -21,6 +21,11 @@ public class StarfightServer extends Server {
     private StarfightLogger logger = new StarfightLogger();
     private ServerTickThread serverTickThread = new ServerTickThread();
 
+    /**
+     * Startet den Server.
+     *
+     * @throws Exception, falls der Server nicht gestartet werden konnte.
+     */
     public StarfightServer() throws Exception {
         this.logger.log(this.getClass(), "Starting Starfight server on port 26800...");
         instance = this;
@@ -49,6 +54,9 @@ public class StarfightServer extends Server {
         }
     }
 
+    /**
+     * Bereitet den Server vor dem eigentlichen Start vor.
+     */
     private void prepareNetworking() {
         this.addListener(new ServerNetworkHandler());
         PacketRegistry.apply(this.getKryo());
@@ -62,6 +70,11 @@ public class StarfightServer extends Server {
         return world;
     }
 
+    /**
+     * Gibt ein neues Connection-Objekt bei einer neuen Verbindung zurück.
+     *
+     * @return ein neues PlayerConnection-Objekt.
+     */
     @Override
     protected Connection newConnection() {
         return new PlayerConnection();

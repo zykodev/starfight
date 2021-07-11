@@ -14,6 +14,12 @@ public class Texture {
     private int textureId;
     private int width, height;
 
+    /**
+     * Liest eine Textur aus einem InputStream ein.
+     *
+     * @param inputStream der zu lesende InputStream
+     * @throws Exception, falls der Stream nicht gelesen werden konnte.
+     */
     public Texture(InputStream inputStream) throws Exception {
         BufferedImage bufferedImage = ImageIO.read(inputStream);
         inputStream.close();
@@ -40,11 +46,17 @@ public class Texture {
         GL20.glBindTexture(GL20.GL_TEXTURE_2D, 0);
     }
 
+    /**
+     * Sagt OpenGL, dass für das nächste zu rendernde Element diese Textur verwendet werden soll.
+     */
     public void bindTexture() {
         GL11.glEnable(GL11.GL_TEXTURE_2D);
         GL20.glBindTexture(GL20.GL_TEXTURE_2D, this.textureId);
     }
 
+    /**
+     * Sagt OpenGL, dass nun keine Textur mehr verwendet werden soll.
+     */
     public void unbindTexture() {
         GL11.glDisable(GL11.GL_TEXTURE_2D);
         GL20.glBindTexture(GL20.GL_TEXTURE_2D, 0);

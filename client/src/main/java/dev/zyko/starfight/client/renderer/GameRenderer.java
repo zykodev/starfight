@@ -23,6 +23,11 @@ public class GameRenderer {
         this.particleRenderer = new ParticleRenderer();
     }
 
+    /**
+     * Rendert alles zum Spiel Zugehörige.
+     *
+     * @param partialTicks Anzahl der vergangenen Ticks seit dem letzten vollständigen Update.
+     */
     public void renderGame(double partialTicks) {
         this.prevNanos = System.nanoTime();
         if (this.frameTimer.isDelayComplete(1000)) {
@@ -59,6 +64,11 @@ public class GameRenderer {
     private void renderOverlay(double partialTicks) {
     }
 
+    /**
+     * Zeigt den Mauszeiger an.
+     *
+     * @param partialTicks Anzahl der vergangenen Ticks seit dem letzten vollständigen Update.
+     */
     private void renderPointer(double partialTicks) {
         double[] mouse = StarfightClient.getInstance().getInputManager().getMousePosition();
         GL11.glPushMatrix();
@@ -67,6 +77,11 @@ public class GameRenderer {
         GL11.glPopMatrix();
     }
 
+    /**
+     * Zeigt Debug-Daten oben links in der Ecke an.
+     *
+     * @param partialTicks Anzahl der vergangenen Ticks seit dem letzten vollständigen Update.
+     */
     private void renderDebugOverlay(double partialTicks) {
         GL11.glPushMatrix();
         FontRenderer fontRenderer = StarfightClient.getInstance().getFontManager().getFontRenderer("ui/basictext");
@@ -81,6 +96,15 @@ public class GameRenderer {
         GL11.glPopMatrix();
     }
 
+    /**
+     * Zeichnet ein Rechteck.
+     *
+     * @param x      x-Koordinate der Ecke des Rechtecks oben links.
+     * @param y      y-Koordinate der Ecke des Rechtecks oben links.
+     * @param width  Breite des Rechtecks.
+     * @param height Höhe des Rechtecks.
+     * @param color  Farbe des Rechtecks.
+     */
     public void drawRectangle(double x, double y, double width, double height, int color) {
         float[] colorArray = ColorUtil.hexToRGBA(color);
         GL11.glPushMatrix();
@@ -99,6 +123,15 @@ public class GameRenderer {
         GL11.glPopMatrix();
     }
 
+    /**
+     * Zeichnen einen nicht ausgefüllten Kreis.
+     *
+     * @param centerX   x-Koordinate des Mittelpunkts des Kreises.
+     * @param centerY   y-Koordinate des Mittelpunkts des Kreises.
+     * @param radius    Radius des Kreises.
+     * @param color     Farbe des Linie.
+     * @param thickness Dicke der Linie.
+     */
     public void drawCircle(double centerX, double centerY, double radius, int color, float thickness) {
         float[] colorArray = ColorUtil.hexToRGBA(color);
         GL11.glPushMatrix();
@@ -120,6 +153,14 @@ public class GameRenderer {
         GL11.glPopMatrix();
     }
 
+    /**
+     * Zeichnet ein Rechteck, auf welches eine Textur angewendet werden kann.
+     *
+     * @param x      x-Koordinate der Ecke des Rechtecks oben links.
+     * @param y      y-Koordinate der Ecke des Rechtecks oben links.
+     * @param width  Breite des Rechtecks.
+     * @param height Höhe des Rechtecks.
+     */
     public void drawTexturableRectangle(double x, double y, double width, double height) {
         GL11.glPushMatrix();
         GL11.glEnable(GL11.GL_BLEND);

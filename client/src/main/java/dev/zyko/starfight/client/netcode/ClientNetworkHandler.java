@@ -11,8 +11,17 @@ import dev.zyko.starfight.protocol.impl.*;
 
 public class ClientNetworkHandler extends Listener {
 
+    /**
+     * Latenz zwischen Server und Client.
+     */
     private long latency;
 
+    /**
+     * Verarbeitet empfangene Pakete.
+     *
+     * @param connection die Verbindung, auf welcher die Daten empfangen wurden.
+     * @param o          die Daten, die empfangen wurden.
+     */
     @Override
     public void received(Connection connection, Object o) {
         if (!(o instanceof Packet)) return;
@@ -88,6 +97,11 @@ public class ClientNetworkHandler extends Listener {
         super.received(connection, o);
     }
 
+    /**
+     * Ausgelöst, sobald die Verbindung beendet wird.
+     *
+     * @param connection die Verbindung, die geschlossen wurde.
+     */
     @Override
     public void disconnected(Connection connection) {
         super.disconnected(connection);

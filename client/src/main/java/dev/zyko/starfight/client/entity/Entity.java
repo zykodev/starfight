@@ -7,8 +7,19 @@ import java.util.Objects;
 
 public abstract class Entity {
 
+    /**
+     * ID, damit jedes Entity sowohl vom Client als auch vom Server genau "benannt" werden kann
+     */
     protected int id;
+
+    /**
+     * Position und Größe
+     */
     protected double posX, posY, width, height;
+
+    /**
+     * Zu verwendende Textur
+     */
     protected Model model;
 
     public Entity(int id, double posX, double posY, double width, double height, Model model) {
@@ -20,8 +31,21 @@ public abstract class Entity {
         this.model = model;
     }
 
+    /**
+     * Aktualisiert Client-seitig die Daten von lokalen Entities.
+     */
     public abstract void updateEntity();
 
+    /**
+     * Zeigt das Entity im Spiel an.
+     *
+     * @param partialTicks Anzahl der vergangenen Ticks seit dem letzten vollständigen Update.
+     * @param x            x-Koordinate, an welchem das Entity angezeigt werden soll.
+     * @param y            y-Koordinate, an welchem das Entity angezeigt werden soll.
+     * @param width        Breite des Entitys.
+     * @param height       Höhe das Entitys.
+     * @param rotation     Rotation des Entitys auf der x-y-Ebene.
+     */
     public void drawEntity(double partialTicks, double x, double y, double width, double height, double rotation) {
         GL11.glPushMatrix();
         GL11.glTranslated(x, y, 0);
@@ -32,9 +56,15 @@ public abstract class Entity {
         GL11.glPopMatrix();
     }
 
+    /**
+     * Werden bei einem bestimmten Entity weitere OpenGL-Caps benötigt, so können diese hier durch Überschreiben der Methode implementiert werden.
+     */
     protected void enableAdditionalFeatures() {
     }
 
+    /**
+     * Werden bei einem bestimmten Entity weitere OpenGL-Caps benötigt, so können diese hier durch Überschreiben der Methode implementiert werden.
+     */
     protected void disableAdditionalFeatures() {
     }
 

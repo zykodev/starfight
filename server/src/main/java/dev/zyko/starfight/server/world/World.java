@@ -177,7 +177,7 @@ public class World {
     }
 
     public void spawnPowerUps() {
-        for (double i = 0; i < 360; i += 4.0D) {
+        for (double i = 0; i < 360; i += 6.0D) {
             double x = Math.sin(Math.toRadians(i)) * this.random.nextDouble() * this.radius;
             double y = Math.cos(Math.toRadians(i)) * this.random.nextDouble() * this.radius;
             EntityPowerUp powerUp = new EntityPowerUp(this.getNextEntityID(), x, y, 2.0D + 2.0D * this.random.nextInt(3));

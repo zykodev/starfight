@@ -8,6 +8,12 @@ public class GameTickThread extends Thread {
     private boolean terminated = false;
     private int updatesPerSecond = 0;
 
+    /**
+     * Aktualsiert die Game-Logik unabhängig von der Grafikperformance.
+     * D.h. anstatt 200 Updates bei 200 Bildern pro Sekunde weiterhin 48 Updates pro Sekunde.
+     * D.h. anstatt 10 Updates bei 10 Bildern pro Sekunde weiterhin 48 Updates pro Sekunde.
+     * Wichtig für Multiplayer.
+     */
     @Override
     public void run() {
         TimeHelper helper = new TimeHelper();

@@ -10,7 +10,6 @@ import dev.zyko.starfight.client.netcode.NetworkManager;
 import dev.zyko.starfight.client.renderer.GameRenderer;
 import dev.zyko.starfight.client.renderer.font.FontManager;
 import dev.zyko.starfight.client.renderer.model.ModelManager;
-import dev.zyko.starfight.client.renderer.shader.ShaderManager;
 import dev.zyko.starfight.client.renderer.texture.TextureManager;
 import dev.zyko.starfight.client.thread.GameTickThread;
 import dev.zyko.starfight.client.util.IOHelper;
@@ -24,13 +23,10 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.Locale;
 import java.util.Properties;
-import java.util.UUID;
 
 public class StarfightClient {
 
     public static final String VERSION = "alpha-indev";
-    public static final String SIGNATURE = UUID.randomUUID().toString().replace("-", "");
-
     private static StarfightClient instance;
 
     private EntityPlayerSpaceship playerSpaceship;
@@ -40,16 +36,18 @@ public class StarfightClient {
     private DisplayManager displayManager;
     private GameRenderer gameRenderer;
     private InputManager inputManager;
-
     private TextureManager textureManager;
-    private ShaderManager shaderManager;
     private FontManager fontManager;
     private ModelManager modelManager;
 
     private TimeHelper gameTickTimer = new TimeHelper(48);
-
     private GameTickThread gameTickThread;
 
+    /**
+     * Initialisiert das Spiel und öffnet das Spiel-Fenster vor.
+     *
+     * @throws Exception, falls es bei diesem Vorgang ein Problem gab.
+     */
     public StarfightClient() throws Exception {
         instance = this;
         this.networkManager = new NetworkManager();
@@ -57,7 +55,6 @@ public class StarfightClient {
         this.textureManager = new TextureManager();
         this.modelManager = new ModelManager();
         this.fontManager = new FontManager();
-        this.shaderManager = new ShaderManager();
         this.inputManager = new InputManager();
         this.displayManager.createDisplay(1280, 720, "Starfight (" + StarfightClient.VERSION + ")");
         this.textureManager.loadTextures();
@@ -66,7 +63,6 @@ public class StarfightClient {
         File iconAsset = IOHelper.extractAsset("textures/spaceship.png");
         ByteBuffer buffer = TextureHelper.fileToBuffer(iconAsset.getAbsolutePath());
         this.displayManager.setIcon(buffer);
-        this.shaderManager.loadShaders();
         this.gameRenderer = new GameRenderer();
         this.gameRenderer.getParticleRenderer().setup(0, 0, 1280, 720);
         this.gameRenderer.displayGuiScreen(new GuiScreenMainMenu());
@@ -85,12 +81,18 @@ public class StarfightClient {
         return instance;
     }
 
+    /**
+     * Beendet das Spiel.
+     */
     private void exit() {
         this.networkManager.disconnect();
         this.displayManager.destroyDisplay();
         this.gameTickThread.terminate();
     }
 
+    /**
+     * Startet das Spiel.
+     */
     private void run() {
         this.gameTickThread = new GameTickThread();
         this.gameTickThread.setName("game-tick-thread");
@@ -138,6 +140,13 @@ public class StarfightClient {
         }
     }
 
+    /**
+     * Öffnet einen Link im Standard-Systembrowser.
+     *
+     * @param url die URL, welche geöffnet werden soll.
+     *            <p>
+     *            Notiz: Nur für Windows getestet.
+     */
     public void openWebsite(String url) {
         try {
             String command = "";
@@ -185,10 +194,6 @@ public class StarfightClient {
 
     public TextureManager getTextureManager() {
         return textureManager;
-    }
-
-    public ShaderManager getShaderManager() {
-        return shaderManager;
     }
 
     public FontManager getFontManager() {

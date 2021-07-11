@@ -1,11 +1,7 @@
 package dev.zyko.starfight.client.renderer.model;
 
 import dev.zyko.starfight.client.renderer.texture.Texture;
-import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
-
-import java.nio.DoubleBuffer;
-import java.nio.IntBuffer;
 
 public class Model {
 
@@ -31,6 +27,15 @@ public class Model {
         }, 0);
     }
 
+    /**
+     * Rendert das Model auf den Bildschirm.
+     *
+     * @param x            x-Koordinate, an welcher das Model angezeigt werden soll.
+     * @param y            y-Koordinate, an welcher das Model angezeigt werden soll.
+     * @param width        Breite des Models.
+     * @param height       Höhe des Models.
+     * @param partialTicks Anzahl der vergangenen Ticks seit dem letzten vollständigen Update.
+     */
     public void drawModel(double x, double y, double width, double height, double partialTicks) {
         this.texture.bindTexture();
         GL11.glEnable(GL11.GL_BLEND);
@@ -52,20 +57,6 @@ public class Model {
         GL11.glEnd();
         GL11.glDisable(GL11.GL_BLEND);
         this.texture.unbindTexture();
-    }
-
-    private DoubleBuffer createDoubleBuffer(double[] data) {
-        DoubleBuffer doubleBuffer = BufferUtils.createDoubleBuffer(data.length);
-        doubleBuffer.put(data);
-        doubleBuffer.flip();
-        return doubleBuffer;
-    }
-
-    private IntBuffer createIntBuffer(int[] data) {
-        IntBuffer intBuffer = BufferUtils.createIntBuffer(data.length);
-        intBuffer.put(data);
-        intBuffer.flip();
-        return intBuffer;
     }
 
 }

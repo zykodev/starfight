@@ -45,7 +45,9 @@ public class ParticleRenderer {
             StarfightClient.getInstance().getGameRenderer().drawRectangle(-1, -1, 2, 2, -1);
             GL11.glPopMatrix();
         }
-        /*
+
+        /* Code für coolen Plexus-Effekt 8)
+         * Leider kaum performant, daher nicht verwendet.
         for (Particle particle : this.particles) {
             for (Particle particle2 : this.particles) {
                 if(particle == particle2) continue;
@@ -68,8 +70,7 @@ public class ParticleRenderer {
                     GL11.glPopMatrix();
                 }
             }
-        }
-         */
+        }*/
     }
 
 }

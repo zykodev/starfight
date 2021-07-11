@@ -8,6 +8,13 @@ import java.nio.IntBuffer;
 
 public class TextureHelper {
 
+    /**
+     * Liest eine Textur-Datei in einen ByteBuffer ein.
+     *
+     * @param filePath die Datei, welche gelesen werden soll.
+     * @return einen ByteBuffer, welcher die Daten aus der Datei enthält.
+     * @throws Exception, falls die Datei nicht gelesen werden konnte.
+     */
     public static ByteBuffer fileToBuffer(String filePath) throws Exception {
         ByteBuffer imageBuffer;
         int width, height;

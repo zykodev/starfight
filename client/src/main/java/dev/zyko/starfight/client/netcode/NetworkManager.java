@@ -11,6 +11,9 @@ import dev.zyko.starfight.protocol.impl.C03PacketConnect;
 
 public class NetworkManager extends Client {
 
+    /**
+     * Aktueller Netzwerk-Status
+     */
     private ConnectionStatus status = ConnectionStatus.OFFLINE;
 
     public NetworkManager() {
@@ -20,7 +23,13 @@ public class NetworkManager extends Client {
         Runtime.getRuntime().addShutdownHook(new Thread(this::disconnect));
     }
 
-    public void connect(String remoteAddress, String nickname) throws Exception {
+    /**
+     * Verbindet zu einem Server mit dem angegebenen Nicknamen.
+     *
+     * @param remoteAddress die Server-Adresse, zu welcher verbunden werden soll.
+     * @param nickname      der Nickname, mit welchem verbunden werden soll.
+     */
+    public void connect(String remoteAddress, String nickname) {
         int port = 26800;
         String hostname = "";
         if (remoteAddress.contains(":")) {
@@ -47,6 +56,9 @@ public class NetworkManager extends Client {
         }).start();
     }
 
+    /**
+     * Trennt die aktuelle Verbindung, sofern eine besteht und fährt sämtliche Netzwerkfunktionalität herunter.
+     */
     public void disconnect() {
         if (this.isConnected()) {
             this.sendPacket(new C02PacketDisconnect());
@@ -58,6 +70,11 @@ public class NetworkManager extends Client {
         this.status = ConnectionStatus.OFFLINE;
     }
 
+    /**
+     * Sendet ein Paket an den Server, falls aktuell eine Verbindung besteht.
+     *
+     * @param packet das Paket, welches an der Server geschickt werden soll.
+     */
     public void sendPacket(Packet packet) {
         if (this.isConnected()) {
             this.sendTCP(packet);
@@ -72,10 +89,9 @@ public class NetworkManager extends Client {
         this.status = status;
     }
 
-    public enum OpferEnum {
-        ERIK, ERIK2, ERIK3
-    }
-
+    /**
+     * Stellt Verbindungsstatus dar.
+     */
     public enum ConnectionStatus {
         CONNECTING("Connecting..."),
         LOGGING_IN("Logging in..."),

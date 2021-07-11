@@ -15,6 +15,14 @@ public class DisplayManager {
     private long windowId;
     private int width, height;
 
+    /**
+     * Öffnet ein neues Fenster, in welchem die Spielinhalte gerendert werden können.
+     *
+     * @param width  die Breite des Fensters.
+     * @param height die Höhe des Fensters.
+     * @param title  der Titel des Fensters.
+     * @throws Exception, falls das Fenster nicht geöffnet werden konnte.
+     */
     public void createDisplay(int width, int height, String title) throws Exception {
         if (!GLFW.glfwInit()) {
             throw new IllegalStateException("GLFW failed to initialize, application stuck in illegal state.");
@@ -39,6 +47,10 @@ public class DisplayManager {
         GLFW.glfwSetCharCallback(this.windowId, new InputManager.KeyboardCharAdapter());
     }
 
+    /**
+     * Aktualisiert das Fenster.
+     * Beispielsweise wird das aktuell angezeigte Menü neu skaliert und Eingabe wird an die entsprechenden Event-Handler weitergeleitet.
+     */
     public void updateDisplay() {
         GLFW.glfwPollEvents();
         int[] width = new int[1];
@@ -57,6 +69,14 @@ public class DisplayManager {
         }
     }
 
+    /**
+     * Passt den Viewport vom OpenGL-Standard auf etwas neues, in diesem Fall besser handhabbares, an.
+     *
+     * @param x      die (virtuelle) x-Koordinate des Pixels oben links in der Ecke.
+     * @param y      die (virtuelle) y-Koordinate des Pixels oben links in der Ecke.
+     * @param width  die (virtuelle) x-Koordinate des Pixels unten rechts in der Ecke.
+     * @param height die (virtuelle) y-Koordinate des Pixels unten rechts in der Ecke.
+     */
     public void setViewport(int x, int y, int width, int height) {
         GL11.glViewport(0, 0, width, height);
         GL11.glMatrixMode(GL11.GL_MODELVIEW);
@@ -68,14 +88,27 @@ public class DisplayManager {
         GL11.glLoadIdentity();
     }
 
+    /**
+     * Das Spiel verwendet Double Buffering, weshalb nach jedem gerenderten Frame die beiden Framebuffer getauscht werden müssen.
+     *
+     * @see "https://de.wikipedia.org/wiki/Doppelpufferung"
+     */
     public void finishUpdate() {
         GLFW.glfwSwapBuffers(this.windowId);
     }
 
+    /**
+     * Zerstört das Fenster und den OpenGL-Kontext.
+     */
     public void destroyDisplay() {
         GLFW.glfwTerminate();
     }
 
+    /**
+     * Überprüft, ob das Fenster sich schließen soll. (bspw. durch Klicken auf das X)
+     *
+     * @return true, wenn das Fenster sich schließen soll, ansonsten false.
+     */
     public boolean shouldWindowClose() {
         return GLFW.glfwWindowShouldClose(this.windowId);
     }
@@ -84,6 +117,11 @@ public class DisplayManager {
         return windowId;
     }
 
+    /**
+     * Ändert das Fenster-Symbol
+     *
+     * @param image ein ByteBuffer, welcher die Bilddaten enthält.
+     */
     public void setIcon(ByteBuffer image) {
         GLFWImage glfwImage = GLFWImage.malloc();
         GLFWImage.Buffer glfwImages = GLFWImage.malloc(1);
