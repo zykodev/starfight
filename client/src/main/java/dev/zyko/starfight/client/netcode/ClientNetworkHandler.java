@@ -37,6 +37,9 @@ public class ClientNetworkHandler extends Listener {
             world.loadEntity(entityPlayerSpaceship);
             StarfightClient.getInstance().setWorld(world);
             StarfightClient.getInstance().setPlayerSpaceship(entityPlayerSpaceship);
+            double screenWidth = StarfightClient.getInstance().getDisplayManager().getWidth();
+            double screenHeight = StarfightClient.getInstance().getDisplayManager().getHeight();
+            StarfightClient.getInstance().getGameRenderer().getParticleRenderer().setup(packet.getPosX() - screenWidth / 2, packet.getPosY() - screenHeight / 2, screenWidth, screenHeight);
             StarfightClient.getInstance().getGameRenderer().displayGuiScreen(null);
         }
         if (msg instanceof S02PacketDisconnect) {
@@ -92,6 +95,12 @@ public class ClientNetworkHandler extends Listener {
         }
         if (msg instanceof S09PacketPlayOutEffectSpawn) {
             StarfightClient.getInstance().getWorld().loadEntity(new EntityEffect(((S09PacketPlayOutEffectSpawn) msg).getEntityId(), ((S09PacketPlayOutEffectSpawn) msg).getPosX(), ((S09PacketPlayOutEffectSpawn) msg).getPosY()));
+        }
+        if (msg instanceof S10PacketPlayOutPowerUpStatus) {
+            if(((S10PacketPlayOutPowerUpStatus) msg).getType() > 0) {
+                StarfightClient.getInstance().getPlayerSpaceship().setActivePowerUp(((S10PacketPlayOutPowerUpStatus) msg).getType());
+                StarfightClient.getInstance().getPlayerSpaceship().setRemainingPowerUpTicks(((S10PacketPlayOutPowerUpStatus) msg).getDuration());
+            }
         }
         super.received(connection, o);
     }

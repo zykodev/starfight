@@ -6,9 +6,14 @@ import dev.zyko.starfight.client.gui.GuiScreen;
 import dev.zyko.starfight.client.renderer.font.FontRenderer;
 import dev.zyko.starfight.client.renderer.model.Model;
 import dev.zyko.starfight.client.renderer.particle.ParticleRenderer;
+import dev.zyko.starfight.client.renderer.texture.Texture;
+import dev.zyko.starfight.client.renderer.texture.TextureManager;
 import dev.zyko.starfight.client.util.ColorUtil;
 import dev.zyko.starfight.util.TimeHelper;
 import org.lwjgl.opengl.GL11;
+import org.w3c.dom.Text;
+
+import java.text.DecimalFormat;
 
 public class GameRenderer {
 
@@ -18,6 +23,7 @@ public class GameRenderer {
     private TimeHelper frameTimer = new TimeHelper();
     private int framesPerSecond = 0, framesDrawn = 0;
     private long frameTime = System.nanoTime(), prevNanos, postNanos;
+    private DecimalFormat decimalFormat = new DecimalFormat("#.#");
 
     public GameRenderer() {
         this.particleRenderer = new ParticleRenderer();
@@ -62,6 +68,28 @@ public class GameRenderer {
     }
 
     private void renderOverlay(double partialTicks) {
+        double screenHeight = StarfightClient.getInstance().getDisplayManager().getHeight();
+        if(StarfightClient.getInstance().getPlayerSpaceship() != null) {
+            Texture texture = null;
+            if(StarfightClient.getInstance().getPlayerSpaceship().getActivePowerUp() == 2.0D) {
+                texture = StarfightClient.getInstance().getTextureManager().getTexture("entity/powerup_speed");
+            }
+            if(StarfightClient.getInstance().getPlayerSpaceship().getActivePowerUp() == 6.0D) {
+                texture = StarfightClient.getInstance().getTextureManager().getTexture("entity/powerup_cdr");
+            }
+            this.drawRectangle(3, screenHeight - 3 - 64, 64, 64, 0x80111111);
+            if(texture != null) {
+                GL11.glPushMatrix();
+                texture.bindTexture();
+                this.drawTexturableRectangle(19, screenHeight - 3 - 64, 48, 48);
+                texture.unbindTexture();
+                GL11.glPopMatrix();
+            }
+            if(StarfightClient.getInstance().getPlayerSpaceship().getActivePowerUp() > 0) {
+                double remainingSeconds = (double) StarfightClient.getInstance().getPlayerSpaceship().getRemainingPowerUpTicks() / 48.0D;
+                StarfightClient.getInstance().getFontManager().getFontRenderer("ui/basictext").drawStringWithShadow(this.decimalFormat.format(remainingSeconds) + "s", 3, (float) (screenHeight - 3 - 18), -1);
+            }
+        }
     }
 
     /**
@@ -93,6 +121,7 @@ public class GameRenderer {
             fontRenderer.drawString("posX: " + StarfightClient.getInstance().getPlayerSpaceship().getPosX(), 1, 1 + 18 + 18 + 18 + 18, -1);
             fontRenderer.drawString("posY: " + StarfightClient.getInstance().getPlayerSpaceship().getPosY(), 1, 1 + 18 + 18 + 18 + 18 + 18, -1);
             fontRenderer.drawString("latency: " + StarfightClient.getInstance().getNetworkManager().getClientNetworkHandler().getLatency(), 1, 1 + 18 + 18 + 18 + 18 + 18 + 18, -1);
+            fontRenderer.drawString("powerup: " + StarfightClient.getInstance().getPlayerSpaceship().getActivePowerUp() + ", " + StarfightClient.getInstance().getPlayerSpaceship().getRemainingPowerUpTicks(), 1, 1 + 18 + 18 + 18 + 18 + 18 + 18 + 18, -1);
         }
         GL11.glPopMatrix();
     }

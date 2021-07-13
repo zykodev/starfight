@@ -2,6 +2,7 @@ package dev.zyko.starfight.server.world.entity;
 
 import dev.zyko.starfight.protocol.Packet;
 import dev.zyko.starfight.protocol.impl.S07PacketPlayOutEntityHealth;
+import dev.zyko.starfight.protocol.impl.S10PacketPlayOutPowerUpStatus;
 import dev.zyko.starfight.server.StarfightServer;
 import dev.zyko.starfight.server.netcode.PlayerConnection;
 import dev.zyko.starfight.server.world.entity.stats.PowerUpType;
@@ -108,6 +109,7 @@ public class EntityPlayerSpaceship extends EntitySpaceship {
     public void setPowerUpType(PowerUpType powerUpType) {
         this.powerUpType = powerUpType;
         this.powerUpTicks = 0;
+        this.sendPacket(new S10PacketPlayOutPowerUpStatus(this.powerUpType.getType(), this.powerUpType.getDuration()));
     }
 
     public int getDeaths() {

@@ -58,6 +58,7 @@ public class EntityProjectile extends EntityMovable {
                 this.spawnParticles(this.posX, this.posY);
                 StarfightServer.getInstance().getWorld().despawnEntity(this);
                 StarfightServer.getInstance().getWorld().despawnEntity(e);
+                StarfightServer.getInstance().getWorld().spawnPowerUps(1);
             }
             return;
         }

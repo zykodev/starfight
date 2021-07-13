@@ -73,9 +73,9 @@
     </dependency>
   </dependencies>
   <properties>
-    <lwjgl.version>3.2.3</lwjgl.version>
-    <maven.compiler.source>8</maven.compiler.source>
     <maven.compiler.target>8</maven.compiler.target>
+    <maven.compiler.source>8</maven.compiler.source>
+    <lwjgl.version>3.2.3</lwjgl.version>
   </properties>
 </project>
 

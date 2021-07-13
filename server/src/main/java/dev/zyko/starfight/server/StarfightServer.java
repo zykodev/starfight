@@ -9,12 +9,9 @@ import dev.zyko.starfight.server.netcode.ServerNetworkHandler;
 import dev.zyko.starfight.server.thread.ServerTickThread;
 import dev.zyko.starfight.server.world.World;
 
-import java.util.UUID;
-
 public class StarfightServer extends Server {
 
     public static final String VERSION = "alpha-indev";
-    public static final String SIGNATURE = UUID.randomUUID().toString().replace("-", "");
 
     private static StarfightServer instance;
     private final World world;
@@ -29,8 +26,8 @@ public class StarfightServer extends Server {
     public StarfightServer() throws Exception {
         this.logger.log(this.getClass(), "Starting Starfight server on port 26800...");
         instance = this;
-        this.world = new World(4000.0D);
-        this.world.spawnPowerUps();
+        this.world = new World(2000.0D);
+        this.world.spawnPowerUps(25);
         this.serverTickThread.setName("server-tick-thread");
         this.serverTickThread.start();
         // Log.set(Log.LEVEL_DEBUG);

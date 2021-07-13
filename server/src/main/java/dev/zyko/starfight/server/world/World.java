@@ -1,10 +1,7 @@
 package dev.zyko.starfight.server.world;
 
 import dev.zyko.starfight.data.ScoreboardEntry;
-import dev.zyko.starfight.protocol.impl.S04PacketPlayOutEntitySpawn;
-import dev.zyko.starfight.protocol.impl.S05PacketPlayOutEntityPosition;
-import dev.zyko.starfight.protocol.impl.S06PacketPlayOutEntityDespawn;
-import dev.zyko.starfight.protocol.impl.S08PacketPlayOutScoreboardData;
+import dev.zyko.starfight.protocol.impl.*;
 import dev.zyko.starfight.server.world.entity.*;
 
 import java.util.ArrayList;
@@ -130,38 +127,40 @@ public class World {
 
     public void spawnEntity(Entity entity) {
         this.entityList.add(entity);
-        if (entity instanceof EntityPlayerSpaceship)
+        this.playerSpaceshipList.forEach(p -> {
+            if (p != entity) {
+                if (entity instanceof EntityPlayerSpaceship) {
+                    p.sendPacket(new S04PacketPlayOutEntitySpawn(entity.getId(), S04PacketPlayOutEntitySpawn.SPACESHIP, entity.getPosX(), entity.getPosY(), ((EntityPlayerSpaceship) entity).getRotation(), ((EntityPlayerSpaceship) entity).getName()));
+                    p.sendPacket(new S07PacketPlayOutEntityHealth(entity.getId(), ((EntityPlayerSpaceship) entity).getHealth()));
+                } else if (entity instanceof EntityProjectile) {
+                    p.sendPacket(new S04PacketPlayOutEntitySpawn(entity.getId(), S04PacketPlayOutEntitySpawn.PROJECTILE, entity.getPosX(), entity.getPosY(), ((EntityProjectile) entity).getRotation(), "Projectile"));
+                } else {
+                    p.sendPacket(new S04PacketPlayOutEntitySpawn(entity.getId(), 0, entity.getPosX(), entity.getPosY(), 0, "Entity"));
+                }
+            }
+        });
+        if (entity instanceof EntityPlayerSpaceship) {
             this.playerSpaceshipList.add((EntityPlayerSpaceship) entity);
-        for (Entity e : this.entityList) {
-            if (e instanceof EntityPlayerSpaceship) {
-                if (e != entity) {
-                    if (entity instanceof EntityPlayerSpaceship) {
-                        ((EntityPlayerSpaceship) e).sendPacket(new S04PacketPlayOutEntitySpawn(entity.getId(), S04PacketPlayOutEntitySpawn.SPACESHIP, entity.getPosX(), entity.getPosY(), ((EntityPlayerSpaceship) entity).getRotation(), ((EntityPlayerSpaceship) entity).getName()));
-                    } else if (entity instanceof EntityProjectile) {
-                        ((EntityPlayerSpaceship) e).sendPacket(new S04PacketPlayOutEntitySpawn(entity.getId(), S04PacketPlayOutEntitySpawn.PROJECTILE, entity.getPosX(), entity.getPosY(), ((EntityProjectile) entity).getRotation(), "Projectile"));
-                    } else {
-                        ((EntityPlayerSpaceship) e).sendPacket(new S04PacketPlayOutEntitySpawn(entity.getId(), 0, entity.getPosX(), entity.getPosY(), 0, "Entity"));
-                    }
-                }
-            }
-            if (entity instanceof EntityPlayerSpaceship) {
-                this.tileEntityList.forEach(te -> {
-                    if (te instanceof EntityPowerUp) {
-                        ((EntityPlayerSpaceship) e).sendPacket(new S04PacketPlayOutEntitySpawn(te.getId(), S04PacketPlayOutEntitySpawn.POWER_UP, te.getPosX(), te.getPosY(), ((EntityPowerUp) te).getType(), "Power Up"));
-                    } else {
-                        ((EntityPlayerSpaceship) e).sendPacket(new S04PacketPlayOutEntitySpawn(te.getId(), 0, entity.getPosX(), te.getPosY(), 0, "Tile Entity"));
-                    }
-                });
-                if (e != entity) {
+            EntityPlayerSpaceship ps = (EntityPlayerSpaceship) entity;
+            this.entityList.forEach(e -> {
+                if (e != ps) {
                     if (e instanceof EntityPlayerSpaceship) {
-                        ((EntityPlayerSpaceship) entity).sendPacket(new S04PacketPlayOutEntitySpawn(e.getId(), S04PacketPlayOutEntitySpawn.SPACESHIP, e.getPosX(), e.getPosY(), ((EntityPlayerSpaceship) e).getRotation(), ((EntityPlayerSpaceship) e).getName()));
+                        ps.sendPacket(new S04PacketPlayOutEntitySpawn(e.getId(), S04PacketPlayOutEntitySpawn.SPACESHIP, e.getPosX(), e.getPosY(), ((EntityPlayerSpaceship) e).getRotation(), ((EntityPlayerSpaceship) e).getName()));
+                        ps.sendPacket(new S07PacketPlayOutEntityHealth(e.getId(), ((EntityPlayerSpaceship) e).getHealth()));
                     } else if (e instanceof EntityProjectile) {
-                        ((EntityPlayerSpaceship) entity).sendPacket(new S04PacketPlayOutEntitySpawn(e.getId(), S04PacketPlayOutEntitySpawn.PROJECTILE, e.getPosX(), e.getPosY(), ((EntityProjectile) e).getRotation(), "Projectile"));
+                        ps.sendPacket(new S04PacketPlayOutEntitySpawn(e.getId(), S04PacketPlayOutEntitySpawn.PROJECTILE, e.getPosX(), e.getPosY(), ((EntityProjectile) e).getRotation(), "Projectile"));
                     } else {
-                        ((EntityPlayerSpaceship) entity).sendPacket(new S04PacketPlayOutEntitySpawn(e.getId(), 0, e.getPosX(), e.getPosY(), 0, "Entity"));
+                        ps.sendPacket(new S04PacketPlayOutEntitySpawn(e.getId(), 0, e.getPosX(), e.getPosY(), 0, "Entity"));
                     }
                 }
-            }
+            });
+            this.tileEntityList.forEach(te -> {
+                if (te instanceof EntityPowerUp) {
+                    ps.sendPacket(new S04PacketPlayOutEntitySpawn(te.getId(), S04PacketPlayOutEntitySpawn.POWER_UP, te.getPosX(), te.getPosY(), ((EntityPowerUp) te).getType(), "Power Up"));
+                } else {
+                    ps.sendPacket(new S04PacketPlayOutEntitySpawn(te.getId(), 0, te.getPosX(), te.getPosY(), 0, "Tile Entity"));
+                }
+            });
         }
     }
 
@@ -176,12 +175,11 @@ public class World {
         });
     }
 
-    public void spawnPowerUps() {
-        for (double i = 0; i < 360; i += 6.0D) {
-            double x = Math.sin(Math.toRadians(i)) * this.random.nextDouble() * this.radius;
-            double y = Math.cos(Math.toRadians(i)) * this.random.nextDouble() * this.radius;
-            EntityPowerUp powerUp = new EntityPowerUp(this.getNextEntityID(), x, y, 2.0D + 2.0D * this.random.nextInt(3));
-            this.spawnEntity(powerUp);
+    public void spawnPowerUps(int amount) {
+        for(int i = 0; i < amount; i++) {
+            double[] randomPosition = this.getRandomSpawnPosition();
+            EntityPowerUp entityPowerUp = new EntityPowerUp(this.getNextEntityID(), randomPosition[0], randomPosition[1], 2.0D + 2.0D * this.random.nextInt(3));
+            this.spawnEntity(entityPowerUp);
         }
     }
 

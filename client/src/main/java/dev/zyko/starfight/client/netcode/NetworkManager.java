@@ -69,6 +69,7 @@ public class NetworkManager extends Client {
             this.stop();
         }
         this.status = ConnectionStatus.OFFLINE;
+        StarfightClient.getInstance().getGameRenderer().getParticleRenderer().setup(0, 0, StarfightClient.getInstance().getDisplayManager().getWidth(), StarfightClient.getInstance().getDisplayManager().getHeight());
     }
 
     /**
